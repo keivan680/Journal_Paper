@@ -1,0 +1,18 @@
+This manuscript proposes a dynamical system-based approach for solving
+robust optimization problems in a general convex-concave framework.
+This proposed approach offers a novel solution to robust optimization
+problems by introducing a continuous-time dynamical system.
+Additionally, the proposed dynamical system-based approach offers
+better properties compared to traditional approaches and demonstrates
+the potential to solve a broad range of robust optimization problems in
+a decentralized manner. Some detailed comments are given as follows.
+The improvements compared to the existing results are also unclear,
+which makes it difficult to evaluate the contribution of this article.
+There are some language and grammar issues in this paper and the
+authors need to revise their paper properly.
+The definite article in the captions of all figures is suggested to be
+omitted. In general, the definite article in the title should be
+omitted.
+ The italics of many formulas in this manuscript are not standard, and
+there are some inconsistent phenomena.
+There are issues with the quotation marks in the manuscript.

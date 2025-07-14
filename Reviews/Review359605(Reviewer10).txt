@@ -1,0 +1,12 @@
+The reviewer acknowledges the authors’ efforts in addressing a relevant
+and timely problem. The core idea presented is original and points
+toward a promising research direction with potential impact. However,
+the current manuscript has several important limitations in terms of
+technical depth and presentation, which make it unsuitable for
+publication as a full research article.
+Given the value of the contribution, the reviewer encourages the
+authors to consider re-submitting the work in the form of a technical
+note. This would allow the main idea to be shared with the community
+while leaving room for future refinement and development. The reviewer
+has provided specific comments in the attached file and hopes they will
+help improve the quality of the current submission.
