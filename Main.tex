@@ -1,0 +1,1979 @@
+\documentclass[journal,twoside,web]{ieeecolor}
+\usepackage{generic}
+\pdfminorversion=4 
+
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cleveref}
+\usepackage{subcaption,graphicx}
+\usepackage{mathtools, cuted}
+\usepackage{todonotes}
+\usepackage{url}
+\usepackage{color}
+\usepackage{mathrsfs}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{cite}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{mleftright}
+\usepackage{nth}
+\usepackage{dsfont}
+\usepackage[normalem]{ulem}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{properties}[theorem]{Properties}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{con}[theorem]{Condition}
+\newtheorem{definition}{Definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newtheorem{remark}{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}{Corollary}
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{defn}{Definition}
+\newtheorem{rem}{Remark}
+\newtheorem{ass}{Assumption}
+%\newtheorem{proof}{Proof}
+
+\DeclareMathOperator*{\infm}{inf}
+\DeclareMathOperator*{\minimize}{minimize}
+\DeclareMathOperator*{\maximize}{maximize}
+\DeclareMathOperator*{\subjt}{subject \ to}
+\DeclareMathOperator*{\sgn}{sign}
+\DeclareMathOperator*{\argmin}{argmin} 
+\newcommand{\argmax}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{max}}\;}
+\newcommand{\pe}{\psi}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\trace}{\text{tr}}
+\newcommand{\vecu}{{\bf u}}
+\newcommand{\vece}{{\bf e}}
+\newcommand{\vecc}{{\bf c}}
+\newcommand{\dom}{\cal{D}}
+\newcommand{\op}{\cal{L}}
+\newcommand{\dop}{\cal{E}}
+\newcommand{\x}{\textbf{x}}
+\newcommand{\z}{\mathbb{Z}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\p}{\partial}
+\newcommand{\ps}{p^{\star}}
+\newcommand{\PF}{\mathbb{P}}
+\newcommand{\Tyx}{T_{y\rightarrow x}(p)}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\bd}{\begin{displaymath}}
+\newcommand{\ed}{\end{displaymath}}
+\newcommand{\be}{\begin{align*}}
+\newcommand{\ee}{\end{align*}}
+\newcommand{\si}{\Sigma^{-1}}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\newcommand{\sub}[2]{(#1)_{(#2)}}
+
+% \setlength{\parindent}{0em}
+
+\title{\LARGE \bf Robust Optimization via Continuous-Time Dynamics}
+
+\author{Keivan Ebrahimi, Nicola Elia, and Umesh Vaidya\\
+\thanks{Financial support from the National Science Foundation grants CNS-1329915, ECCS-1150405, CIF-1220643, and ECCS-1810079 and from AFOSR grant FA95500119 are gratefully acknowledged. K. Ebrahimi is with the Department of Electrical \& Computer Engineering, Iowa State University, Ames, Iowa. U. Vaidya is with the Department of Mechanical Engineering, Clemson University, Clemson SC.  N. Elia is with the Department of Electrical and Computer Engineering, University of Minnesota, Twin Cities.
+{\tt\small keivan@iastate.edu},
+{\tt\small uvaidya@clemson.edu},
+{\tt\small nelia@umn.edu}
+}}
+
+\begin{document}
+
+%K1
+%Done: 1,2
+%Done: 14, 15, 16 (answer to reviewers)
+%TODO: 8,9,10,11,12
+
+% display page numbers in the headings. Start with roman numerals %
+\pagestyle{headings}
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+\maketitle
+
+\begin{abstract}
+%We propose a dynamical system-based approach for solving robust optimization problems in a model-free feedback-based manner without knowing the specific formulations of the objective function, constraint functions, and uncertainty sets. Our proposed approach offers a feedback-based, model-free solution for robust optimization problems by introducing a new continuous-time dynamical system, which we call ${\cal RO}$ dynamics.
+We propose a dynamical system-based approach for solving robust optimization problems in a general convex-concave framework. Our proposed approach offers a novel solution to robust optimization problems by introducing a continuous-time dynamical system, which we call ${\cal RO}$ dynamics. Unlike the well-known primal-dual gradient dynamics for solving regular optimization problems, our new approach does not rely on the gradient of the Lagrangian function to derive the vector field. In ${\cal RO}$ dynamics, the uncertain variable is treated as a dynamical state, and we demonstrate that the globally asymptotically stable equilibrium point of ${\cal RO}$ dynamics can recover robust optimal solutions for a general class of convex-concave robust optimization problems. This is achieved without any prior knowledge of the formulation of the specific problem. Furthermore, our approach is amenable to decentralized implementation, enabling the dynamics to autonomously derive an unknown system to solve the robust optimization problem by using output feedback only. This is while the existing solutions such as the robust counterpart and scenario-based random sampling assume that the problem formulation is completely known a priori. In contrast, our proposed method is not constrained by these limitations and is suitable for real-time applications in dynamic environments. To demonstrate the effectiveness of our approach, we provide a simulation example of a robust location and placement problem with time-varying anchor locations, among others. Our proposed dynamical system-based approach offers better properties compared to traditional approaches and demonstrates the potential to solve a broad range of robust optimization problems in a decentralized manner.
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+%This paper addresses the challenge of collectively solving complex optimization problems with a group of agents of limited intelligence through simple interactions and information exchange. 
+With emerging applications that require solving real-time optimization problems in a reactive manner, this paper describes how interacting dynamical systems can find a robust solution for a broad class of robust optimization problems. This is particularly relevant in situations where physical systems must be steered towards optimal operating conditions, without prior knowledge of the functions to be optimized or the model of the uncertainty affecting the optimization. Specifically, we propose a real-time approach to solving robust optimization problems, which has become increasingly important in recent years \cite{he2022}. Optimization problems often involve various forms of uncertainty in the problem data. Two different approaches can be used: stochastic optimization, where uncertainty is treated as a random variable, or robust optimization (${\cal RO}$), where uncertainty is assumed to be deterministic and bounded. Unlike stochastic optimization, ${\cal RO}$ does not require any known probability distributions in the problem data. Instead, ${\cal RO}$ assumes that the uncertain data reside within a predefined uncertainty set, for which constraint violation cannot be tolerated. For more information on robust and stochastic optimization-based approaches, see \cite{bental2009}, \cite{bertsimas2011}, and the references therein. Early works on ${\cal RO}$ include \cite{soyster1976}, which considered robust linear optimization with ellipsoidal uncertainty sets, and \cite{falk1976}, which presented exact solutions of inexact linear programs as a simple case of ${\cal RO}$.
+
+The problem of robust linear programming was studied in \cite{bental1999}, while robust conic-quadratic optimization and robust semi-definite optimization were discussed in \cite{bental2002} and \cite{bental1998}, respectively. Refer to \cite{bertsimas2011} and \cite{beyer2007} for a survey of different ${\cal RO}$ problem solutions. 
+\cite{xu2009} and \cite{xu2010} showed that some of the machine learning algorithms such as the norm-regularized support vector machine and the Lasso problem could be interpreted as ${\cal RO}$ problems. In addition to that, several papers focused on making machine learning problems robust against outliers, parameter uncertainties, and data perturbations by techniques such as adversarial training \cite{lanckriet2003, bhattacharyya2004a, bhattacharyya2004b, trafalis2007, namkoong2016, sinha2018, esfandiari2019}. 
+
+One of the main standard approaches for solving ${\cal RO}$ problems involves constructing a robust counterpart (RC) equivalent to the ${\cal RO}$ problem \cite{bental2009}. This widely used method essentially tries to find a deterministic equivalent to ${\cal RO}$ problem through a reformulation. In this sense, the practicality of robust programming depends on whether or not its RC is computationally tractable. An overview of different RO problems with tractable conjugates can be found in \cite{gorissen20152} Table 1 for some of which RC cannot be found. 
+The reformulation approach to solving the ${\cal RO}$ problem, which is often a challenging, albeit usually convex, optimization problem, has the deficiency of suffering from case-by-case scenarios depending on the specific form of the uncertainty constraint and the specific form of the uncertainty set. In other words, depending on how simple the uncertainty set looks and based on the optimization problem type (whether it is linear programming, quadratic programming, second-order cone programming, semi-definite programming, etc.), an RC is being calculated and provided at hand. These reformulations may be computationally more expensive than other approaches \cite{bertsimas2016}. Hence, the absence of a unified framework for solving a general class of ${\cal RO}$ problems without prior knowledge of the problem formulation is strongly felt.
+
+By calculating a concave conjugate of nonlinear constraint functions and supporting the function of uncertainty sets, \cite{bental20152} and \cite{gorissen20152} used the Fenchel duality to obtain a tractable RC for new classes of robust nonlinear optimization (RNO) problems. It may be the case that no closed form is available for the convex conjugate function of an uncertainty set or convex/concave conjugates of a non-linear constraint. In this case, these approaches do not obtain the RC for many sets of nonlinear uncertainties and constraints.
+
+An alternative randomized approach based on constraint sampling is an approximate probabilistic relaxation solution to ${\cal RO}$ problems as seen in \cite{calafiore2004} and \cite{calafiore2010} where a finite set of high-dimensional deterministic optimization problems obtained from sampling are solved. This approach does not require concavity of the constrain in the uncertain variable but due to the large number of required scenarios to approximate the stochasticity of these problems, the stochastic optimization involves formulating a large-scale scenario program, which is in general computationally demanding. To address this issue, \cite{rostampour2021} presented two methods. The first is to decompose the large-scale scenario program into distributed scenario programs using the alternating-direction multiplier method (ADMM). The second method is to use a soft communication scheme to reduce the required communication between the subproblems.
+
+In another effort, \cite{bental2015} incorporated the min-max behavior of ${\cal RO}$ problems to solve them by an oracle-based approximate robust optimization algorithm based on oracle-based subgradient descent and interior point methods. The proposed algorithms find an approximate robust solution using a number of calls to an oracle that solves the original (non-robust) problem. However, the solution would be approximated with some predetermined accuracy, $\eta$, with the number of iterations growing to ${\cal O}(\frac{1}{\eta})$, as the algorithm approximates the RC by invoking the Oracle a polynomial number of times.
+In \cite{mutapcic2009}, a cutting-plane algorithm treats ${\cal RO}$ problem as semi-infinite programming and iterates between optimization problem with fixed uncertainties values and posterior worst-case analysis to possibly find the robust solution. 
+The worst-case analysis depends on finding pessimization oracles that may be exact or approximate. The robust problem cannot be solved by the cutting plane method if the pessimization is approximate, that is, when the worst-case functions are being computed approximately. In another effort, \cite{nguyen2018} tried to alleviate the computational cost of Oracle-based methods by finding the approximate solution for ${\cal RO}$ problem iteratively with first-order oracles.
+
+Robust optimization over time (ROOT) is another line of research in which robust optimization and dynamic optimization (a certain type of optimization to model uncertainties resulting from environmental changes) are combined. In these problems, robust solutions usually do not remain desirable forever and need to be changed after some major environmental change. \cite{yazdani2023} provides a review of ROOT papers that includes a classification of these problems with their respective definitions.
+
+Compared with existing ${\cal RO}$ methods, we point out that most existing algorithms are in a one-shot manner, as they require a priori knowledge of the uncertainty set model in order to even write the optimization problem to be solved. In contrast, our approach is independent of knowledge of the uncertainty set model as long as it is convex and the adversary variables enter concavely in the constraints and cost function. This opens up the possibility of having distributed real-time implementations of such systems in many settings where the uncertainty model and exact knowledge of the cost function and constraints are not available.
+
+In this paper, we provide the architecture of such a dynamical system that converges to the optimal robust solution for a large class of ${\cal RO}$ problems.
+
+Although our approach is inspired by the work on primal-dual systems \cite{arrow1958,feijer2010}, it presents significant architectural and convergence challenges described in the paper. A key technical contribution is finding the right architecture of the dynamical system for which a non-standard Lyapunov function can help to prove global convergence to an optimal ${\cal RO}$ solution. The proposed continuous-time optimization system can solve a general class of ${\cal RO}$ problems where the cost function and the constraints are convex (concave) with respect to the decision variables (uncertain variables) and the uncertainty sets are convex\footnote{Preliminary convergence results for a special formulation appeared without proofs in \cite{ebrahimi2019continuous}. In this paper, we generalize the problem formulation and provide complete proofs, which are the core of our contributions.}. This class includes all the cases in \cite[~Table 1]{gorissen20152}. 
+%{\color{blue}The primal-dual gradient dynamics, firstly introduced in \cite{arrow1958}, is a continuous-time approach to find the solution (both primal and dual) of a regular (non-robust) optimization problem in a centralized \cite{feijer2010} or distributed manner \cite{bertsekas1989}. The primal-dual dynamics are also at the heart of various discrete-time algorithms for solving optimization problems. In the current paper, we provide a construction of a new continuous-time dynamical system that is capable of solving ${\cal RO}$ problems.
+
+%paper extends the results presented in \cite{ebrahimi2019continuous}. In particular, we relax the strict concavity assumption of the constraints functions with respect to (w.r.t.) the uncertainty variable from \cite{ebrahimi2019continuous} and consider the uncertainty also in the objective function. Furthermore, we extend the results from \cite{ebrahimi2019continuous} to the case where not all constraints are assumed to be active. The distributed implementation of ${\cal RO}$ is also new to this paper. The discrete-time version of the ${\cal RO}$ dynamics is already appeared in our previous works \cite{ebrahimi2019cdc} and \cite{esfandiari2019}}.
+
+The remainder of this paper is organized as follows. In Section \ref{sec_RO}, we present the problem statement of ${\cal RO}$ in a slightly generalized form. In Section \ref{section_saddle}, the characterization of saddle property and KKT optimality conditions along with the Lagrangian function for ${\cal RO}$ problem are provided. The main results on how to construct the ${\cal RO}$ dynamics is presented in Section \ref{section_pddynamics}. This section also includes the Lyapunov-based global convergence result. We then present simulation results in Section \ref{section_simulations} followed by conclusions in Section \ref{section_conclusions}. %One added advantage of our approach is that, when applicable, distributed RO solvers can be easily derived employing standard (consensus-based) constraints. This will be discussed in section \ref{section_distributed}.
+Finally, detailed proofs are mentioned in the Appendix.
+
+%This paper deals with finding the solution of a general convex-concave robust optimization problem through a real-time feedback control dynamical system aiming at autonomously steering toward the optimality. We provide construction of new continuous-time ${\cal RO}$ dynamics such that the equilibrium points of this system coincide with the optimal points of robust optimization (${\cal RO}$) problem. Hence, we can solve the problem without requiring to find any explicit reformulation. ${\cal RO}$ dynamics can solve generic robust optimization problems in a decentralized manner without necessarily knowing specific formulations of the objective function, constraints and uncertainty sets.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Notations}\label{notations}
+
+We define $i=0,\cdots,N$ as $i_{[N]}$, and $i=1,\cdots,N$ as $i^+_{[N]}$. In addition, $\left[\cdot\right]_\eta^+$ shows the positive projection defined as follows for the scalar-valued function $P$
+\begin{align} \label{proj}
+[P]_\eta^+:=\left\{\begin{array}{ccl}P&{\rm if}& P>0 \;{\rm or} \;\eta>0\\
+0&{\rm otherwise}
+\end{array}\right..
+\end{align}
+For vector-valued $P$, the projection is defined element-wise.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Robust Optimization Problems}\label{sec_RO}
+Given an objective $f_0(x)$ to optimize, subject to constraints $f_i(x,u_i) \leq 0$ with uncertain parameters, $\{u_i\}$, a classical robust optimization problem has the following form
+$$
+\begin{array}{ccc}
+\mu&:=&\underset{x}{\min}\; f_0(x)\\
+&&\text{s.t.}\;\;\;f_i(x,u_i)\leq 0,\;\;\;\; \forall \,u_i\in {\cal U}_i,\;\;\;i^+_{[N]}.
+\end{array}
+$$
+where $x\in \real^n$ is a vector of decision variables, $f_0$ and $f_i$ are $\real^n \to \real$ functions, and the uncertainty parameters $u_i \in \real^{m_i}$ are assumed to take arbitrary values in certain convex compact uncertainty sets ${\cal U}_i \subseteq \real^{m_i}$. 
+The above problem is typically a semi-infinite optimization due to the cardinality of the ${\cal U}_i$. However, each robust constraint can be rewritten as a maximization problem as\footnote{Since the uncertainty set is compact, 
+the supremum is attained within the set; therefore, we can replace "sup" with "max" in our formulation.}
+%$$
+%{\cal F}_{i}(x):=\displaystyle\max_{{u_i\in \cal U}_i} f_i(x,u_i)\leq 0.
+%$$
+%and 
+\begin{align}
+\begin{array}{ccc}
+\mu&:=&\underset{x}{\min}\; f_0(x)\\
+&&\text{s.t.}\;\;\;\displaystyle\max_{{u_i\in \cal U}_i} f_i(x,u_i)\leq 0,\;\;\;\;i^+_{[N]}
+\end{array}\;.\label{standardRO}
+\end{align}
+%for many sets ${\cal U}_i$ and function $f_i$  of practical interest the function 
+%$${\cal F}_i(x):=\displaystyle\max_{{u_i\in \cal U}_i} f_i(x,u_i)
+%$$, which we call lower-level optimization, assumes a closed finite-dimensional tractable form \cite{}. 
+%Instead, our approach in this paper is to derive cooperative multi-agent dynamical equations based on simple integrators and gradients where the variables $x(t)$ and  $u_i(t)$ converge to the Robust Optimization solution. 
+
+We consider a slight variation of (\ref{standardRO}), which takes the following under the assumptions stated below.  
+\begin{equation}\label{RO0}
+\mathcal{RO}_0\left\{ \begin{array}{ccc}
+&\mu:=\underset{x}{\min} \;\underset{u_0\in {\cal U}_0}{\max}\; f_0(x,u_0)\\
+&\text{s.t.}\;\;\;\underset{u_i\in {\cal U}_i}{\max}\;\; f_i(x,u_i)\leq 0\;,\;i^+_{[N]},\\ \\
+&{\cal U}_i:=\{u_ i\in \mathbb{R}^{m_i}\;:\;h_{ij}(u_i)\leq 0,\;\;j_{[K_i]}\}\;,\;i_{[N]}
+\end{array}\right.
+\end{equation}
+The problem in (\ref{RO0}) reduces to the one in (\ref{standardRO}) when ${\cal U}_0$ is a singleton.
+Following \cite{bental2009-2} and without loss of generality, we consider the ${\cal RO}$ problem dealing with constraint-wise uncertainties where each constraint $f_i$ is only a function of $u_i$.
+The functions $f_i$ and $h_{ij}$ have scalar values with the following assumptions.
+
+\begin{assumption}\label{assume1} The functions $h_{ij}(u_i)$ are convex in $u_i$ for $i_{[N]}$ and $j^+_{[K_i]}$. 
+The function $f_0(x,u_0)$ is strictly convex in $x$ for any $u_0\in {\cal U}_0$, and concave in $u_0$ for any $x$. Also, for $i^+_{[N]}$, $f_i(x,u_i)$ is convex in $x$ for fixed $u_i$ and concave in $u_i\in {\cal U}_i$, for fixed $x$. %Moreover, $\nabla_{u_i} h_{ij}(u_i)$ is assumed to be non-zero for $h_{ij}(u_i)\geq0$.\footnote{Norm-bound uncertainty sets $\Vert u_i \Vert_p^p-\rho^p \leq 0$ satisfy this assumption.}
+Finally, the functions $f_i$ and $h_i$ $i_{[N]}$ are $C^1$ with local Lipschitz gradients.%\footnote{Extensions to subgradients}.
+% https://math.stackexchange.com/questions/1482494/derivative-of-the-l-p-norm
+\end{assumption}
+
+\begin{assumption} \label{assume_feasible} Existence of optimal solutions and strong duality.
+
+\begin{enumerate}
+\item [A1] ${\cal RO}$ problem (\ref{RO}) is feasible. An optimal min-max solution $(x^\star,u^\star)$ exists and $\mu$ in the ${\cal RO}$ problem (\ref{RO}) is finite.
+\item [A2] ${\cal RO}$ problem satisfies the Slater constraint qualification, for both the upper level optimization (\ref{RO2}) and the lower level (\ref{G.eq})
+ \cite{bental2009-2}, that is, 
+for all $i_{[N]}$ and all $j^+_{[K_i]}$, there exist $u_i \in {\cal U}_i$ such that $h_{ij}(u_i)<0,\;$  and 
+for $i^+_{[N]}$,  there exists $x \in \mathbb{R}^n$ such that, ${\cal F}_i(x)<0$\;.
+%robust characteristic cone constraint qualification (RCCCQ) satisfied. As $g_i(x,u_i)$ is concave in $u_i$ for all $i$, RCCCQ is guaranteed by Slater-type strict feasibility conditions.
+\end{enumerate}
+\end{assumption}
+\begin{remark}
+    It should be noted that the uncertainty is often parametrized affinely in ${\cal RO}$ problem; hence, the concavity property of the $f_i$ functions is automatically satisfied.
+\end{remark}
+\begin{remark} \label{strong_duality_rem}
+Assumption [A2] guarantees that ${\cal RO}$ problem enjoys strong duality for upper and lower level optimization problems (\ref{RO2}) and (\ref{G.eq}) \cite[Section~5.2.3, 5.9.1]{boyd2004}. Moreover, it enforces that saddle point and optimal dual solutions exist \cite{bental2009-2}. For conditions less restrictive than those of Slater, the interested reader may refer to \cite{jeyakumar2010}.
+\end{remark}
+
+Finally, we introduce the problem we consider in the paper, a slight generalization of ${\cal RO}_0$ in (\ref{RO0}).
+\begin{equation}{\cal RO}\left\{\begin{array}{ccc}
+&\mu:=\underset{x}{\min} \;\underset{u_0\in {\cal U}_0}{\max}\; f_0(x,u_0)+\displaystyle\sum_{i=1}^N c_i \underset{u_i\in {\cal U}_i}{\max}\;\; f_i(x,u_i)\label{RO}\\ \\
+&\text{s.t.}\;\;\;\underset{u_i\in {\cal U}_i}{\max}\;\; f_i(x,u_i)\leq 0\;,\;i^+_{[N]},\\ \\
+&{\cal U}_i:=\{u_ i\in \mathbb{R}^{m_i}\;:\;h_{ij}(u_i)\leq 0,\;\;j_{[K_i]}\}\;,\;i_{[N]}
+\end{array}\right. 
+\end{equation}
+where $c_i\geq 0$ for $i^+_{[N]}$. This setting can be seen as an elementary regularized version of more common formulations ${\cal RO}_0$ obtained for $c_i=0$, $i_{[N]}^+$. 
+The role of $c_i$ is further clarified in Remark \ref{active_inactive_constraint_rem}.
+% {\color{red} The difference between the standard ${\cal RO}$ problem in Eq. (\ref{standardRO}) and the one considered in this paper i.e., Eq. (\ref{RO}) is the presence of $c_i$. In particular, when $c_i=0$ for all $i$, the ${\cal RO}$ problem in Eq. (\ref{RO}) will reduce to standard $\cal RO$ problem in Eq. (\ref{standardRO}). The role of $c_i$ is clarified later in Remark \ref{active_inactive_constraint_rem}. } 
+
+It is convenient to rewrite ${\cal RO}$ in the following form 
+\begin{align}
+&\mu:=\underset{x}{\min} \; {\cal F}_0(x)+\sum_{i=1}^N c_i{\cal F}_i(x)\label{RO2}\\
+&\;\;\text{s.t.}\;\;\;{\cal F}_i(x)\leq 0\;,\;i^+_{[N]}\;,\nonumber
+\end{align}
+where 
+\begin{equation}\label{G.eq}
+{\cal F}_i(x):=\max_{u_i\in {\cal U}_i} f_i(x,u_i)\;,\; i_{[N]}\;.
+\end{equation}
+In this paper, we often call (\ref{G.eq}) as the "lower optimization problems", and the minimization in (\ref{RO2}) as the "upper optimization".
+
+ As already mentioned, our formulation includes the typical robust optimization formulation ${\cal RO}_0$
+\begin{equation}
+\begin{array}{lcc}
+\mu=&\;\displaystyle\min_x f_0(x)\\
+s.t.&\; {\cal F}_i(x)\leq 0,\;\;i^+_{[N]}
+\end{array}\;,
+\label{RO3}
+\end{equation}
+or the form below that is popular in the machine learning context \cite{rafique2022,zhang2021}
+\begin{equation}
+\mu=\;\displaystyle\min_x\max_{u\in {\cal U}} f_0(x,u)\;.
+\end{equation}
+We finally introduce the following assumption valid for most of the paper. 
+
+\begin{assumption} \label{assume_c>0} 
+\begin{enumerate}
+\item [A3] $c_i > 0$ for $i^+_{[N]}$.
+%robust characteristic cone constraint qualification (RCCCQ) satisfied. As $g_i(x,u_i)$ is concave in $u_i$ for all $i$, RCCCQ is guaranteed by Slater-type strict feasibility conditions.
+\end{enumerate}
+\end{assumption}
+
+
+\begin{remark} \label{active_inactive_constraint_rem}
+The assumption [A3] is made for technical reasons to simplify and streamline the derivations. It is used to impose arbitrarily small regularization terms in order to provide convergence proof in the event that some of the robust constraints are inactive. On the other hand, if a constraint is active, the corresponding $c_i$s can be zero. So, all $c_i$s can be equal to zero under the classical but stronger assumption that all the robust constraints are active.  %This is how we recover (\ref{RO3}) by considering $c_i$ to be arbitrarily small.
+\end{remark}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Robust feasible solution and robust counterpart}
+A meaningful solution to ${\cal RO}$ problem (\ref{RO}) has to be immune against the uncertainties in the sense that the solution vector $x$ should satisfy the constraints for all $u_i$'s within the uncertainty sets\footnote{Similar to what is meant by feasibility in Robust Control \cite{zhou1995}.}. Such vector $x$ is called a robust feasible solution (RFS). One approach to solving the problem (\ref{RO}) is to try to compute (\ref{G.eq}) in closed form. 
+
+For various important combinations of constraint functions $f_i$ and uncertainty sets ${\cal U}_i$, ($i>0$) it is possible to obtain an explicit convex function ${\cal F}_i$ \cite{bental2009}. A classical example is when $f_i$ is linear in $x$ for fixed $u_i$ and linear in $u_i$ for fixed $x$, while ${\cal U}_i$ is an ellipsoidal set. 
+Then, ${\cal F}_i$ can be easily derived as an explicit second-order conic function. 
+In this case, ${\cal RO}$ problem (\ref{RO}) becomes a nominal optimization problem (not affected by uncertainty) known as the explicit Robust Counterpart (RC):
+\begin{align} \label{rc}
+\displaystyle \min_{{\cal F}_i(x)\leq 0} f_0(x)\;.
+\end{align}
+As shown in \cite{bental2009-2}, the RC is always a convex optimization problem under Assumption \ref{assume1}. While the RC is known for important classes of problems as described in \cite{bertsimas2011}, this approach requires problem-specific derivations; moreover, RC is generally difficult to find (See Section \ref{section_simulations} for an example). Instead, our proposed approach has a dynamical system that simultaneously finds the best RFS and the worst parameters $u_i$' s, independently of the specifics of the constraint functions and the uncertainty sets.
+
+%Suppose that we are given a candidate solution $x$ and aim to calculate robust value of the objective function at $x$. This will be achieved through finding the largest value of the objective over all data realizations in the uncertainty sets. Hence, the following optimization problem can be formulated to find the best RFS
+%\begin{align} \label{ro3}
+%\underset{x}{\min} \Big\{\max_{\substack{u_i \in {{\cal U}_i}\\ \forall i}} f(x): \; g_i(x,u_i) \leq 0, \; \forall i\Big\}.
+%\end{align}
+%This paradigm allows one to measure out the quality of an RFS by taking the maximum of the objective function over the sets ${\cal U}_i$'s. Then, the optimal robust quantity of the objective function is the best value among all of the RFSs while a finite optimal solution will be assumed for ${\cal RO}$ problem (\ref{RO}). The regular method of approaching ${\cal RO}$ problem is solving it for the worst case of uncertain variables and finding the RC as follows
+%\begin{align} \label{ro4}
+%\underset{x}{\min} \Big\{\max_{\substack{u_i \in {{\cal U}_i}\\ \forall i}} f(x):  g_i(x,u_i) \leq 0: \forall u_i \in {{\cal U}_i}, \forall i\Big\}.
+%\end{align}
+%The optimal solution (value) of RC problem (\ref{ro4}) will be the optimal solution (value) of ${\cal RO}$ problem (\ref{RO}).  Note that progressing from uncertain problem (\ref{ro3}) to deterministic problem (\ref{ro4}), and working to find the RC for every realization of ${\cal RO}$ problem (such as LP, QP, QCQP, SOCP, SDP, etc.) is what we want to avoid as this approach is case-dependent and literally hard to be calculated in a general sense.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Duality, KKT conditions and saddle property} \label{section_saddle}
+The basic idea of this paper is to combine the usually separated and nested optimization (\ref{RO2}) and (\ref{G.eq}) into one Lagrangian optimization. 
+
+To derive the Lagrangian function for ${\cal RO}$ problem (\ref{RO}), we introduce Lagrange multipliers $\lambda_i\geq 0$ for $i^+_{[N]}$, and let $\lambda=(\lambda_1,\lambda_2,\cdots,\lambda_N)^\top \in \mathbb{R}_+^N$ where the non-negative orthant of $\mathbb{R}^N$ is denoted by $\mathbb{R}_+^N$. Note that $\mu$ in ${\cal RO}$ problem (\ref{RO}) can be written in short-hand notation  as follows
+\begin{align}
+\mu=&\;\underset{x}{\min}\;\underset{\lambda\geq 0}{\max}\; {\cal F}_0(x)+\sum_{i=1}^N (c_i+\lambda_i) \; {\cal F}_i(x)\;,
+ \label{upper_ro}
+\end{align}
+where ${\cal F}_i(x)$ is given by (\ref{G.eq}). 
+ By introducing Lagrange multipliers $v_{ij} \geq 0$ for the maximization problem in (\ref{G.eq}) and defining 
+\begin{align*}
+v_i:=(v_{i1},\cdots, v_{iK_i})^\top \in \mathbb{R}_+^{K_i},\;h_i:=(h_{i1},\cdots, h_{iK_i})^\top\;,\nonumber
+\end{align*}
+the lower level strong duality (according to Assumption \ref{assume_feasible}) yields
+\begin{align} \label{lower_ro}
+{\cal F}_i(x)=\underset{u_i\in \mathbb{R}^{m_i}}{\max}\;\underset{v_{i}\geq 0}{\min}\;f_i(x,u_i)-v_i^\top h_{i}(u_i)\;.
+\end{align}
+
+Defining the Lagrangian $\tilde {\cal L}_i:\mathbb{R}^n \times \mathbb{R}^{m_i} \times \mathbb{R}^{K_i} \rightarrow \mathbb{R}$ for the lower level maximization problem (\ref{lower_ro}) as
+\begin{align} \label{lower_lag}
+\tilde {\cal L}_i(x,u_i,v_i):=f_i(x,u_i)-v_i^\top h_{i}(u_i),\;i^+_{[N]},
+\end{align}
+and
+\begin{align} \label{upper_lag}
+\tilde {\cal L}_0(x,u_0,v_0):=f_0(x,u_0)-v_0^\top h_{0}(u_0)\;.
+\end{align}
+In the optimization problem (\ref{upper_ro}), $\mu$ can be written as
+\begin{align} \label{main_RO_eq}
+\mu=\underset{x}{\min}&\;\underset{\lambda\geq 0}{\max}\;\underset{u_0}{\max}\;\underset{v_0\geq 0}{\min}\;\; \tilde{\cal L}_0(x,u_0,v_0)\\
+&+\sum_{i=1}^N (c_i+\lambda_i)\; \underset{u_i}{\max}\;\underset{v_{i}\geq 0}{\min}\;\;\tilde {\cal L}_i(x,u_i,v_i)\;\nonumber.
+\end{align}
+or combining the independent maximizations and minimizations, and collecting the variables, we have 
+\begin{align}\label{main_RO2_eq}
+\mu=&\min_{x}\max_{\lambda\geq 0}\max_{u}\min_{v\geq 0} \\
+&\big(\tilde{\cal L}_0(x,u_0,v_0)+\sum_{i=1}^N (c_i+\lambda_i) \; \tilde {\cal L}_i(x,u_i,v_i)\big)\;.\nonumber
+\end{align}
+Hence, we showed the equivalence of (\ref{RO}) and (\ref{main_RO_eq}). 
+The complete Lagrangian ${\cal L}(x,\lambda,u,v)$ for ${\cal RO}$ problem is derived as
+\begin{align}
+{\cal L}(x,\lambda,u,v)&\;:=\;f_0(x,u_0)-v_0^\top h_0(x,u_0)\nonumber\\
+&+\sum_{i=1}^N (c_i+\lambda_i)\big(f_i(x,u_i)-v_i^\top h_i(x,u_i)\big)\;,
+\label{lag}
+\end{align}
+which leads to
+\begin{align*}
+\mu=\min_{x}\max_{\lambda\geq 0}\max_{u}\min_{v\geq 0}\;{\cal L}(x,\lambda,u,v)\;.
+\end{align*}
+From Remark \ref{strong_duality_rem}, strong duality holds for both upper and lower optimizations. Thus, we can switch the order of max and min as follows 
+\begin{equation}\label{dual.eq}
+\mu=\max_{\lambda\geq 0}\;\min_{x}\min_{v\geq 0} \max_{u}\;{\cal L}(x,\lambda,u,v)\;.
+\end{equation}
+
+\begin{definition} \label{optimal_ro}
+We denote an optimal solution of (\ref{dual.eq}), $z^\star:=(x^\star,\lambda^\star,u^\star,v^\star)$, as an ''optimal ${\cal RO}$ solution", where $(x^\star, u^\star)$ is an optimal solution for (\ref{RO}), and $(\lambda^\star, v^\star)$ are optimal values for the corresponding dual variables according to the principles in \cite[Section~5.9.1]{boyd2004}.
+\end{definition}
+
+\subsection{KKT optimality conditions}
+As strong duality holds for ${\cal RO}$ problem, any optimal solution, $z^\star=(x^\star,\lambda^\star,u^\star,v^\star)$, satisfies the following Karush-Kuhn-Tucker (KKT) conditions, and vice-versa \cite{boyd2004}
+\begin{align}
+&\nabla_x f_0(x^\star,u_0^\star)+  \sum_{i=1}^N(c_i+\lambda^\star_i) \nabla_x f_i(x^\star,u_i^\star)=0,\label{kkt1}\\
+&\nabla_{u_i} f_i(x^\star,u_i^\star)-{v_i^\star}^\top \nabla_{u_i} h_i(u_i^\star)=0,\; i_ {[N]},\label{kkt2}\\
+&\;v_{ij}^\star\geq 0,\; h_{ij}(u_i^\star)\leq 0,\;v_{ij}^\star h_{ij}(u_i^\star)=0,\;  j^+_{[K_i]}, i_{[N]} \label{kkt3}\\
+&\lambda_i^\star\geq 0,\;f_{i}(x^\star,u_i^\star)\leq 0,\;\lambda_i^\star f_{i}(x^\star,u_i^\star)=0,\;i^+_{[N]} \label{kkt4}
+\end{align}
+where $\nabla_x f$ is the notation for the gradient of a function $f$ w.r.t. $x$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Saddle property of the optimal ${\cal RO}$ solution}
+As the ${\cal RO}$ problem has two levels, we have different saddle property related to the bi-level optimization problem. For the ${\cal RO}$ problem as a whole, there is a saddle property based on the Lagrangian function (\ref{lag}), which we call the ${\cal RO}$ saddle property. In the context of Lagrangian duality, a saddle point of the Lagrangian function is a point where the function is minimized with respect to the convex variables and maximized with respect to the concave variables. The following lemma addresses the connection between the optimal ${\cal RO}$ solution and ${\cal RO}$ saddle property (proof in the appendix).
+
+\begin{lemma} \label{saddle.lem} [Saddle property] 
+Let $z^\star=(x^\star,\lambda^\star,u^\star,v^\star)$ be an optimal ${\cal RO}$ solution. Then, for all $x,\lambda\geq 0,u,v\geq 0$\;, $z^\star$ satisfies the ${\cal RO}$ saddle property, namely,
+\begin{align} \label{saddle}
+{\cal L}(x^\star,\lambda,u,v^\star)\leq {\cal L}(x^\star,\lambda^\star,u^\star,v^\star)\leq {\cal L}(x,\lambda^\star,u^\star,v)\;.
+\end{align}
+\end{lemma}
+
+Proving Lemma \ref{saddle.lem} is one of the main contributions of our paper. Lemma 1 proves that the saddle point property holds true for the ${\cal RO}$ problem despite the fact that the Lagrangian in (\ref{saddle}) is not jointly convex-concave. The proof is given in the appendix and this lemma is being used to show the monotonicity property of the Lyapunov function in Lemma \ref{monotonicity}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Dynamical system solving ${\cal RO}$} \label{section_pddynamics}
+
+So far,  we have characterized the "optimization" properties of the Robust Optimization problem under study.  In this paper, we are interested in understanding if there is a continuous-time dynamical system that can solve ${\cal RO}$ and how it would operate. Our main motivations are two: (1) Understanding from a dynamical system perspective how ${\cal RO}$ can be solved. (2) Studying how physically interacting systems with very simple capabilities and or "intelligence" can cooperate to solve complex optimization problems (learning, estimation, and decision) well outside the single element capabilities. While there are now answers to these questions for large classes of convex optimization problems \cite{feijer2010},\cite{wang2011}, this is the first work, to the best of our knowledge, that addresses ${\cal RO}$ problems. Our task turned out to be quite non-trivial, as explained below.
+
+The basic method to obtain a continuous-time dynamics that solves a constrained convex optimization problem goes back to \cite{arrow1958}. The main idea is quite intuitive. The primal dynamics evolves with the negative gradient of the problem's Lagrangian function, w.r.t, the primal variable, that is $x$, while the dual dynamics evolves with the positive gradient of the Lagrangian w.r.t to the dual variables, that is, $\lambda_i$s. The primal descent and dual ascent dynamics is globally converging to the optimal solution under minor assumptions. The proof is based on a simple quadratic Lyapunov function. However, from a system point of view, it is the passivity of the gradient of a convex function that provides the convergence mechanism \cite{simpson2016,kosaraju2018}.
+
+For the ${\cal RO}$ problem, the standard approach does not work due to the nested structure of optimization. Thus, the natural match between intuitive primal-descent dual-ascent dynamics via a traditional quadratic Lyapunov function is broken. It turns out that it is not easy to find the right combination of dynamics and Lyapunov function that show global convergence.
+
+This section presents the main contribution of the paper: a continuous-time dynamical system named "${\cal RO}$ dynamics" (together with an appropriate "Lyapunov function") whose solutions globally converge to a solution of ${\cal RO}$ problem. Let
+\begin{align*}
+M=\sum_{i=0}^{N}m_i\;,\; K=\sum_{i=0}^{N}K_i\;.
+\end{align*}
+Consider the following ${\cal RO}$ dynamics defined on $\mathbb{S}:= \mathbb{R}^n \times \mathbb{R}^N_{+} \times \mathbb{R}^M \times \mathbb{R}^K_+$\;
+
+\begin{align} \label{pd_dynamics}
+\left\{
+\begin{array}{cl}
+\vspace{3mm}
+&\dot x=-\nabla_x f_0(x,u_0)-  \sum_{i=1}^N(c_i+\lambda_i) \nabla_x f_i(x,u_i)\\
+\vspace{2mm}
+&\dot \lambda_i=[f_i(x,u_i)-v_i^\top h_i(u_i)]_{\lambda_i}^+,\; i^+_{[N]}\\
+\vspace{2mm}
+&\dot u_i=\nabla_{u_i}f_i(x,u_i)-  \sum_{j=1}^{K_i} v_{ij} \nabla_{u_i} h_{ij}(u_i),\; i_{[N]}\\
+\vspace{2mm}
+&\dot{v}_0=[h_0(u_0)]_{v_0}^+\\
+\vspace{2mm}
+&\dot v_i=[(c_i+\lambda_i) \; h_i(u_i)]_{v_i}^+,\;i^+_{[N]}
+\end{array}\right..
+\end{align}
+
+\subsection{Examples and comments} \label{examples_and_comments}
+It is interesting to describe the structure using special examples.
+
+\subsubsection{min-max} Consider the following ${\cal RO}$ problem with no constraints
+\begin{align*}
+\mu=\min_x\max_{u_0:h_0(u_0)\leq 0}f_0(x,u_0)\;.
+\end{align*}
+Such problems are popular in machine learning. In this case, the continuous-time dynamical system is given by 
+
+\begin{align*}
+\left\{
+\begin{array}{cl}
+\vspace{3mm}
+&\dot{x}=-\nabla_x f_0(x,u_0)\\
+\vspace{2mm}
+&\dot{u}_0=\nabla_{u_0}f_0(x,u_0)-v_0^\top \nabla_{u_0} h_0(u_0)\\
+\vspace{2mm}
+&\dot{v}_0=[h_0(u_0)]_v^+
+\end{array}\right..
+\end{align*}
+Above dynamic is gradient-descent in $x$ while gradient-ascent in $u_0$ and $v_0$. We must note that often in machine learning applications, the constraints on $u_0$ are simple boxes, and the dual variables $v_0$ are omitted in place of a simple set projection.
+
+\subsubsection{One uncertain constraint}
+Another simple example is the following ${\cal RO}$ problem which follows the standard setting where the constraint is active and $c_1$ is zero.
+\begin{align*}
+\begin{array}{lcl}\mu&=&\displaystyle\min_x f_0(x)\\
+&s.t.&\displaystyle \max_{h_1(u_1)\leq 0}f_1(x,u_1)\leq 0
+\end{array}
+\end{align*}
+The dynamical system equations are
+\begin{align*}
+\left\{
+\begin{array}{cl}
+\vspace{3mm}
+&\dot{x}=-\nabla_x f_0(x)-\lambda_1 \nabla_x f_1(x,u_1)\\
+\vspace{2mm}
+&\dot{\lambda}_1=[f_1(x,u_1)-v_1^\top h_1(u_1)]_{\lambda_1}^+\\
+\vspace{2mm}
+&\dot{u}_1=\nabla_{u_1} f_1(x,u_1)-v_1^\top \nabla_{u_1}h_1(u_1)\\
+\vspace{2mm}
+&\dot{v}_1=[\lambda_1h_1(u_1)]_{v_1}^+
+\end{array}\right..
+\end{align*}
+
+This example shows the following significant differences with the primal-dual dynamical system for solving standard optimization problems appeared in \cite{feijer2010,cherukuri2016}.
+\begin{enumerate}
+\item First, the ${\cal RO}$ dynamics has additional states associated with the worst-case constraint $u_i$ and the associated multiplier $v_1$.  
+ \item Another difference is that the ${\cal RO}$ dynamics vector field is not completely derived as negative/positive gradients of the Lagrangian function ${\cal L}$. In particular, the vector field for the state $u_1$ is not obtained as the positive gradient of the Lagrangian function ${\cal L}$.
+\item Finally, we note the presence of $\lambda_1$, the dual variable, in the upper optimization in the dynamics of $v_1$, the dual variable of the lower optimization. At first glance, this seems strange, since one could expect the differential equations for $u_1$ and $v_1$ to be simply the primal-ascent and dual-descent, respectively, of the lower optimization problem. This point will be discussed further after we present the stability results in Remark \ref{remark_reader_notice}.
+\end{enumerate}
+
+%One further comment regarding the constraint(s) being active: Typically, in the analysis of algorithmic-based solutions of constrained optimization problems, the constraints are assumed to be all active, without loss of generality. This is because the active constraints affect the solution, while the inactive ones do not. Moreover, the user can remove the inactive constraints a posteriori and run the algorithm with only the active constraints. Herein we assume that $c>0$.
+
+%\begin{assumption}\label{poslambda.ass}
+%Let $z^\star=(x^\star,\lambda^\star,u^\star,v^\star)$ be any optimal ${\cal RO}$ solution of (\ref{main_RO2_eq}) and (\ref{dual.eq}). We assume $\lambda_i^\star>0$ for $i^+_{[N]}$\;.
+%\end{assumption}
+
+\subsection{Equivalence of the KKT and equilibrium points} \label{kkt<=>eq.sec}
+ The following lemma relates the optimal (KKT) points of (\ref{RO}) and the equilibrium points of the dynamics of ${\cal RO}$.
+\begin{lemma}\label{kkttoeq.lem}[Optimal solution and equilibrium point]
+Under Assumptions \ref{assume1} and \ref{assume_feasible}, any optimal ${\cal RO}$ solution based on Definition \ref{optimal_ro} is an equilibrium point of ${\cal RO}$ dynamics (\ref{pd_dynamics}) and vice versa.
+\end{lemma}
+\begin{proof}
+Any equilibrium point, $\bar{z}=(\bar{x},\bar{\lambda},\bar{u},\bar{v})$  of ${\cal RO}$ dynamics (\ref{pd_dynamics}) satisfies
+\begin{align*}
+&\nabla_x f_0(\bar x,\bar{u}_0)+  \sum_{i=1}^N (c_i+\bar \lambda_i) \nabla_x f_i(\bar x,\bar u_i)=0\;,\\
+&f_{i}(\bar x,\bar u_i)-\bar v_i^\top h_i(\bar u_i)\leq 0,\;\bar \lambda_i\geq 0\;,\\
+&\bar \lambda_i(f_{i}(\bar x,\bar u_i)-\bar v_i^\top h_i(\bar u_i))=0\;,\\
+&\nabla_{u_i} f_i(\bar x,\bar u_i)-\bar v_i^\top \nabla_{u_i} h_i(\bar u_i)=0\;,\\
+&h_{0j}(\bar u_0)\leq 0,\; \bar v_{0j}\geq 0,\;\bar v_{0j}h_{0j}(\bar u_0)=0\;,\\
+& (c_i+\bar{\lambda}_i) h_{ij}(\bar u_i)\leq 0,\; \bar v_{ij}\geq 0,\;\bar v_{ij}(c_i+\bar \lambda_i) h_{ij}(\bar u_i)=0\;,\\
+\end{align*}
+for $i^+_{[N]},j^+_{[K_i]}$, while any optimal point satisfies below KKT conditions 
+\begin{align}
+    &\nabla_x f_0(x^\star,u_0^\star)+  \sum_{i=1}^N(c_i+\lambda^\star_i) \nabla_x f_i(x^\star,u_i^\star)=0, \label{kkt1} \\
+    &\nabla_{u_i} f_i(x^\star,u_i^\star)-{v_i^\star}^\top \nabla_{u_i} h_i(u_i^\star)=0, \;\;\; i \in [N], \label{kkt2} \\
+    &v_{ij}^\star\geq 0,\; h_{ij}(u_i^\star)\leq 0,\;v_{ij}^\star h_{ij}(u_i^\star)=0, \; j \in [K_i], \; i \in [N] \label{kkt3} \\
+    &\lambda_i^\star\geq 0,\;f_{i}(x^\star,u_i^\star)\leq 0,\;\lambda_i^\star f_{i}(x^\star,u_i^\star)=0, \; i \in [N] \label{kkt4}
+\end{align}
+
+Substituting $z^\star$ for $\bar{z}$, and using the fact that $(c_i+\lambda_i^\star)>0$ for all $i^+_{[N]}$, it is immediate to verify that the optimal point $z^\star$, satisfying (\ref{kkt1})-(\ref{kkt4}), also satisfies the above equilibrium conditions and therefore is an equilibrium point of ${\cal RO}$ dynamics (\ref{pd_dynamics}).
+
+On the other hand, since $c_i> 0$ and $c_i+\bar{\lambda}_i>0$,  for $i_{[N]}^+$; then, $h_{ij}(\bar{u}_i)\leq 0$, and $\bar{v}_{ij} h(\bar{u}_{ij})=0$ for $i_{[N]},j_{[K_i]}^+$. Substituting these properties in the rest of the equilibrium conditions, we see that $\bar{z}$ satisfies the KKT conditions therefore is optimal for ${\cal RO}$.
+
+%{\color{red} Put numbers for the first set of equations, then explicitly show the equivalence for each equation. Also mention that from uniqueness of $x^\star$, we have $\bar x = x^\star$}
+\qed
+\end{proof}
+
+% {\color{red}
+% Assume for $i=N$ $c_N=0$ and there is no optimal solution of ${\cal RO}$ with $\lambda_N^\star>0$, and that the $N^{th}$ constraint is strictly inactive. 
+
+% From the previous argument ${\cal RO}$ dynamics cannot have an equilibrium point with $\bar{\lambda}_N>0$, since it would then satisfy the KKT conditions and it would be optimal. 
+% So, any $\bar{z}$ must have $\bar{\lambda}_N=0$.
+
+% Then $\bar{z}$ must satisfy (\ref{firstcon.eq}) and  (\ref{lastcon.eq}).
+
+% As before,  $\bar{z}_{N-1}=(\bar{x},\bar{\lambda}_{1}^{N-1},\bar{u}_0^{N-1},\bar{v}_0^{N-1})$ satisfies the KKT conditions for ${\cal RO}_{N-1}$. 
+% and since  $\bar{\lambda}_N=0$ is allowed, then $\bar{x}$ must be  optimal for ${\cal RO}$
+
+% Following the same argument we have that 
+
+
+
+% \begin{align}\label{strongbis.eq}
+% 0&\geq f_N(\bar{x},\bar{u}_N)-\bar{v}_N^\top h_N(\bar{u}_N)\;,\nonumber\\
+% &= \max_{u_N}\;\big(f_N(\bar{x},u_N)-\bar{v}_N^\top h_N(u_N)\big)\;,\nonumber\\
+% &\geq \min_{v_N\geq 0}\max_{u_N}\;\big(f_N(\bar{x},u_N)-v_N^\top h_N(u_N)\big)\;,\nonumber\\
+% &=f_N(\bar{x},\hat{u}_N)-\hat{v}_N^\top h_N(\hat{u}_N)
+% \end{align}
+% where $\hat{u}_N$ and $\hat{v}_N$ denote the optimal solutions which satisfy the  KKT conditions for the saddle point of the $N^{th}$ lower level optimization; namely, $\hat{v}_{Nj} h_{Nj}(\hat{u}_N)=0$ $\hat{v}_{Nj}\geq 0$, and $h_{Nj}(\hat{u}_N)\leq 0$, for $j_{[K_N]}^+$. 
+
+% However now, since the $N^{th}$ constraint is strictly inactive at the optimal $\bar{x}$ we have that  
+% then 
+% \begin{align}
+% f_N(\bar{x},\hat{u}_N)-\hat{v}_N^\top h_N(\hat{u}_N)=-\alpha <0.
+% \end{align}
+% Substituting into (\ref{strongbis.eq}), 
+% \begin{align}\label{strong2.eq}
+% 0&\geq f_N(\bar{x},\bar{u}_N)-\bar{v}_N^\top h_N(\bar{u}_N)\;,\nonumber\\
+% &= \max_{u_N}\;\big(f_N(\bar{x},u_N)-\bar{v}_N^\top h_N(u_N)\big)\;,\nonumber\\
+% &\geq -\alpha.
+% \end{align}
+% Therefore, $\bar{v}_N\geq 0$ and $\bar{u}_N$ do not necessarily satisfy the KKT conditions for the saddle point of the $N^{th}$ lower level optimization, and hence $\bar{z}$ may not satisfy the KKT conditions of ${\cal RO}$. 
+
+% Using  the ${\cal RO}$-saddle property, we have that 
+% \begin{align*}
+% &f_0(\bar{x},u_0)-(v_0^\star)^\top h_0(u_0)\\
+% &+\sum_{i=1}^
+% {N-1}(c_i+\lambda_i)(f_i(x^\star,u_i)-(v_i^\star)^\top h_i(u_i))\\
+% &+\lambda_N(f_i(\bar{x},u_N)-(v_N^\star)^\top h_N(u_N))\\
+% &\leq \mu\\
+% &=f_0(\bar{x},u^\star)-(v^\star_0)^\top h_0(u_0^\star)\\
+% &+\sum_{i=1}^{N-1}(c_i+\lambda_i^\star)(f_i(\bar{x},u_i^\star)-(v^\star_i)^\top h_i(u_i^\star))\\
+% &\leq f_0(x,u^\star)-(v^\star_0)^\top h_0(u_0^\star)\\
+% &+\sum_{i=1}^{N-1}(c_i+\lambda_i^\star)(f_i(x,u_i^\star)-(v_i)^\top h_i(u_i^\star))\\
+% \end{align*}
+% then 
+% \begin{align*}
+% \begin{array}{l}
+% {\cal L}(\bar{x},\lambda_1^{N},u_0^{N},{v_0^{N}}^\star)-{\cal L}_(x,{\lambda_1^{N}}^\star,{u_0^{N}}^\star,v_0^{N})\\
+% =
+% {\cal L}_{N-1}(\bar{x},\lambda_1^{N-1},u_0^{N-1},{v_0^{N-1}}^\star)-{\cal L}_{N-1}(x,{\lambda_1^{N-1}}^\star,{u_0^{N-1}}^\star,v_0^{N-1})\\
+% +\lambda_N(f_i(\bar{x},u_N)-(v_N^\star)^\top h_N(u_N))\\
+% \leq -\lambda_N \alpha
+% \end{array}
+% \end{align*}
+%}
+
+We denote the ${\cal RO}$ dynamics (\ref{pd_dynamics}) compactly with the shorthand notation $\dot z={\cal Z}^{\cal RO}(z)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Lyapunov Function}
+In this subsection, we present the Lyapunov function\footnote{With slight abuse of notation.} as the second important contribution of the paper that is tightly connected with the proposed dynamical system.
+
+\begin{lemma} \label{monotonicity} [Monotonicity property]
+Let $z^\star=(x^\star,\lambda^\star,u^\star, v^\star)$ be an optimal ${\cal RO}$ solution (Definition \ref{optimal_ro}).
+%{\color{red} with $(c_i+\lambda_i^\star)>0$, $i^+_{[N]}$.}
+ 
+ Let  $V: {\mathbb S}\to \mathbb{R}_+ $ defined as
+\begin{align}
+V=\frac{1}{2}\big( &\Vert x-x^\star\Vert^2+\Vert\lambda-\lambda^\star \Vert^2+\Vert u_0-u_0^\star\Vert^2+\nonumber \\
+&\sum_{i=1}^N(c_i+\lambda_i^\star) \Vert u_i-u_i^\star\Vert^2+ \sum_{i=0}^N\Vert v_i-v_i^\star\Vert^2\big)\;, \label{Lya_function}
+\end{align}
+then, the Lie-derivative of $V$ along ${\cal Z}^{\cal RO}$ at $z=(x,\lambda,u,v)$ is $\nabla V(z)^\top \dot z\leq 0$.
+\end{lemma}
+\begin{proof}
+Note that $\nabla V(z)^\top$ equals to
+\begin{align}
+&(x-x^\star)^\top(-\nabla_x f_0(x,u_0)-  \sum_{i=1}^N(c_i+\lambda_i) \nabla_x f_i(x,u_i))\nonumber\\
++&\sum_{i=1}^N(\lambda_i-\lambda_{i}^\star) [f_i(x,u_i)-v_i^\top h_i(u_i)]_{\lambda_i}^+\nonumber\\
++&(u_0-u_0^\star)^\top (\nabla_{u_0} f_0(x,u_0)-v_{0}^\top \nabla_{u_0} h_{0}(u_0))\nonumber\\
++&\sum_{i=1}^N(c_i+\lambda_{i}^\star)(u_i-u_{i}^\star)^\top (\nabla_{u_i} f_i(x,u_i)-v_{i}^\top \nabla_{u_i} h_{i}(u_i))\nonumber\\
++& (v_0-v_0^\star)^\top [h_0(u_0)]_{v_0}^++ \sum_{i=1}^N (v_{i}-v_{{i}}^\star)^\top [(c_i+\lambda_i)\; h_{i}(u_i)]_{v_{i}}^+\;.
+\end{align}
+By convex and concave under-estimator properties according to Assumption \ref{assume1}, one can write \cite[Section~3.1.3]{boyd2004}
+\begin{align}
+%&(x^\star-x)^\top \nabla_x f_0(x,u_0) \leq f(x^\star,u_0)-f(x,u_0)\;,\label{under_estimator_1}\\
+&(x^\star-x)^\top \nabla_x f_i(x,u_i) \leq f_i(x^\star,u_i)-f_i(x,u_i)\;,\label{under_estimator_2}\\
+&(u_i-u_i^\star)^\top \nabla_{u_i} f_i(x,u_i) \leq f_i(x,u_i)-f_i(x,u_i^\star)\;,\label{under_estimator_3}\\
+&(u_i^\star-u_i)^\top \nabla_{u_i} h_{ij}(u_i) \leq h_{ij}(u_i^\star)-h_{ij}(u_i)\;.\label{under_estimator_4}
+\end{align}
+
+Moreover, using the fact that the projection operator is non-expansive, we have that
+\begin{align}
+&(\lambda_i-\lambda_{i}^\star) [f_i(x,u_i)-v_i^\top h_i(u_i)]_{\lambda_i}^+\nonumber\\
+&\;\;\;\;\;\;\;\;\;\;\leq(\lambda_i-\lambda_{i}^\star) (f_i(x,u_i)-v_i^\top h_i(u_i))\;,\\
+&(v_{0}-v_{{0}}^\star)^\top [ h_{0}(u_0)]_{v_{0}}^+
+\leq(v_0-v_{{0}}^\star)^\top h_{0}(u_0),\\
+&(v_{i}-v_{{i}}^\star)^\top [(c_i+\lambda_i)\; h_{i}(u_i)]_{v_{i}}^+\nonumber\\
+&\;\;\;\;\;\;\;\;\;\;\leq(v_{i}-v_{{i}}^\star)^\top (c_i+\lambda_i)\; h_{i}(u_i)\;.
+\end{align}
+
+By substitution, we get
+\begin{align}
+&\nabla V(z)^\top \dot z \leq\nonumber\\ &f_0(x^\star,u_0)-f_0(x,u_0)+  \sum_{i=1}^N(c_i+\lambda_i) (f_i(x^\star,u_i)-f_i(x,u_i))\nonumber\\
+&+ \sum_{i=1}^N(c_i+\lambda_i)-(c+\lambda_i^\star))(f_i(x,u_i)-v_i^\top h_i(u_i))\nonumber\\
+&+f_0(x,u_0)-f_0(x,u_0^\star)+v_0^\top (h_0(u_0^\star)-h_0(u_0))\nonumber\\
+&+ \sum_{i=1}^N (c+\lambda_i^\star) (f_i(x,u_i)-f_i(x,u_i^\star)+v_i^\top (h_i(u_i^\star)-h_i(u_i))\nonumber\\
+&+(v_0-v_0^\star)^\top h_0(u_0)+  \sum_{i=1}^N (v_{i}-v_{i}^\star)^\top(c_i+\lambda_i) h_{i}(u_i)\;. \label{vdot_first}
+\end{align}
+
+After simplification and rearrangement we obtain
+\begin{align*}
+\nabla V(z)^\top \dot z\leq \; & f_0(x^\star,u_0)-(v_0^\star)^\top
+h_0(u_0)\\
+&-f_0(x,u_0^\star)+v_0^\top h_0(u_0^\star)\\
+&+\sum_{i=1}^N(c+\lambda_i) \Big(f_i(x^\star,u_i)-(v_i^\star)^\top h_i(u_i))\Big)\\
+&-\sum_{i=1}^N(c+\lambda_i^\star) \Big(f_i(x,u_i^\star)-v_i^\top h_i(u_i^\star))\Big)\;.
+\end{align*}
+
+%From strict convexity, $\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)=0$ only if $x=x^\star$, which leads to 
+%\begin{align*}
+%&\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)\leq T\\
+%&+\sum_{i=1}^N\lambda_i \Big(g_i(x^\star,u_i)-(v_i^\star)^\top h_i(u_i))\Big)\\
+%&- \sum_{i=1}^N\lambda_i^\star \Big(g_i(x^\star,u_i^\star)-v_i^\top h_i(u_i^\star))\Big)\;.
+%\end{align*}
+%from KKT $g_i(x^\star,u_i^\star)=0$, so
+%$\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)=0$ if
+%\begin{align*}
+%&\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)\leq T\\
+%&+ \sum_{i=1}^N\lambda_i \Big(g_i(x^\star,u_i)-(v_i^\star)^\top h_i(u_i))\Big)\\
+%&- \sum_{i=1}^N\lambda_i^\star\Big(v_i^\top h_i(u_i^\star))\Big)=0\;.
+%\end{align*}
+Adding and subtracting ${\cal L}(x^\star,\lambda^\star,u^\star,v^\star)$ yields
+\begin{align} \label{deriv_v}
+\nabla V(z)^\top \dot z\leq&\; {\cal L}(x^\star,\lambda,u,v^\star)-{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)\\
+&+{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)-{\cal L}(x,\lambda^\star,u^\star,v) \;.\nonumber
+\end{align}
+Note that from Lemma \ref{saddle.lem} (saddle property),
+\begin{align*}{\cal L}(x^\star,\lambda,u,v^\star)-{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)\leq 0\;,
+\\
+{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)-{\cal L}(x,\lambda^\star,u^\star,v)\leq 0\;.
+\end{align*}
+Hence, 
+\begin{align} \label{deriv_v2}
+\nabla V(z)^\top \dot z\leq&\; {\cal L}(x^\star,\lambda,u,v^\star)-{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)\\
+&+{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)-{\cal L}(x,\lambda^\star,u^\star,v)\leq 0 \;.\nonumber
+\end{align}
+\qed\\
+\end{proof}
+
+\begin{remark} \label{remark_reader_notice}
+To elaborate on the issue with the gradient descent-ascent primal-dual dynamics for robust optimization and the reason we need a modified ${\cal RO}$ dynamics, note that although ${\cal RO}$ problem is jointly-convex in $x$ and $v$, it is not jointly concave in $\lambda$ and $u$. Hence, the primal-dual dynamics (with $\lambda_i$ in $\dot u_i$ dynamics) is not converging to the ${\cal RO}$ solution if $\lambda_i$ reaches zero before $u_i$ reaches its optimal value. In other words, the $u_i$ dynamics freezes when $\lambda_i$ is near zero. That is why we modified the primal-dual dynamics with the new ${\cal RO}$ dynamics which changes the stability results and proofs significantly. 
+The reader should notice how the unintuitive dynamics (see discussion in Section \ref{examples_and_comments}) fits the computation of the Lie derivative based on the unconventional function $V$ which is quadratic in the error w.r.t. an optimal solution $z^\star=(x^\star,\lambda^\star,u^\star,v^\star)$ but weights the error in the $u$ variables w.r.t. the optimal dual variables, $\lambda^\star$, of the upper optimization. Discovering both the dynamical system and the Lyapunov function is our main achievement in this paper, as they do not follow from simple extension of existing approaches.
+\end{remark}
+
+\begin{remark} \label{convergence_speed}
+The convergence speed analysis of ${\cal RO}$ dynamics in the discrete-time version of our algorithm appears in \cite{ebrahimi2019cdc}.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Solutions: Existence, Uniqueness, and Continuity}
+We need to guarantee that the switching dynamical system (\ref{pd_dynamics}) has well defined solutions. 
+To do so, we show that our system satisfies the conditions for applicability of existing results \cite{cherukuri2016}. The development of this section is in the Appendix Section \ref{existence.sec}. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Convergence Analysis}
+Considering $\gamma(t)$ as a solution of ${\cal RO}$ dynamics (\ref{pd_dynamics}) defined on the time interval $[0,\infty)$, omega-limit set is defined as
+\begin{align} \label{omega_limit}
+\Omega(\gamma):=\{& y \in \mathbb S \;|\; \exists \{t_k\}_{k=1}^\infty \subset [0,\infty) \nonumber\\
+&\text{with}\; \lim_{k \rightarrow \infty} t_k=\infty \;\text{and}\; \lim_{k \rightarrow \infty} \gamma(t_k)=y\}\;.
+\end{align}
+The next lemma presents an invariant property for the omega-limit set of any solution of the ${\cal RO}$ dynamics, which contributes in showing the convergence result.
+\begin{lemma}\cite[Lemma~4.4]{cherukuri2016}[Invariance of omega-limit set]
+%{\color{red} Assume $c_i+\lambda^\star_i>0, i^+_{[N]}$.}
+The omega-limit set of any solution of the ${\cal RO}$ dynamics (\ref{pd_dynamics}) starting from any point $\mathbb S$ is invariant.
+\label{omega_invariance}
+\end{lemma}
+%The proof of this lemma is the same as the proof of invariance of omega-limit sets of solutions of locally Lipschitz vector fields in \cite[Lemma~4.1]{khalil2002} from the construction we made in the proof of Lemma \ref{uniq_exis}.
+
+Finally, we have the main convergence result. 
+\begin{theorem} \label{maintheorem} [Convergence] 
+Under Assumptions \ref{assume1} and \ref{assume_feasible}, the trajectories of ${\cal RO}$ dynamics (\ref{pd_dynamics}) converge to an optimal ${\cal RO}$ solution for any initial condition in $\mathbb{S}=\mathbb{R}^n\times \mathbb{R}^N_{+}\times \mathbb{R}^M\times \mathbb{R}^K_+$. In other words, the set of optimal ${\cal RO}$ solutions is globally asymptotically stable on $\mathbb{S}$ under ${\cal RO}$ dynamics (\ref{pd_dynamics}).
+\end{theorem}
+\begin{proof}
+Let $z^\star=(x^\star,\lambda^\star,u^\star,v^\star)$ be an optimal ${\cal RO}$ solution under Assumptions \ref{assume1} and \ref{assume_feasible}. Lemma \ref{uniq_exis} implies that a unique solution of ${\cal RO}$ dynamics ${\cal Z}^{\cal RO}$ exists starting from any point in the compact set $\mathbb P=V^{-1}(\leq \delta) \cap \mathbb S$ for any $\delta>0$ \footnote{As $V$ is radially unbounded, the set $\mathbb P$ is always compact.}. We now call this solution $\bar \gamma(t)$.
+
+From Lemma \ref{omega_invariance}, the omega-limit set of $\bar \gamma(t)$ is invariant and invariance principle for discontinuous Caratheodory systems \cite[Proposition~2.1]{cherukuri2016} (simplified version of \cite[Proposition~3]{bacciotti2006nonpathological}) implies that $\bar \gamma(t)$ converges to the largest invariant set in $\text{cl}({\cal M})$ where ${\cal M}:=\{z \in \mathbb P\,|\, \mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)=0\}$.
+
+Next, we characterize the set ${\cal M}$ where $\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)=0$ by defining
+\begin{align}
+\bar{\cal M}:=& \left\{z \in \mathbb P\,\middle|\,\lambda\geq 0, v_i\geq 0, \forall i, \right. \nonumber\\
+&{\cal L}(x^\star,\lambda,u,v^\star)-{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)=0, \nonumber\\
+&\left. {\cal L}(x^\star,\lambda^\star,u^\star,v^\star)-{\cal L}(x,\lambda^\star,u^\star,v)=0 \right\}\;.\label{sad}
+\end{align}
+
+From the inequality in (\ref{deriv_v2}), it follows that ${\cal M} \subseteq \bar{\cal M}$. We then prove that every point in $\bar{\cal M}$ is an optimal ${\cal RO}$ solution.
+
+From the strict convexity of $f$, it follows that $x=x^\star$ on $\bar{\cal M}$. From (\ref{sad}), any point in $\bar{\cal M}$ achieves the optimal cost of ${\cal RO}$. Let $\bar{z}=(x^\star,\bar{\lambda},\bar{u},\bar{v})\in \bar{\cal M}$\;. Then, in general, 
+\begin{align*}
+    {\cal L}(x^\star,\bar{\lambda},\bar{u},v^\star) &\leq {\cal L}(x^\star,\lambda^\star,u^\star,v^\star)\;, \\
+    {\cal L}(x^\star,\lambda^\star,u^\star,v^\star) &\leq {\cal L}(x^\star,\lambda^\star,u^\star,\bar{v})\;.
+\end{align*}
+
+But since $\bar{z}\in \bar {\cal M}$, the equality must hold for the above equations. This means that 
+\begin{align*}
+\begin{array}{l}
+\bar{v}=\argmax{v \geq 0}\; {\cal L}(x^\star,\lambda^\star,u^\star,v)\;,\\
+(\bar{\lambda},\bar{u})=\argmax{u,\lambda \geq 0}\; {\cal L}(x^\star,\lambda,u,v^\star)\;.
+\end{array}
+\end{align*}
+Therefore, ${\bar{z}}$ is an optimal ${\cal RO}$ solution. Therefore, any point in $\bar{{\cal M}}$ is an optimal ${\cal RO}$ solution. On the other hand, any optimal ${\cal RO}$ solution is an equilibrium of ${\cal RO}$ dynamics (\ref{pd_dynamics}) according to Lemma \ref{kkttoeq.lem} and therefore is in ${\cal M}$. Thus, ${\cal M}=\bar{\cal M}$. As $\delta>0$ is arbitrary, we conclude that the set of optimal ${\cal RO}$ solutions is globally asymptotically stable on $\mathbb S$.
+
+Note that ${\cal M}$ can contain an uncountable infinite set of points. If the optimal ${\cal RO}$ solution is not unique, these correspond to the set of optimal ${\cal RO}$ solutions and to the set of non-isolated equilibria of ${\cal RO}$ dynamics (\ref{pd_dynamics}) from Lemma \ref{kkttoeq.lem}. Moreover, the convergence of each solution in Theorem \ref{maintheorem} is to a point in the set of optimal ${\cal RO}$ solutions. This means that the omega-limit set of any solution $\gamma(t)$ is a singleton which follows from (\ref{omega_limit}) and Lemma \ref{monotonicity}.
+\qed
+\end{proof}
+
+\begin{corollary}
+Under Assumptions \ref{assume1} and \ref{assume_feasible}, let $z=(x^\star,\lambda^\star,u^\star,v^\star)$ be an optimal solution. 
+Assume all robust constraints are strictly active, that is, $\lambda_i^\star>0,\;i^+_{[N]}$. Then, the ${\cal RO}$ dynamics (\ref{pd_dynamics}) converges to an optimal solution.  
+\end{corollary}
+\begin{proof}
+The setup of the corollary satisfies the assumptions of Theorem \ref{maintheorem}, as $c_i+\lambda_i^\star>0,\;i^+_{[N]}$.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Convergence with inactive constraints} \label{perturbed_section_pddynamics}
+The convergence proof is based on the mild assumption that $c_i+\lambda_i^\star>0$.
+In this section we consider the optimization with $c_i=0$, $i_{[N]}$, as 
+\begin{align} \label{mu_0}
+&\mu:=\underset{x}{\min} \; {\cal F}_0(x)\\
+&\;\;\text{s.t.}\;\;\;{\cal F}_i(x)\leq 0\;,\;i^+_{[N]}\;,\nonumber
+\end{align}
+where there are inactive constraints.
+
+% If we assume that all the robust constraints are active, then we can simply set $c=0$ in (\ref{pd_dynamics}), as the convergence proof we have presented is valid also in this case.
+
+In case of inactive constraints, (\ref{pd_dynamics}) with $c=0$ empirically converges with the $\lambda's$ corresponding to inactive constraints converging to zero. However, the proof does not directly apply in this case as $(c_i+\lambda_i^\star)=0$, for some $i$, and the Lyapunov function is no longer valid for some $\lambda_i^\star=0$. Moreover, the $u_i$ and $v_i$ dynamics as well as the interaction with the $x$ dynamics become irrelevant to the convergence but are still part of the dynamics. 
+To address this case, we consider the perturbed problem with $c_i=\varepsilon>0$ sufficiently small. Then dynamics (\ref{pd_dynamics}), that is,
+
+\begin{align} \label{pd_dynamics_ep}
+\left\{
+\begin{array}{cl}
+\vspace{3mm}
+&\dot x=-\nabla_x f_0(x,u_0)- \sum_{i=1}^N(\varepsilon+\lambda_i) \nabla_x f_i(x,u_i)\\
+\vspace{2mm}
+&\dot \lambda_i=[f_i(x,u_i)-v_i^\top h_i(u_i)]_{\lambda_i}^+,\;\; i^+_{[N]}\\
+\vspace{2mm}
+&\dot u_i=\nabla_{u_i}f_i(x,u_i)-  \sum_{j=1}^{K_i} v_{ij} \nabla_{u_i} h_{ij}(u_i),\; i_{[N]}\\
+\vspace{2mm}
+&\dot{v}_0=[h_0(u_0)]_{v_0}^+\\
+\vspace{2mm}
+&\dot v_i=[(\varepsilon+\lambda_i) \; h_i(u_i)]_{v_i}^+,\;\;i^+_{[N]}
+\end{array}\right.,
+\end{align}
+converges to some $\mu_{\varepsilon}$ and $x^\star_{\varepsilon}$ from Theorem \ref{maintheorem}. It turns out that for $\varepsilon$ sufficiently small, we can approximate the optimal cost and the optimal solution $x^\star$ arbitrarily well under compactness conditions.
+
+\begin{theorem} \label{RO_ROperturbed} 
+
+For the problem ${\cal RO}$ (\ref{RO}) under Assumptions \ref{assume1} and \ref{assume_feasible}, let $x^\star_\varepsilon$ be the optimal solution where $c=\varepsilon$. Then
+$\displaystyle\lim_{\varepsilon \to 0}\mu_\varepsilon=\mu_0$, where $\mu_0$ is the optimal cost of problem ${\cal RO}$ (\ref{RO}) with $\varepsilon=0$, that is, (\ref{mu_0}). Furthermore, assuming the feasible set ${\cal C}=\{x\in \mathbb{R}^n\,|\,{\cal F}_i(x)\leq 0,\; i^+_{[N]}\}$ is compact, we have
+\begin{align*}
+\displaystyle\lim_{\varepsilon \to 0} \parallel x_\varepsilon^\star-x^\star \parallel=0\;,
+\end{align*}
+with $x^\star$ be the optimal ${\cal RO}$ solution when $\varepsilon=0$, that is, problem (\ref{mu_0}) (proof in the appendix).
+\end{theorem}
+
+Finally, we note that the dynamics in (\ref{pd_dynamics_ep}), is equivalent to the following dynamics by letting $\hat{\lambda}=\lambda+\varepsilon {\bf 1}$ 
+\begin{align} \label{pd_dynamics_0}
+\left\{
+\begin{array}{cl}
+\vspace{3mm}
+&\dot x=-\nabla_x f_0(x,u_0)-\sum_{i=1}^N\hat{\lambda}_i \nabla_x f_i(x,u_i)\\
+\vspace{2mm}
+&\dot{\hat{\lambda}}_i=[f_i(x,u_i)-v_i^\top h_i(u_i)]_{\hat{\lambda}_i}^{\varepsilon +},\;\; i^+_{[N]}\\
+\vspace{2mm}
+&\dot u_i=\nabla_{u_i}f_i(x,u_i)-\sum_{j=1}^{K_i} v_{ij} \nabla_{u_i} h_{ij}(u_i),\; i_{[N]}\\
+\vspace{2mm}
+&\dot{v}_0=[h_0(u_0)]_{v_0}^+\\
+\vspace{2mm}
+&\dot v_i=[\hat{\lambda}_i \; h_i(u_i)]_{v_i}^+,\;\;i^+_{[N]}
+\end{array}\right.,
+\end{align}
+Noting that above dynamics evolves on $\mathbb{S}= \mathbb{R}^n \times \mathbb{R}^N_{\varepsilon +} \times \mathbb{R}^M \times \mathbb{R}^K_+$, it shows that the perturbed dynamics can be obtained by simply perturbing $\lambda_i$ projections with respect to $\varepsilon$ instead of $0$, by initializing $\lambda_i \geq \varepsilon > 0$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\begin{remark}
+\label{model_free_rem}
+%{\color{red} Need to connect precisely to our system equations. What are the What is the feedback controller? Is the model free also used by $u$? There are relations between the boxes in our dynamics, $c$ is common to $x$ and $\nu$, dynamics in what sense these are model free? It seems to me every dynamical system can be seen as model free. I am missing the point.} 
+In this section, we derive the zeroth-order ${\cal RO}$ dynamics to solve the model-free robust optimization problem. Figure \ref{fig_feedback_loop} shows the implementation of the proposed model-free feedback control scheme to steer the state of a black-box system to an optimal solution of a robust optimization problem (\ref{RO}). At each time $t$, the controller feeds the input $\hat z(t)$ to the black-box system and receives the corresponding zeroth-order feedback $f(\hat x)$, $g(\hat x,\hat u)$, and $h(\hat u)$, which are then used to update the input $\hat z(t)$ according to the ${\cal RO}$ dynamics. Depending on the actual problem, the feedback can be the real-time measurements from a physical system, the simulation outputs from a complex simulator, or the observations from experiments.
+
+Although developed based on the static optimization problem (\ref{RO}), ${\cal RO}$ zeroth-order dynamics can adapt to dynamical system changes due to the use of real-time system feedback. The adaptivity and dynamic tracking performance of this scheme are demonstrated by the numerical simulations in Section \ref{section_simulations}. Moreover, ${\cal RO}$ zeroth-order dynamics directly extends to the cooperative multi-agent problems and has a decentralized version, with each agent computing and executing its own actions.
+
+\begin{figure}[ht]
+    \begin{center}
+        \tikzstyle{block} = [draw, rectangle, fill=blue!15, minimum height=4em, minimum width=8em, text width=6em]
+        \tikzstyle{virtual} = [coordinate]
+        \begin{tikzpicture}[node distance=3cm,on grid,auto,>=latex']
+            % Place nodes
+            \node [block] (system) {System: $f(.),g(.),h(.)$};
+            \node [block, below=of system] (controller) {Controller: ${\cal RO}$ dynamics};
+            \node [virtual, left=of system] (input){};
+            \node [virtual, right=of model] (output){};
+            % Connect nodes
+            \draw [->,rounded corners] (system.east) -- node {feedback} (output) |- node[] {$f(\hat x),g(\hat x,\hat u),h(\hat u)$} (controller.east);
+            \draw [->,rounded corners] (controller.west) -| (input) -- node {input $\hat z(t)$} (system.west);
+        \end{tikzpicture}
+    \end{center}
+    \caption{Diagram of model-free ${\cal RO}$ solver}\label{fig_feedback_loop}
+\end{figure}
+\end{remark}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Simulations}\label{section_simulations}
+In MATLAB, several solvers can be used to simulate ordinary differential equations (ODE). In the following simulation examples, "ode15s" is used, which is a solver for stiff problems.
+
+\subsection{Robust Quadratic Programming}
+
+Consider a robust QP problem as below
+\begin{align} \label{ro_simulation}
+&\min_{x \in \mathbf{R}^2} \;f(x):=-8x_1-16x_2+x_1^2+4x_2^2\nonumber\\
+&\;\;\;\text{s.t.} \max_{u\in {\cal U}} \;\;\; (a+Pu)^\top x\leq b\;,
+\end{align}
+%\begin{align*}
+%\begin{array}{l}
+%\dot{u}=x-2v Qu\\
+%\dot{v}=[\lambda %(u'Qu-1)]_v^+
+%\end{array}
+%\end{align*}
+%\begin{align*}
+%5u_1^2+4u_1\hat{u}_2+4\hat{u}_2^2-1
+%\end{align*}
+%\begin{align*}
+%5\hat{u}_1^2+4\ha%t{u}_1u_2+4u_2^2-1
+%\end{align*}
+where $x \in \mathbf{R}^2$ is the decision variable, and $a =[1\;\;1]^\top$, $P=I_2 \in \mathbf{R}^{2 \times 2}$ and $b=5$ are given parameters. Variable $u$ is uncertain, for which, the uncertainty set is described by the intersection of five ellipsoids as below
+\begin{align*}{\cal U}:=\{u \in \mathbb{R}^{2}:h_{j}(u) \leq 0\;,\; j^+_{[5]}\}\;,\end{align*}
+where 
+$h_j(u):=u^\top Q_j u-1, j^+_{[5]}$. Each $Q_{j}$ is a symmetric positive semi-definite matrix and $ \sum_{j=1}^{5} Q_j \succ 0$. In this example, we assume that the following matrices specify ellipsoids
+\begin{align*}
+&Q_1=\left[\begin{array}{ccl} 2 & 0\\0 & 2 \end{array}\right],\; Q_2=\left[\begin{array}{ccl} 5 & -2\\-2 & 4  \end{array}\right],\; Q_3=\left[\begin{array}{ccl} 4 & 4\\4 & 6\end{array}\right],\;\\
+&Q_4=\left[\begin{array}{ccl} 3 & 0\\0 & 8 \end{array}\right],\;
+Q_5=\left[\begin{array}{ccl} 5 & 2\\2 & 4 \end{array}\right].
+\end{align*}
+%{\color{red} Inconsistency 1: The problem as stated is not included in the ones we claim we can solve due to assumption $2$ $[A3]$. In other words the $c_i$'s are omitted. We are simulating for c with consistency. We can choose c to be zero because the only constraint is active. This is a good example to convey the Remark for active constraint case. Mention c is 0.001 and what is the effect of changing c on lambda solutions. Connect the points with the main sections. In this case, c is not needed here as it's a perturbation parameter. Show what happens when c is going to 0.001 from 0.}
+The Lagrangian function can be written as
+\begin{align*}
+{\cal L}=&f(x)+\lambda \big((a+Pu)^\top x-b-v ^\top h(u)\big)\;.
+\end{align*}
+where
+\begin{align*}
+h=[h_1,h_2,h_3,,h_4,h_5]^\top ,\ v=[v_1,v_2,v_3,v_4,v_5]^\top.
+\end{align*}
+%The Lagrangian is consistent with the formulation (41).
+
+We obtain the following dynamics according to ${\cal RO}$ dynamics (\ref{pd_dynamics_0})
+\begin{align*}
+\left\{
+\begin{array}{cl}
+\vspace{1mm}
+&\dot x=-\left[\begin{array}{ccl} 2x_1-8\\8x_2-16 \end{array}\right]-\hat{\lambda}\;(a+Pu)\\
+\vspace{1mm}
+&\dot {\hat{\lambda}} = \big[(a+Pu)^\top x-b-v ^\top h(u)\big]_{\hat{\lambda}}^{\varepsilon+}\\
+&\dot u=P^\top x-\;2\sum_{j=1}^5 Q_j u v_{j}\\
+\vspace{1mm}
+&\dot v=\left[\hat{\lambda}\; h(u) \right]_{v}^+
+\end{array}
+\vspace{1mm}
+\right.
+\end{align*}
+where $\hat{\lambda}=\lambda+\varepsilon$. 
+% By considering a norm-based uncertainty set as $;h(u)=\parallel u \parallel^2_2-1$, the trajectories for the following choices of parameters are shown in Fig. (\ref{trajectories_norm}).
+% \begin{align*}
+% P=\left[\begin{array}{ccl}1& 0\\0&1\end{array}\right],\;a=\left[\begin{array}{ccl}1\\1\end{array}\right],\;b=5.
+% \end{align*}
+The trajectories for this system starting from zero initial conditions are shown in Fig. \ref{trajectories_norm_intersection}. Note that the constraint is active, so we can set $\varepsilon$ to zero according to Remark \ref{active_inactive_constraint_rem}. The optimal value of $x$ is $[2.2674,1.6636]$ and the optimal cost is $-28.5452$. Five ellipsoids in the uncertainty set are plotted in Fig. \ref{ellipsoids}. The blue star shows the optimal value of $u$ at $[0.4046,0.0909]$ which lies on the boundary of intersection of two of the ellipsoids corresponding to $Q_3$ and $Q_5$.  %$u^{\star \top} Q_3 u^\star=u^{\star \top} Q_5 u^\star=1$.
+Also note that for positive values of $\varepsilon$, the $\lambda$ trajectory and convergence value may change but the solution $x$ remains the same as the constraint is active.
+
+The solution for the ${\cal RO}$ problem (\ref{ro_simulation}) can be verified by other methods. We can apply the technique in \cite{calafiore2004}, in which random instances of uncertainties are sampled from the uncertainty set. Each of the uncertainty instances corresponds to a constraint. This results in a deterministic optimization problem with finitely many constraints.  By picking $1115$ samples from the intersection of ellipsoids uncertainty set and solving the derived deterministic optimization problem with $1115$ constraints by CVX, the approximate robust optimal solution and the approximate optimal cost value are found $[2.2693, 1.6770]$ and $-28.5873$ respectively. The optimal cost function of our method has a larger value compared to the method in \cite{calafiore2004}, as the latter approximates the RFS by taking finite samples. Hence, it cannot find the best value of $u$ precisely and the optimal $u$; therefore, the optimal cost is approximated. The second method verifying our solution is robust counterpart \cite{bental2009}. Deriving the robust counterpart and solving the deterministic problem by CVX returns the same solution compared to the ${\cal RO}$ dynamics. Our method works on the main ${\cal RO}$ problem to find the optimal solution without transforming it to a deterministic equivalent which can be a hassle and even impossible task, as will be shown in the following example.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.55]{trajectories_intersection.eps}
+\vspace{-1.5mm}
+\caption{Trajectories of ${\cal RO}$ dynamics for the robust QP problem with intersection of ellipsoids uncertainty set in Example A.}
+\label{trajectories_norm_intersection}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.55]{ellipsoids}
+\vspace{-1.5mm}
+\caption{Uncertainty set for the Example A plotted in $u_
+2$-$u_1$ space. The big red point at the origin represents the initial point of $u$ in ${\cal RO}$ dynamics and the blue star depicts the optimal value of $u$ on the intersection of two ellipsoids derived by our method. The small red grid points are the $1115$ sampled points from the uncertainty set in randomized scenario method \cite{calafiore2004} to compare with our method.}
+\vspace{-8mm}
+\label{ellipsoids}
+\end{center}
+\end{figure}
+
+%\noindent {\it \textbf{Example B}}: Consider the same QP optimization problem as Example A but change the description of the uncertainty set. The function $h(u)$ for this example is defined by a scalar geometric programming constraint as $h(u)=  \sum_{i=1}^{r}\alpha_i \exp(d_i^\top u)-\rho.$ We choose $r=2,\; \alpha_1=1,\; d_1=[1,0]^\top,\; \alpha_2=1,\; d_2=[1,1]^\top,$ and $\rho=10.$ When the other parameters in the cost and constraint are similar to the previous example, Fig. \ref{trajectories_geometric} shows the trajectory plots of the ${\cal RO}$ dynamics where the optimal cost is at $-20.4327$. We observe that the optimal $u$ is at the boundary of the uncertainty set, that is, $\alpha_1 \exp(d_1^\top u^\star)+\alpha_2 \exp(d_2^\top u^\star)=\rho$.
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = 0.4]{trajectories_geometric}
+%\caption{Trajectories of the ${\cal RO}$ dynamics for the robust QP example with geometric programming uncertainty set.}
+%\label{trajectories_geometric}
+%\end{center}
+%\end{figure}
+%When a nonlinear term like the geometric programming constraint is appeared in the problem's constraint and/or uncertainty set, to derive the RC, we have to compute the corresponding support function and/or conjugate function of the nonlinear term by calculations or according to look-up tables as described in \cite{bental20152}. Then, the RC is obtained based on the type of the optimization problem. This method gives the same optimal solution for the considered example; however, the ${\cal RO}$ dynamics enjoys a more general and straightforward setting for solving nonlinear ${\cal RO}$ problems.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Robust Nonlinear Optimization with no RC}\label{norc.sec}
+
+Consider the following robust nonlinear optimization problem
+\begin{align} \label{ro_simulation_3}
+&\min_{x \in \mathbf{R}^2} \;f(x):=\frac{1}{2}(x_1-1)^2+\frac{1}{2}(x_2-2)^2\\
+&\;\;\;\text{s.t.}\;\;\max_{u\in {\cal U}} u^\top \left[\begin{array}{ccl}e^{x_1^2}\\e^{x_2^2} \end{array}\right] \leq b\;,\;\nonumber
+\end{align}
+where $x \in \mathbf{R}^2$, and $u=[u_1, u_2]^\top \in \mathbf{R}^2$, for which, the strictly convex uncertainty set is described by
+\begin{align} \label{uncertasinty_example3}
+{\cal U}:=\{u \in \mathbb{R}^{2}:e^{u_j^2}+u_j e^{\frac{1}{u_j}} \leq \rho_j\;,\; j=1,2\}\;.
+\end{align}
+As stated in \cite{bental20152} and \cite{gorissen20152}, there is no closed-form convex conjugate for the constraint (convex in $x$) in (\ref{ro_simulation_3}) and no closed-form conjugate for the convex uncertainty set in (\ref{uncertasinty_example3}). This is the third case in \cite[~Table 1]{gorissen20152}, for which there is no known method for obtaining RC. However, by writing the Lagrangian function as
+\begin{align*}
+{\cal L}=&\frac{1}{2}(x_1-1)^2+\frac{1}{2}(x_2-2)^2\\
+&+\lambda \Big(u^\top \Big[\begin{array}{ccl}e^{x_1^2}\\e^{x_2^2} \end{array}\Big]-b-v^\top \Big[\begin{array}{cc} e^{u_1^2}+u_1 e^{\frac{1}{u_1}}-\rho_1 \\ e^{u_2^2}+u_2 e^{\frac{1}{u_2}}-\rho_2 \end{array}\Big]\Big)\;,
+\end{align*}
+where $h_j(u_j)=e^{u_j^2}+u_j e^{\frac{1}{u_j}}-\rho_j$ for $j=1,2$ as defined in the previous example, we can form the ${\cal RO}$ dynamics for the RNO problem (\ref{ro_simulation_3}) as
+\begin{align*}
+&\dot x=-\Big[\begin{array}{ccl} x_1-1 \\ x_2-2 \end{array}\Big]-\hat{\lambda}\; \Big[\begin{array}{cc} 2 x_1 e^{x_1^2} & 0 \\ 0 & 2 x_2 e^{x_2^2}\end{array}\Big]u \nonumber\;,\\
+&\dot {\hat{\lambda}} = \Big[u^\top \Big[\begin{array}{cc} e^{x_1^2}\\ e^{x_2^2}\end{array}\Big]-b- \sum_{j=1}^2 \big(v_j(e^{u_j^2}+u_j e^{\frac{1}{u_j}}-\rho_j)\big)\Big]_{\hat{\lambda}}^{\varepsilon+}\nonumber\;,\\
+&\dot u=\Big[\begin{array}{cc} e^{x_1^2}\\ e^{x_2^2}\end{array}\Big]- \sum_{j=1}^2(2u_j e^{u_j^2}+e^{\frac{1}{u_j}}-\frac{1}{u_j} e^{\frac{1}{u_j}}) v_j\nonumber\;,\\
+&\dot v=\Big[\hat{\lambda}\; \Big[\begin{array}{cc} e^{u_1^2}+u_1 e^{\frac{1}{u_1}}-\rho_1 \\ e^{u_2^2}+u_2 e^{\frac{1}{u_2}}-\rho_2 \end{array}\Big] \Big]_{v}^+\nonumber\;,
+\end{align*}
+according to ${\cal RO}$ dynamics (\ref{pd_dynamics_0}) where $\hat{\lambda}=\lambda+\varepsilon$. Similarly to the previous example, we can set $\varepsilon$ to zero according to Remark \ref{active_inactive_constraint_rem} as the constraint is active. Fig. \ref{trajectories_nonlinear_exp_no_RC} shows the trajectory plot for $\rho_1=10$, $\rho_2=20$, and all the states initialized at $1$. The robust optimal solution is $[0.5271, 0.7916]$ and the optimal cost value is $0.8419$. We observe that the optimal value for $u$, which is $[1.4020, 1.6824]$ lies on the boundary of the uncertainty set. For positive values of $\varepsilon$, the trajectory and convergence value of $\lambda$ may change, but the solution $x$ remains the same as the constraint is active.
+
+Applying the sampling method in \cite{calafiore2004} with $168$ sampled points in the grid $0.2 \leq u_1 \leq 2$ and $0.2 \leq u_2 \leq 2$ within the uncertainty sets, and solving the many-constrained deterministic problem, the approximate robust optimal solution will be $[0.5376, 0.8193]$, and the approximate optimal cost value is $0.8039$. We again observe that our solution is more exact with a larger cost function value. It is worth mentioning that the solution will be closer to ours by taking more samples in the randomized scenario approach with the cost of adding more constraints to the optimization problem\footnote{For this example, the running time of the sampling scenario method with CVX is more than $200$ times the running time for the ${\cal RO}$ dynamics method.
+Furthermore, the sampling method gives less accurate results.}. The reader may imagine how inefficient this approach is when the main $\cal{RO}$ problem has many constraints. The robust counterpart method in \cite{bental2009} nor the one in \cite[~Table 1]{gorissen20152} cannot find the solution as there is no closed-form convex conjugate available for this complicated example. However, the ${\cal RO}$ dynamics easily finds the robust optimal solution.
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.55]{trajectories_nonlinear_exp_no_RC.eps}
+\caption{Trajectory of the ${\cal RO}$ dynamics for the robust nonlinear optimization problem (\ref{ro_simulation_3}) in Example B.}
+\label{trajectories_nonlinear_exp_no_RC}
+\end{center}
+\end{figure}
+%When a nonlinear term like the geometric programming constraint is appeared in the problem's constraints and/or the uncertainty set, to derive the RC, we have to compute the corresponding support function and/or conjugate function of the nonlinear term with calculations or according to look-up tables as described in \cite{bental20152}. Then, the RC is obtained according to type of the optimization problem. Following this method results in the same optimal solution for the considered example, however, the ${\cal RO}$ dynamics enjoy a more straightforward setting for solving the ${\cal RO}$ example.
+
+\iffalse\subsection{Distributed robust support vector machine}
+We present experimental results of a distributed robust Support Vector Machine (SVM) problem with ellipsoidal uncertainties in a two-dimensional synthetic data set. The RC for this problem is known; however, RC will increase the complexity of the robust SVM problem. Our proposed approach can handle SVM in data sets with heterogeneous uncertainty sets, that is, the case where the uncertainty set associated with each data point is different \cite{ebrahimi2019cdc}. There may be no RC available, or RC is hard to find in this case. We seek a distributed implementation of ${\cal RO}$ dynamics to solve the ${\cal RO}$ problem
+% for robust SVM as a discriminative binary maximum-margin linear classifier defined by a separating hyperplane with applications in statistical learning, especially classification, and regression challenges 
+\cite{vapnik1995}. 
+% In a nutshell, SVM is a supervised machine learning algorithm for determining decision planes that define decision boundaries. 
+%Given labeled training data, SVM algorithm outputs an optimal hyperplane which categorizes new examples in the test data. Solving a quadratic optimization problem with the dimension related to the cardinality of the training set is something needed for training an SVM problem. For two-dimensional data, the hyperplane is a line dividing a plane into two parts for every class of data. Data points called support vectors have central role in determining the separating hyperplane and margins.
+Assume that there are two sets of points in $\mathbf{R}^n$ such as $S_1=\{I_1,I_2,\cdots,I_{M_1}\}$ and $S_2=\{I_{M_1+1},I_{M_1+2},\cdots,I_{M}\}$ with labels. 
+\begin{align*}
+& y_1=y_2=\cdots=y_{M_1}=1\;,\\
+& y_{M_1+1}=y_{M_1+2}=\cdots=y_{M}=-1\;.
+\end{align*}
+In case the sets are linearly separable, we are looking for an affine function $f(I):=I^\top a-b$ such that
+\begin{align*}
+\left\{\begin{array}{ccl}f(I_i)>0 \ \ \text{for all} \ I_i \in S_1\\f(I_i)<0 \ \ \text{for all} \ I_i \in S_2 \end{array}\right..
+\end{align*}
+The linearly separable assumption is not realistic in many situations, and we are looking for an affine function which minimizes the misclassified points. The soft-margin support vector classifier is a heuristic approach to approximating the maximum linear discrimination as follows \cite[Chap~8]{boyd2004}
+\begin{align} \label{ro_svm}
+&\min_{a \in \mathbf{R}^{n-1},\;b \in \mathbf{R},\;z \in \mathbf{R}^{M}} \;\parallel a \parallel_2^2+\gamma \mathds{1}^\top z\\
+&\;\;\;\;\;\;\;\;\;\;\;\text{s.t.}\;\;z \geq 0\;,\; y_j(I_j^\top a-b) \geq 1-z^j\;,\; j^+_{[M]}\nonumber\;.
+\nonumber\end{align}
+%The first term in the cost function is the inverse of the width of the slab defined by $-1 \leq a^\top z-b\leq 1$. The second term in the cost function, including $\mathds{1}$ as a vector of all ones, can be seen as a convex relaxation for the number of misclassified points and $\gamma$ is a positive number determining the weight of the second term in the cost function. Variable $z$ can be interpreted as the degree of violation for the original constraints, that is, $x_i^\top a-b \geq 1$ and $x_i^\top a-b \leq -1$. These constraints can be recovered by making $z$ large enough and we can make these inequalities always feasible in this way.
+Note that in the terminology of (\ref{dist}), $x=[a,b] \in \mathbf{R}^n$. The classifier can be calculated by solving the above optimization problem for $a$ and $b$, and sparse non-negative $z$ so that the inequalities are satisfied. A robust version of the SVM problem can be obtained, assuming that the location of data points is uncertain. An additive ellipsoidal uncertainty can be modeled for each data point as follows:
+\begin{align*}
+I_j=\bar I_j+u^j,\; {\cal U}^j:=\{u^j \in \mathbb{R}^{m_j}:\;\parallel u^j \parallel_2^2 \; \leq \alpha_j^2\}\;,
+\end{align*}
+for $j^+_{[M]}$. 
+% As a centralized processing unit for SVM is not always available due to different reasons such as communication overhead, scalability, power limitations or privacy and security issues, centralized linear robust SVM can be considered as a set of coupled decentralized subproblems with imposed consensus constraints for the classifier parameters. This problem is tackled in \cite{forero2010} by ADMM approach and message exchange between neighboring nodes and showing that for linear distributed SVM, the algorithm converges to a centralized SVM classifier, in which, all distributed samples are available centrally. 
+For distributed implementation using the continuous-time ${\cal RO}$ dynamics, we assume a network with a balanced and strongly connected graph with symmetric Laplacian ${L}$. We allow the nodes (data points) to interact with their neighbors to have local estimates of $a$ and $b$, namely $a^j$ and $b^j$. Another assumption is that all of the data points in the training set are available to every agent. We define $\mathbf{a}=[a^1,\cdots,a^M]^\top$ and $\mathbf{b}=[b^1,\cdots,b^M]^\top$. The nodes interact through the graph Laplacian to agree on the same values of $a$ and $b$, which is provably convergent to a centralized SVM classifier. The distributed ${\cal RO}$ problem can be formulated by replacing the common variables with auxiliary per-node variables and adding consensus constraints to impose variable agreement among neighboring nodes as follows
+\begin{align} \label{ro_svm_dist}
+&\min_{\mathbf{a},\;\mathbf{b},\;z} \; \sum_{j=1}^M (\parallel a^j \parallel_2^2+\gamma z^j)\\%+\frac{\rho}{2} \mathbf{a}^\top \mathbb{L} \mathbf{a}+\frac{\rho}{2} \mathbf{b}^\top {L} \mathbf{b}\\
+&\;\;\; \text{s.t.}\;\;\mathbb{L} \mathbf{a}=0,\;{L} \mathbf{b}=0,\;z \geq 0\;,\nonumber\\
+&\;\;\;\;\;\;\;\;\; y_j\big((\bar I_j+u^j)^\top a^j-b^j\big) \geq 1-z^j,\;\parallel u^j \parallel_2^2 \; \leq \alpha_j^2\;,\nonumber 
+\end{align}
+for $j^+_{[M]}$, where $\mathbf{a} \in \mathbf{R}^{(n-1)M},\;\mathbf{b} \in \mathbf{R}^{M},\;z \in \mathbf{R}^{M},\; \mathbb{L}:=L\otimes I_{n-1}$,\; %$\mathbb{L}_j$ and $L_j$ are the $j^{th}$ (block) rows of $\mathbb{L}$ and $L$ respectively,
+and augmented terms are added to the objective function to improve the optimization problem formulation. Because of network connectivity, neighborhood consensus implies network-wide consensus. Hence, problem (\ref{ro_svm}) is equivalent to problem (\ref{ro_svm_dist}) that is $a^j=a$ and $b^j=b$ for $j^+_{[M]}$, where $(a,b)$ is a feasible solution of (\ref{ro_svm}). Problem (\ref{ro_svm_dist})
+has the following Lagrangian according to (\ref{lag})
+\begin{align} \label{lagrangian_compact_svm}
+{\cal L}=& \sum_{j=1}^M (\parallel a^j \parallel_2^2+\gamma z^j)\nonumber\\%+\frac{\rho}{2} \mathbf{a}^\top \mathbb{L} \mathbf{a}+\frac{\rho}{2} \mathbf{b}^\top L \mathbf{b} \nonumber\\
+&+\eta_a^\top \mathbb{L} \mathbf{a}+\eta_b^\top {L} \mathbf{b}-\sum_{j=1}^{M} \lambda_j v_j h_j(u^j)\nonumber\\&+  \sum_{j=1}^{M} \lambda_j \Big(-y_j \big((\bar I_j+u^j)^\top a^j+b^j\big)+1-z^j\Big)\;,
+\end{align}
+where $z \succeq 0$, $\lambda \succeq 0$, and $v \succeq 0$, and $h_j(u^j)=\parallel u^j \parallel_2^2-\alpha_j^2$\;.
+The SVM problem is bound to have inactive constraints. Therefore, (\ref{pd_dynamics}) is not directly applicable. Instead, we apply the perturbed dynamics (\ref{pd_dynamics-pert2}).
+We have the following distributed ${\cal RO}$ dynamics to solve the robust linear SVM problem
+\begin{align} \label{ro_svm_dynamics}
+&\dot a^j=-2 a^j-\mathbb{L}_j \eta_a+y_j \lambda_j (\bar I_j+u^j)\nonumber\\
+&\dot b^j=-{L}_j \eta_b-y_j \lambda_j\nonumber\\
+&\dot \lambda_j=\big[-y_j \big((\bar I_j+u^j)^\top a^j+b^j\big)+1-z^j-v_j h_j(u^j))\big]_{\lambda_j}^{+\epsilon}\nonumber\\
+&\dot z^j=\left[-\gamma+\lambda_j\right]_{z^j}^+\\
+&\dot u^j=-y_j a^j-2u^j v_j\nonumber\\
+&\dot v_j=\left[\lambda_j \; h_j(u^j) \right]_{v_j}^+\;,j^+_{[M]}\nonumber\\
+&\dot \eta_a=\mathbb{L} a\nonumber\\
+&\dot \eta_b={L} b\nonumber
+\end{align}
+%The nominal inequality constraints $z^j\geq 0$, although  not included in our formulation for simplicity, can be handled by our approach with no modifications.
+The numerical example is a network including $M=20$ nodes with the dimension of $2$ (that is, $n=3$) in a daisy chain with a circulated-matrix Laplacian with the first row as
+$[-2 \ \ 1 \ \ 0 \ \ \cdots \ \ 0 \ \ 1] \in \mathbb{R}^{20}$, second row as $[1 \ \ -2 \ \ 1 \ \ 0 \ \ \cdots \ \ 0] \in \mathbb{R}^{20}$, and so on. The location of nodes in two-dimensional space is given in Table \ref{table_nodes}. Fig. \ref{svm2} shows the data map including the separating hyperplane derived by distributed ${\cal RO}$ dynamics (\ref{ro_svm_dynamics}) for $\gamma=100$, $\rho=35$ and different $\alpha_j$'s from $0.05$ to $0.2$ while we chose all the initial conditions for the states to be zero. The optimal values determining the separating plane are calculated as $a^\top=[2.979,-0.745]$ and $b=1.154$. %The hyperplane will change for different $\gamma$ values.
+Noting that the number of constraints, that is 20, is much more than the dimension of SVM example that is, 2, and according to Lemma \ref{strong_conv.lem}, the optimal solution for $a^j$ and $b^j$ in ${\cal RO}_\varepsilon$ dynamics is equal to the one for ${\cal RO}$ dynamics.
+
+We can observe in Fig. \ref{svm2} how the uncertainties of the data points affect the classifier. In this specific example, data points are linearly separable in the absence of uncertainties. However, the problem is non-separable in the robust case and can only be classified by a soft-margin approach. Notice how the non-robust hyperplane without considering the uncertainties (dashed line) is moved to the left (solid line) when the uncertainties are considered. 
+
+%As the Lagrangian function has the convex-concave property, primal players attempt to minimize the Lagrangian by moving against their gradients. In contrast, the dual players, including the uncertainties, follow their gradient directions, maximizing the Lagrangian. This is equivalent to making the margin narrower by pushing the points (including the support vectors) towards the separating hyperplane.
+
+%Generally, the support vectors will not remain the same in SVM problem if uncertainties are added to the data points.
+Figures \ref{trajectories_2_perturbed}-\ref{trajectories_4_perturbed} show how the main trajectories in the ${\cal RO}$ dynamics are evolving to get the final convergence and agreement among the node variables.
+
+%As can be seen in Fig. \ref{svm}, each support vector data point goes to the corresponding uncertainty set boundary toward the hyperplane direction. However, some non-support vector data points do not go to the boundary as the associated constraint in the robust SVM problem is not active. We can easily compute $u_i^\star$ in theory for these points by knowing the worst-case uncertainty direction and the simple nature of the uncertainty sets; however, this computation is not always feasible nor necessary. We simulate the dynamics (\ref{ro_svm_dynamics}) again but this time, according to ${\cal RO}_\varepsilon$ dynamics in (\ref{pd_dynamics-pert2}), by adding an epsilon logic to the $\lambda$ projection with $\varepsilon=0.001$ (we will get the same solution with smaller eps). The result for the same data set and parameters with zero initial conditions (except for the $\lambda_j$ which starts at $\varepsilon$) can be seen in Fig. \ref{svm2}. We notice that all of the data points now go to the boundary of the corresponding uncertainty sets. The convergence and consensus of the main trajectories for ${\cal RO}_\varepsilon$ dynamics can be seen in Fig. \ref{trajectories_2_perturbed}-\ref{trajectories_5_perturbed}. As the constraints associated with non-support vectors in the SVM problem are inactive, the corresponding elements of $\lambda_j$ do not satisfy Assumption \ref{poslambda.ass}. That is why the corresponding elements of $u^j$ for the non-support vectors in ${\cal RO}$ dynamics are not converging to the equilibrium point as they are frozen by the corresponding element in $\lambda_j$ going to zero (Fig \ref{trajectories_4_main}). By exploiting the perturbed dynamics, ${\cal RO}_\varepsilon$, all of the elements of $u^j$ are converging to the equilibrium point as $\varepsilon$ prevents $\lambda_j$ going to zero. Theorem \ref{RO_ROperturbed} specifies the closeness of solutions between ${\cal RO}_\varepsilon$ and ${\cal RO}$ dynamics.
+
+%Noting that the number of constraints, that is, 20, is much more that the dimension of SVM example, that is, 2, and according to Lemma \ref{strong_conv.lem}, the optimal solution for $a^j$ and $b^j$ in ${\cal RO}_\varepsilon$ dynamics is equal to the one for ${\cal RO}$ dynamics.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{ccccccccccccccccccccccc}
+\hline
+\multicolumn{11}{|c|}{$2D$ data points in the SVM example} \\
+\hline
+Blue & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\\
+\hline
+$x_1$ & 1 & 0.5 & 1 & 0.75 & 1 & 1.5 & 1.3 & 0.6 & 0.7 & 2\\
+$x_2$ & 2 & -0.5 & 1 & 0.75 & 0 & 0.5 & 1 & -0.2 & 0.5 & 1\\
+\hline
+Red & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20\\
+\hline
+$x_1$ & 0.6 & 0 & 0.5 & 0.5 & 0 & 0.3 & -0.2 & 0.5 & 0.3 & -1\\
+$x_2$ & 1.5 & -0.7 & 0.5 & 0.75 & 0 & 0.5 & 1 & 2 & 1.5 & 1\\
+\end{tabular}
+\caption{Data points for the SVM example. The points $1$-$10$ are associated with the set $S_1$ (blue class) and the points $11$-$20$ are in $S_2$ (red class).}
+\label{table_nodes}
+\end{table}
+%\todo{Since we have results for the case of $\lambda^\star=0$ .. can we use this results to show that not all $\lamdba^\star$ for this example will be positive..Can we use perturbed system to identify the inactive constraints..}
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.45]{trajectories_1_perturbed_eps0.001.eps}}
+\caption{A Numerical example of distributed SVM classifier with ${\cal RO}_\varepsilon$ dynamics ($\varepsilon=0.001$). Dots are the nominal data points, that is, $\bar I_j$, and plus signs are the robust data points, that is, $\bar I_j+u^j^\star$. The solid black line represents the robust separating hyperplane and the non-robust hyperplane (without considering the uncertainties) can be seen by the dashed line. The blue and red dotted points are nominal data points. The perturbed positions of data points (after being added by the worst case uncertainties) are shown by plus signs. Light blue circles are depicted to show the radius of ellipsoidal uncertainty sets which are heterogeneous in size.}
+\label{svm2}
+\vspace{-7mm}
+\end{center}
+\end{figure}
+
+
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = 0.45]{trajectories_2_main}
+%\caption{Trajectories of $a^j$ and $b^j$ in the distributed SVM example with ${\cal RO}$ dynamics. The first component of $a^j$, that is, $a_1^j$ agrees on a same value for every $j$ and the same is true for $a_2^j$ and $b^j$.}
+%\label{trajectories_2_main}
+%\end{center}
+%\end{figure}
+
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = 0.45]{trajectories_4_main}
+%\caption{Trajectories of $\lambda_j$ and $z^j$ in the distributed SVM example with ${\cal RO}$ dynamics.}
+%\label{trajectories_4_main}
+%\end{center}
+%\vspace{0mm}
+%\end{figure}
+
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = 0.45]{trajectories_5_main}
+%\caption{Trajectories of $v_j$ and $\parallel u^j \parallel$ in the distributed SVM example with ${\cal RO}$ dynamics. The steady state value of norm of $u^j$ will be equal to $\alpha_j$ for each $j$.}
+%\label{trajectories_5_main}
+%\end{center}
+%\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.41]{trajectories_2_perturbed_eps0.001.eps}
+\caption{Trajectories of $a^j$ and $b^j$ in the distributed SVM example with ${\cal RO}_\varepsilon$ dynamics ($\varepsilon=0.001$). The first component of $a^j$, that is, $a_1^j$ agrees on a same value for every $j$ and the same is true for $a_2^j$ and $b^j$.}
+\label{trajectories_2_perturbed}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.45]{trajectories_4_perturbed_eps0.001.eps}
+\caption{Trajectories of $\lambda_j$ and $z^j$ in the distributed SVM example with ${\cal RO}_\varepsilon$ dynamics ($\varepsilon=0.001$).}
+\label{trajectories_4_perturbed}
+\end{center}
+\vspace{0mm}
+\end{figure}
+
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = 0.45]{trajectories_1_main.eps}}
+%\caption{A Numerical example of distributed SVM classifier with ${\cal RO}$ dynamics. Dots are the nominal data points, that is, $\bar I_j$ and plus signs are the robust data points, that is, $\bar I_j+u^j^\star$. The solid black line represents the robust separating hyperplane which the non-robust hyperplane (without considering the uncertainties) can be seen by the dashed line. Blue and red dotted points are the main positions of data points. The perturbed positions (after being added by the worst case uncertainties) are shown by plus signs. Light blue circles are depicted to show the radius of ellipsoidal uncertainty sets which are heterogeneous in size.}
+%\label{svm}
+%\vspace{0mm}
+%\end{center}
+%\end{figure}
+
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = 0.45]{trajectories_5_perturbed_eps0.001.eps}
+%\caption{Trajectories of $v_j$ and $\parallel u^j \parallel$ in the distributed SVM example with ${\cal RO}_\varepsilon$ dynamics ($\varepsilon=0.001$). The steady state value of norm of $u^j$ will be equal to $\alpha_j$ for each $j$.}
+%\label{trajectories_5_perturbed}
+%\end{center}
+%\end{figure}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Robust Dynamic Location Problem}
+We now consider the optimal cooperative and robust self-placement of autonomous vehicles, modeled as first-order kinematic points, to monitor multiple targets (initially assumed static). This is a dynamic generalization of a classical facility location problem \cite{farahani2009} and here we provide a solution to the robust formulation of this problem using ${\cal RO}$ dynamics. The optimization problem is described by an undirected graph with $N$ nodes and a set of edges ${\mathbb E}$. Among these nodes, the first $N_1$ nodes represent the fixed positions of the targets (also referred to as anchors), while the remaining $N_2 = N - N_1$ nodes represent the mobile agents. Each node $x_i\in \mathbb{R}^2$ denotes the location of an anchor or an agent. The anchors $x_1,\cdots,x_{N_1}$ have fixed positions and the agents $x_{N_1+1},\cdots,x_{N}$ are mobile and can adjust their positions. The problem is to find the locations of the sensor nodes $x_{N_1+1},\cdots, x_N$ to minimize the following cost
+\begin{align*}
+g(x_1,..,x_{N_1})=\min_{x_{N_1+1},\cdots,x_N} \sum_{(i,j)\in {\mathbb E}}
+f_{ij}(x_i, x_j)\;,
+\end{align*}
+which is the sum of some measure of "length" for each link. This problem and its generalizations have many applications \cite{boyd2004}, and can be solved efficiently and in a distributed fashion in continuous time \cite{wang2011}. Leaving the sensor nodes (agents) mobile and capable of computation in distributed mode, we obtain a distributed dynamical version \emph{real-time} of the optimal placement. The sensor nodes, through local interactions, cooperate to find and move toward their globally optimal locations autonomously. 
+\iffalse
+In static location and placement problems, we have $N$ points in $\mathbb{R}^2$ or $\mathbb{R}^3$, and a list of pairs of points that need to be connected by links. The locations of $N_1$ points are (typically) fixed (anchors), and the locations of $N_2=N-N_1$ points are variable. We need to determine the variables to minimize the total interconnection length of the links, possibly under some constraints on positions. 
+A typical example relates to finding the locations of plants or warehouses of a company where the links are routes to transport goods. The goal is to find the optimal locations to minimize shipping costs \cite{boyd2004}. 
+Considering $x_i \in \mathbb{R}^k$ for $k=2$ or $k=3$, the problem can be defined as
+\begin{align*}
+    \sum_{(i,j) \in {\cal A}} f_{ij}(x_i,x_j)
+\end{align*}
+%{\color{brown} Are the $x_j$ with index $j$ are the anchor points..}{\color{blue} I thought it took it from boyd's book I will check}
+where ${\cal A}$ is the set of all links, and $f_{ij}:\mathbb{R}^k \times \mathbb{R}^k \rightarrow \mathbb{R}$ is the cost function that represents the length of the link interconnection such as $\parallel x_i-x_j \parallel$ with the Euclidean norm or the $l_p$-norm. In this case, the location and placement problem is convex. Other form of the problem including non-negative weights for distances is
+\begin{align*}
+    \sum_{(i,j) \in {\cal A}} w_{ij} \parallel x_i - x_j \parallel\;.
+s\end{align*}
+By assigning zero weights to pairs of nodes that are not connected, the problem can be see more simply as
+\begin{align*}
+    \sum_{i<j} w_{ij} \parallel x_i - x_j \parallel\;.
+\end{align*}
+\fi
+The problem can also be under a set of constraints for the position of agents $x_{N_1+1},\cdots,x_{N_1}$ to be in a specified convex set. Specifically, we consider the following robust location and placement problem
+\begin{align*}
+    &\min_{x_{N_1+1},\cdots,x_N} \sum_{(i,j)\in {\mathbb E}} \frac{1}{2}\; w_{ij} \parallel x_i - x_j \parallel_2^2\\
+    &\;\;\text{s.t.}\;\;\underset{u_i\in {\cal U}_i}{\max} (a_i+P_i u_i)^\top x_i \leq b_i, \; i={N_1+1},\cdots,N\;,
+\end{align*}
+where the uncertainty $u_i$ lies in ${\cal U}_i = \parallel u_i \parallel_2^2\; \leq \rho_i^2$ and $x_{N_1}+1,\cdots,x_{N}$ are moving agents. The ${\cal RO}$ dynamics for this problem can be derived as follows for $i=N_1+1,\cdots,N$
+\begin{align*}
+\left\{
+\begin{array}{cl}
+\vspace{2mm}
+&\dot{x}_i=\sum_j w_{ij} (x_i-x_j)-\hat \lambda_i \; (a_i+P_i u_i)\\
+\vspace{2mm}
+&\dot{\hat \lambda}_i=[(a_i+u_i P_i)^\top x_i-P_i u_i^\top c_i-b_i-v_i\; {\cal U}_i]_{\hat \lambda_i}^{\varepsilon+}\\
+\vspace{2mm}
+&\dot{u}_i=P_i^\top (x_i-c_i)-2v_i u_i\\
+\vspace{2mm}
+&\dot{v}_i=[\hat \lambda_i\; {\cal U}_i]
+\vspace{2mm}
+\end{array}\right..
+\end{align*}
+Note that this problem is naturally distributed and our dynamics reflects the distributed structure. We consider the setup shown in Figure \ref{fig_points} with five anchors and four agents. The figure also shows the (fixed) interconnection graph among all the elements of the problem. In this academic example, we consider the presence of a linear constraint defining the half-space where the agents can be. The constraint is simply
+\begin{align*}
+{\bf 1}'x_i\leq 2.5, \;\; i=N_1+1,\cdots,N\;,
+\end{align*}
+for all the agents. 
+In addition, we would like the agents to find robust locations based on the uncertainty on the nominal slope $45^o$ of the nominal constraint. Namely 
+\begin{align*}
+{\bf 1}'x_i+u_iP'x_i\leq 2.5,\;\; i=N_1+1,\cdots,N\;,
+\end{align*}
+where $P'=\begin{bmatrix}1&-1\end{bmatrix}$ and $\|u_i\|_2^2\leq \rho^2$. For example, when $\rho=1$, the constraint can be any line passing through $x'=(1.25,\,1.25)$, including the horizontal and vertical ones. Figure \ref{fig_points} also shows the nominal linear constraint. The location of the shown agents is the optimal robust one w.r.t. the constraint being perturbed by the uncertainty $u_i$ with $\|u_i\|_2^2\leq 0.1$.
+
+%Figure \ref{fig_merge} shows the trajectories of each agent in  the plane under different conditions described next. 
+
+First, agents start at their initial locations at the origin (white circle), and their paths converge to the optimal robust location for $\rho^2=0.1$. Such locations are indicated by full-colored circles. We see that agents $1$ and $4$ (blue and green) are on the boundary of the robust feasible set identifiable with the larger sector in the figure. The uncertain constraint is not active for the other agents. However, their optimal location is indirectly influenced by the robust constraint active in agents $1$ and $4$ as all agents and anchors are interconnected. 
+
+In the next phase of the simulation, we rotate the location of the anchors clockwise at constant speed. Although agents only react to their local neighbors (agents/anchors), the interconnected dynamical system shows the ability to globally track the coordinated motion of the anchors within the robust feasible set. It is interesting to notice that the boundary of the feasible set is not defined a priori or hard-coded in the simulation, but it emerges from the interactions built in the dynamical system. Finally, after some time, the uncertainty changes and increases with size $\rho^2=1$ at time $t=300$. This implies that no location should be feasible above the horizontal line passing through $(1.25,1.25)$ and on the right of the vertical line passing through the same point. The location of the agents when the uncertainty changes is indicated by black empty circles. We note that, when the uncertainty changes, the nodes $1$, $2$, and $3$ are located outside the new robust feasible set and, with a transient correction, move inside the robust SW quadrant for the rest of the time. 
+
+This example showcases the ability of the dynamical system to track changes online and adapt to uncertainty changes over time. We have obtained the behavior shown by appropriate scaling of the various differential equations involved. Note that the convergence is not affected by positive scaling of the differential equations. A relatively larger scaling on the dual variables in charge of the constraints makes the system response more reactive toward feasibility and more sensitive toward uncertainty changes. We leave to future research the systematic design of the optimization system for the desired real-time behavior.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.26]{simulation_figure_finalv3.png}
+\vspace{-1.5mm}
+\caption{Locations of agents and anchors, interactions between agents and anchors, and the nominal linear constraint in Example C.}
+\label{fig_points}
+\end{center}
+\end{figure}
+
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale=0.3]%{simulation_figure2_moving_target_agent_2.png}
+%\vspace{-1.5mm}
+%\caption{Trajectories of agents}
+%\label{fig_merge}
+%\end{center}
+%\end{figure}
+
+\section{Conclusions}\label{section_conclusions}
+We proposed a continuous-time dynamical system, ${\cal RO}$ dynamics, to solve robust optimization problems. This approach can solve convex-concave ${\cal RO}$ problems in a decentralized manner without requiring specific model knowledge. This approach offers an advantage over existing methods, which are based on robust counterpart and random sampling particularly for problems with large scales, complex constraint and uncertainty sets, real-time adaptation requirements or unknown dynamics. The implementation capability of ${\cal RO}$ dynamics, elaborated in this paper, opens new avenues for robustifying large-scale optimization problems in Machine Learning and Deep Learning against uncertainties, perturbations, and adversarial attacks, while further research is needed to analyze the computational cost and rigorously characterize the convergence rate of ${\cal RO}$ dynamics.
+%By exploiting real-time system feedback, ${\cal RO}$ dynamics steers a physical system to the robust optimal solution with dynamic tracking capability, and is inherently robust and adaptive to time-varying unknown disturbances, a property that can be investigated further in the future.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Appendix} \label{section_appendix}
+
+\subsection{Lemma \ref{saddle.lem} [Saddle property]}
+Essentially, we want to show that
+\begin{align*}
+{\cal L}(x^\star,\lambda,u,v^\star)\leq \mu \leq {\cal L}(x,\lambda^\star,u^\star,v)\;.
+\end{align*}
+Under Assumption \ref{assume_feasible}, an optimal solution $x^\star$ exists and based on Assumption \ref{assume1}, this optimal solution is unique as $f_0(x,u_0)$ is strictly convex in $x$ for any $u_0 \in{\cal U}_0$. Consider any optimal solution $(x^\star,\lambda^\star,u^\star,v^\star)$ for ${\cal RO}$ problem (\ref{dual.eq}).
+
+\noindent
+For each of the lower level optimizations, let  
+\begin{align*}
+\eta_i=\max_{u_i\in {\cal U}_i}f_i(x^\star,u_i)=f_i(x^\star,u_i^\star)=
+\tilde{\cal L}_i(x^\star,u_i^\star,v_i^\star),\; i_{[N]}\;.
+\end{align*}
+From the corresponding saddle property, it follows that for all $u_i$, $i_{[N]}$,
+\begin{equation}\label{xxlb.eq}
+f_i(x^\star,u_i)-(v_i^\star)^\top h_i(u_i)\leq \eta_i\;.
+\end{equation}
+From the upper level saddle property, for all $\lambda_i\geq 0$, $i^+_{[N]}$,
+\begin{align*}
+\eta_0+\sum_i(c_i+\lambda_i)\eta_i\leq f_0(x^\star,u_0^\star)+\sum_{i=1}^N(c_i+\lambda_i^\star)\eta_i=\mu\;.
+\end{align*}
+Substituting the lower bound on $\eta_i$, (\ref{xxlb.eq}), in the left hand side, it follows that for all $u_i, i_{[N]}$ and $\lambda_i\geq 0, i^+_{[N]}$,
+\begin{align*}
+&{\cal L}(x^\star,\lambda,u,v^\star)\\
+= &f_0(x^\star,u_0)-(v_0^\star)^\top h_0(u_0)\\
+& +\sum_{i=1}^
+N(c_i+\lambda_i)(f_i(x^\star,u_i)-(v_i^\star)^\top h_i(u_i))\\
+\leq &\;\mu\;,
+\end{align*}
+where we have used $c_i+\lambda_i\geq 0$. We next use lower saddle property in the other direction, namely, for all $v_i\geq 0$,
+\begin{align*}
+\eta_i=f_i(x^\star,u_i^\star)=f_i(x^\star,u_i^\star)-(v_i^\star)^\top h_i(u_i^\star)\\
+\leq f_i(x^\star,u_i^\star)-(v_i)^\top h_i(u_i^\star)\;,
+\end{align*}
+which implies that for all $v_i\geq 0$, $-v_i^\top h(u^\star)\geq 0$, $i_{[N]}$.\\
+Using this property and the fact that $(c_i+\lambda_i^\star)\geq 0$, it follows that for all $v_i\geq 0$, $i^+_{[N]}$,
+\begin{equation}\label{xxub.eq}
+-(v_0)^\top h_0(u_0^\star)-\sum_{i=1}^N(c_i+\lambda_i^\star)(v_i)^\top h_i(u_i^\star)\geq 0\;.
+\end{equation}
+% \begin{align}
+% \mu&=f_0(x^\star,u^\star)-(v_0^\star)^\top h_0(u_0^\star)\nonumber\\
+% &+\sum_{i=1}^N(c+\lambda_i^\star)(f_i(x^\star,u_i^\star)-(v_i^\star)^\top h_i(u_i^\star))\nonumber\\
+% &\leq f_0(x^\star,u^\star)-(v_0)^\top h_0(u_0^\star)\nonumber\\
+% &+\sum_{i=1}^N(c+\lambda_i^\star)f_i(x^\star,u_i^\star)-\sum_{i=1}^N(c+\lambda_i^\star)(v_i)^\top h_i(u_i^\star)\nonumber\\
+% &=\mu-(v_0)^\top h_0(u_0^\star)-\sum_{i=1}^N(c+\lambda_i^\star)(v_i)^\top h_i(u_i^\star)
+% \end{align}
+
+\noindent
+The upper level saddle property implies 
+\begin{align*}
+\mu\leq f_0(x,u_0^\star)+\sum_{i=1}^N(c_i+\lambda_i^\star)f_i(x,u_i^\star)
+\end{align*}
+for all $x$. Combining this with (\ref{xxub.eq}), we obtain
+\begin{align*}
+\mu&\leq f_0(x,u_0^\star)-(v_0)^\top h_0(u_0^\star)\\
+&+\sum_{i=1}^N(c_i+\lambda_i^\star)(f_i(x,u_i^\star)-(v)^\top h_i(u_i^\star))\\
+&={\cal L}(x,\lambda^\star,u^\star,v)
+\end{align*}
+for all $x$ and $v_i\geq 0, i_{[N]}$.
+\qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{${\cal RO}$ dynamics solutions properties}\label{existence.sec}
+${\cal RO}$ dynamics (\ref{pd_dynamics}) can be viewed as switched dynamical system with a discontinuous right-hand side. The conditions guaranteeing the existence and uniqueness of the solution and continuity w.r.t. initial conditions, for a general discontinuous dynamical system are provided in \cite[Theorem~2.5]{nagurney2012projected}. In this section, we show that our ${\cal RO}$ dynamics (\ref{pd_dynamics}) satisfies the refined conditions presented in \cite{cherukuri2016}.
+
+To prove the existence and uniqueness of solutions for (\ref{pd_dynamics}), and also the continuity of solutions w.r.t. the initial conditions, there are two main steps. The first step is showing that ${\cal RO}$ dynamics is a particular case of projected dynamical systems. The second step requires ${\cal RO}$ dynamics (\ref{pd_dynamics}) satisfying the monotonicity property, which is our main result.
+
+\begin{definition} \label{projection_operator} (Projection operator)
+If ${\cal K}$ is a closed convex set, for any point $\bar y \in \mathbb R^q$, the point projection of $\bar y$ on the set ${\cal K}$ can be written as
+\begin{align*}
+\text{proj}_{\cal K}(\bar y)=\text{argmin}_{y \in {\cal K}} \parallel y-\bar y \parallel\;.
+\end{align*}
+For $\bar y \in \mathbb R^n$ and $y \in {\cal K}$, vector projection of $\bar y$ at $y$ w.r.t. ${\cal K}$ is
+\begin{align}
+\label{projection_operator}
+\Pi_{\cal K}(y,\bar y) = \text{lim}_{\delta \rightarrow 0^+} \frac{\text{proj}_{\cal K}(y+\delta \bar y)-y}{\delta}\;.
+\end{align}
+\end{definition}
+
+Note that the map $\text{proj}_{\cal K}$ is Lipschitz on $\mathbb R^q$ with constant $L=1$ \cite[Proposition~2.4.1]{clarke1983}. 
+
+\begin{definition} \label{projected_dynamical_system} [Projected dynamical system \cite{nagurney1996}]
+Considering a differential equation $\dot y=F(y)$ with $F:\mathbb R^q \rightarrow \mathbb R^q$, the associated projected dynamical system is defined as
+\begin{align}
+\label{projected_dynamics}
+\dot y = \Pi_{\cal K}(y,F(y)),\; y(0) \in {\cal K}\;.
+\end{align}
+\end{definition}
+
+\begin{lemma} \label{projected} (${\cal RO}$ dynamics as a projected dynamics)
+${\cal RO}$ dynamics (\ref{pd_dynamics}) can be written as a projected dynamical system according to Definition \ref{projected_dynamical_system}.
+\end{lemma}
+\begin{proof}
+The proof of Lemma \ref{projected} follows along the lines of the construction outlined in \cite{cherukuri2016}. Details omitted. \qed\\
+\end{proof}
+
+%The proof for Lemma \ref{monotonicity} is presented in the appendix. Specifically, we show that
+%\begin{align} \label{deriv_v2}
+%\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)&\leq\; {\cal L}(x^\star,\lambda,u,v^\star)-{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)\nonumber\\
+%&+{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)-{\cal L}(x,\lambda^\star,u^\star,v) \leq 0,
+%\end{align}
+%where the last inequality follows from (\ref{saddle}).
+
+%\cite[Theorem~2.5]{nagurney1996}.
+\begin{proposition} \label{proposition_projected}
+If $F$ in the projected dynamical system (\ref{projected_dynamics}) is Lipschitz on ${\cal K}$, we have the following existence, uniqueness, and continuity w.r.t. the initial condition results for the solutions of the projected dynamics (\ref{projected_dynamics}):
+\begin{enumerate}
+\item For any $y_{0} \in {\cal K}$, there exists a unique solution $t \rightarrow y(t)$ of the projected system (\ref{projected_dynamics}) with $y(0)=y_{0}$ in $[0,\infty)$.
+\item Consider a sequence of points $\{y_{k}\}_{k=1}^\infty \subset {\mathcal K}$ with $lim_{k \rightarrow \infty}=y$. Then, the sequence of solutions $\{t \rightarrow \gamma_k(t)\}_{k=1}^\infty$ of the projected dynamics (\ref{projected_dynamics}) with $\gamma_k(0)=y_k$ for all $k$, converges to the solution $t \rightarrow \gamma(t)$ of (\ref{projected_dynamics}) with $\gamma(0)=y$ uniformly on every compact set of $[0,\infty)$.
+\end{enumerate}
+\end{proposition}
+The ability to write ${\cal RO}$ dynamics (\ref{pd_dynamics}) as a projected dynamical system along with the monotonicity property is used in the proof of the existence, uniqueness and continuity of the solutions of the set ${\mathbb S}$.
+
+\begin{lemma} \label{uniq_exis}
+(Existence, uniqueness and continuity of solutions)
+$\gamma:[0,T) \rightarrow {\mathbb S}$ is defined as a Caratheodory solution of ${\cal Z}^{\cal RO}$ in the interval $[0,T)$ if $\gamma$ is absolutely continuous on $[0,T)$ and satisfies $\dot \gamma(t)={\cal Z}^{\cal RO} (\gamma(t))$ almost everywhere in $[0,T)$. 
+%We consider solutions of ${\cal RO}$ dynamics in Caratheodory sense as ${\cal RO}$ dynamics is a discontinuous system. 
+Under Assumptions \ref{assume1} and \ref{assume_feasible}, and starting from any point $z\in \mathbb S$, a unique solution to ${\cal RO}$ dynamics (\ref{pd_dynamics}) exists and remains in $\mathbb S \cap V^{-1}(\leq V(z))$. Also, if a sequence of points $\{z_k\}_{k=1}^\infty \subset {\mathbb S}$ converges to $z$ as $k \rightarrow \infty$, the sequence of solutions $\{t \rightarrow \gamma_k(t)\}_{k=1}^\infty$ of ${\cal Z}^{\cal RO}$ starting at these points (that is, $\gamma_k(0)=z_k$ for all $k$) converge uniformly to the solution $t \rightarrow \gamma(t)$ on every compact set of $[0,\infty)$.
+\end{lemma}
+The proof of this lemma follows closely along the lines of proof for the existence and uniqueness of solution for the primal-dual dynamical system from \cite[Lemma~4.3]{cherukuri2016}. 
+%{\color{brown} I think this level of details could be enough and the reference to the supplementary material can be removed.. }
+%(proof in the supplementary material \cite{extended_version}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Theorem \ref{RO_ROperturbed}}
+
+Based on the optimal solution $x^\star$ for ${\cal RO}$ problem, 
+\begin{align*}
+\mu=\min_{{\cal F}_i(x)\leq  0} {\cal F}_0(x)\;,\; \mu={\cal F}_0(x^\star)\;.
+\end{align*}
+As the cost function of $\mu_\varepsilon$ is smaller than or equal to that of ${\cal RO}$ and the feasible sets of the two problems are equal, 
+\begin{equation}\label{ub.eq}
+ \mu_\varepsilon-\mu\leq 0\;.
+\end{equation}
+Since $x^\star$ minimizes ${\cal F}_0(x)$ over the constraint set, $\mu={\cal F}_0(x^\star)\leq {\cal F}_0(x_\varepsilon^\star)$.
+Adding and subtracting $\varepsilon\sum_{i=1}^n{\cal F}_i(x^\star_\varepsilon)$
+in the RHS and using (\ref{ub.eq}) yields $\varepsilon \sum_{i=1}^N{\cal F}_{i}(x_\varepsilon^\star)\leq 
+\mu_\varepsilon-\mu\leq 0$\;.
+
+Following a similar argument as before by comparing $\mu(\varepsilon_0)$ and $\mu_\varepsilon$ for $\varepsilon_0\geq \varepsilon$, we now let 
+\begin{align*}
+&\mu_\varepsilon=\tilde{{\cal F}}_0(x^\star_\varepsilon)={\cal F}_0(x^\star_\varepsilon)+\varepsilon\sum_{i=1}^N{\cal F}_i(x^\star_\varepsilon)\;,\\
+&\mu(\varepsilon_0)=\tilde{{\cal F}}_0(x^\star_{\varepsilon_0})+\delta\sum_{i=1}^N{\cal F}_i(x^\star_{\varepsilon_0})\;,
+\end{align*}
+where $\delta=\varepsilon_0-\varepsilon$. Then, $\mu_\varepsilon\geq \mu(\varepsilon_0)$\;,
+but because $x_\varepsilon^\star$ is optimal for $\mu_\varepsilon$\;, we have
+$\tilde{{\cal F}}_0(x^\star_\varepsilon)\leq \tilde{{\cal F}}_0(x^\star_{\varepsilon_0})$. 
+As $x^\star_\varepsilon$ is feasible for $\mu(\varepsilon_0)$, \begin{align*}
+\tilde{{\cal F}}_0(x^\star_{\varepsilon_0})+\delta\sum_{i=1}^N{\cal F}_i(x^\star_{\varepsilon_0})=\mu(\varepsilon_0)\leq \tilde{{\cal F}}_0(x^\star_{\varepsilon})+\delta\sum_{i=1}^N{\cal F}_i(x^\star_{\varepsilon})\;.
+\end{align*}
+Combining the two inequalities,
+\begin{align*}
+\delta\sum_{i=1}^N{\cal F}_i(x^\star_{\varepsilon_0})-\delta\sum_{i=1}^N{\cal F}_i(x^\star_{\varepsilon})\leq \tilde{{\cal F}}_0(x^\star_{\varepsilon})-\tilde{{\cal F}}_0(x^\star_{\varepsilon_0})\leq 0\;,
+\end{align*}
+which implies that $\sum_{i=1}^N{\cal F}_i(x^\star_{\varepsilon_0})\leq \sum_{i=1}^N{\cal F}_i(x^\star_{\varepsilon})$. Thus, 
+\begin{equation}\label{limi.eq}
+\varepsilon\sum_{i=1}^N{\cal F}_{i}(x_{\varepsilon_0}^\star)\leq
+\varepsilon\sum_{i=1}^N{\cal F}_{i}(x_{\varepsilon}^\star)\leq 
+\mu_\varepsilon-\mu \leq 0\;.
+\end{equation}
+Since $\sum_{i=1}^N{\cal F}_{i}(x_{\varepsilon_0}^\star)=\frac{\mu(\varepsilon_0)-{\cal F}_0(x^\star_{\varepsilon_0})}{\varepsilon_0}$ is bounded, we have
+\begin{equation}\label{limi2.eq}
+\varepsilon\sum_{i=1}^N{\cal F}_{i}(x_{\varepsilon_0}^\star)\leq 
+\mu_\varepsilon-\mu\leq 0\;,
+\end{equation}
+which means that $\mu_\varepsilon$ converges to $\mu$ as $\varepsilon\to 0$.
+
+To prove the second part of the theorem, that is, $x^\star_\varepsilon \to x^\star$ as $\varepsilon \to 0$, consider any sequence $\{\varepsilon_n\}$ converging to $0$. Let $\{x^\star_{n}\}$ be the corresponding sequence of optimal solutions for $\mu(\varepsilon_n)$. 
+
+As ${\cal C}$ is compact and the same for both perturbed and original problem, $x^\star_{n}\in {\cal C}$ is bounded.  Therefore, there exists a convergent sub-sequence $x_{n_t}^\star$ that converges to, say, $\hat{x}\in {\cal C}$, as $\varepsilon_{n_t} \to 0$, since ${\cal C}$ is closed by assumption. 
+
+This implies that
+${\cal F}_0(x_{n_t}^\star) \to {\cal F}_0(\hat{x})\;,$ since ${\cal F}_0(x)$ is continuous. 
+Because $\hat{x}$ is feasible, ${\cal F}_0(\hat{x})\geq \mu$. 
+However,  ${\cal F}_0(\hat{x})>\mu$ is impossible since
+$
+\mu(\varepsilon_{n_t})\to \mu
+$,
+from the first part of the proof, and $\displaystyle\mu(\varepsilon_{n_t})={\cal F}_0(x^\star_{n_t})+\varepsilon_{n_t}\sum_{i=1}^N{\cal F}_{i}(x_{n_t}^\star)\to {\cal F}_0(\hat{x})$, since from (\ref{limi.eq}) and (\ref{limi2.eq}), $\displaystyle\lim_{\varepsilon_{n_t}\to 0}
+\varepsilon_{n_t}\sum_{i=1}^N{\cal F}_{i}(x_{\varepsilon_{n_t}})=0$\;.
+
+Therefore, ${\cal F}_0(\hat{x})=\mu={\cal F}_0(x^\star)$. Since $f(x)$ is strictly convex, $\hat{x}=x^\star$. Since every convergent sub-sequence converges to $x^\star$, the whole sequence converges to it. Since the sequence was arbitrary, we have that $x^\star_\varepsilon\to x^\star$ as $\varepsilon\to 0$\;.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iffalse
+\section{Distributed ${\cal RO}$} \label{section_distributed}
+
+${\cal RO}$ dynamics is inherently suitable for distributed settings. Nodes and agents within a network collaboratively update their decision variables based on local information and communication with neighbors. Distributed processing would scale robust optimization into the realm of massive datasets spread across clusters, where centralized computation is difficult. The centralized theory of ${\cal RO}$ has been investigated extensively through the notion of RC in \cite{bental2009}. However, distributed ${\cal RO}$ has been an under-explored topic. \cite{tempo2019} developed a framework to obtain an approximate global solution of the ${\cal RO}$ problem through multiple interconnected processors distributed among different nodes in a network using a scenario approach that randomly samples the uncertainty sets. \cite{yang2014} considered the case of linear constraint $Ax \leq 0$ where the uncertainty enters the $A$ matrix in a decoupled manner, and a special kind of uncertainty sets such as polyhedral or ellipsoid so that the obtained framework leads to a distributed algorithm. Methods like cutting-plane algorithm can solve ${\cal RO}$ problem in an asynchronous processor communication network with polyhedral approximation as shown in \cite[Chapter~5]{burger2014} and \cite{burger2012}. This can be done by solving another optimization problem with the pessimizing oracle to determine the worst-case parameter. Like before, the cutting-plane method can be exponential in dimension as it keeps adding new instances of the constraints in every iteration. Moreover, the method in \cite{burger2012} considers linearization of the constraints in ${\cal RO}$ problem. In another effort, \cite{zeng2018} solved the robust resource allocation problem with polyhedral uncertainties in the allocation parameters through a multi-agent network using the robust counterpart method. The distributed implementation of the large scale ${\cal RO}$ problem will find applications in big-data analysis, statistical models, and machine learning. We show that the proposed ${\cal RO}$ dynamics is naturally distributed and demonstrate the use of distributed dynamics for the implementation of the distributed robust location and placement problem.
+
+A typical setting for distributed optimization problems consists of a network where the objective of each individual agent is to minimize its local cost function subject to constraints \cite{nedic2009,lobel2011,duchi2012,ram2010,zhu2010,wang2011,elia2010}. The local cost of an individual agent is a function of the state of the network. We assume that local constraints at the node level are subject to uncertainty. Consider a network with $M$ nodes denoted by the set of vertex ${\cal V}=\{1,\cdots,M\}$ with appropriate definitions. 
+%The nodes are assumed to be connected over an undirected graph ${\cal G}=({\cal V},{\mathbb E})$ where the edge set is denoted by $\mathbb E$ such that ${\mathbb E}\subset {\cal V}\times {\cal V}$.
+Let ${\cal N}_j$ denote the neighborhood of node $j$ such that ${\cal N}_j=\{i\;|\;(j,i)\in {\mathbb E}\}$. The flow of information in the network implies that node $j$ exchanges information with neighbors while the Laplacian symmetric graph $L \in \mathbb{R}^{M \times M}$ determines the topology of the network and the connectivity of the graph.
+%The following assumption on the network Laplacian is made.
+%\begin{assumption}\label{assume_Laplacian} The graph Laplacian is symmetric with a unique eigenvalue at zero, which implies an undirected connected graph.
+%\end{assumption}
+% \[\]
+% with locally computable constraints at the agent and the objective function as an aggregate of each agents’ local objective. The distributed structure has to be imposed as the problem needs to be solved over undirected and strongly connected networks through Laplacian matrix . Connected network means that (a possibly multi-hop) path connects any two nodes in the graph and nodes do not have to be fully (all-to-all) connected. Consider a network system with $N$ nodes denoted by the vertex set ${\cal V}=\{1,\cdots,N\}$. The nodes are assumed to be connected over an undirected graph ${\cal G}=({\cal V},{\mathbb E})$ where the edge set is denoted by $\mathbb E$ s.t. ${\mathbb E}\subset {\cal V}\times {\cal V}$. Let ${\cal N}_j$ denote the neighborhood of node $j$ s.t. ${\cal N}_j=\{i|(j,i)\in {\mathbb E}\}$. The network flow of information implies node $j$ to exchange information with neighbors. The key concept of graph Laplacian $L \in \mathbb{R}^{N \times N}$ \todo{N is also the notation we are using for number of constraints.. change the notation} determines the network topology and graph connectivity. The below assumption is being made on $L$.
+% \begin{assumption}\label{assume_Laplacian} The graph Laplacian is symmetric and has a unique eigenvalue at zero, which implies that the graph is undirected and connected.
+% \end{assumption}
+% }
+
+% Consider ${\cal RO}$ problem (\ref{RO}) with the same properties and assumptions as before. Furthermore, the cost function is assumed to be decomposable of $N$ terms, each one associated with an agent in the network and each agent knows (or is subject to) a set of constraints. We consider the case of a decomposable cost function with a common variable where the node $j$ possesses a separate accessible term $f_j: \mathbb{R}^n\to \mathbb{R}$ in the objective that is a function of the common variable $x$. Define $x^j$ to be the local estimate of the state at the node $j$. In this sense, we have to impose agreement among local estimates of $x$ in the distributed network nodes so that eventually $x^j=x^i,\; \forall j,i$. Besides the access to its own state, each node $j$ has access to the neighboring nodes states, that is, $x^k,\;\forall k\in {\cal N}_j$. The same is assumed for the uncertain variable $u$ and its estimate $u^j$ at each node. \todo{Is this the setting for the distributed RO.. I do not think we can solve the problem where single uncertainty is shared through multiple constraints..} 
+
+Consider the following ${\cal RO}$ problem where the network cost function, $f:\mathbb{R}^n\to \mathbb{R}$ is separable in terms of a local cost function at each node, $f_j:\mathbb{R}^n\to \mathbb{R}$ for $j^+_{[M]}$. Local costs are functions of network state $x$, and each network node is assumed to be subjected to a set of $N$ scalar constraints as%and the set of constraints and uncertainties are common among the nodes, that is, each agent knows (or is subject to) a common set of constraints as
+
+% TODO: make constraints shorter
+% TODO: make the equations consistent with (3)
+
+\begin{align} \label{dist}
+&\min_{x \in \mathbf{R}^n} \;f(x):= \sum_{j=1}^M f_j(x)\\
+&\;\;\text{s.t.}\;\;\underset{u_1^j\in {\cal U}_1^j}{\max}\; g^j_1(x,u^j_1)\leq 0\;,\;j^+_{[M]},\nonumber\\
+&\;\;\;\;\;\;\;\;\underset{u_2^j\in {\cal U}_2^j}{\max}\; g^j_2(x,u^j_2)\leq 0\;,\;j^+_{[M]},\nonumber\\
+& \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \vdots \nonumber\\
+&\;\;\;\;\;\;\;\underset{u_N^j\in {\cal U}_N^j}{\max}\; g^j_N(x,u^j_N)\leq 0\;,\;j^+_{[M]},\nonumber
+\end{align}
+where
+% where $f_j: \mathbb{R}^n\to \mathbb{R}$ is the convex function of the common variable $x$, accessible to node $j$ for $j=1,\cdots, N$. $\mathbf{G}^j$ is the set of constraints known by or subject to the agent $j$ which is a vector-valued function denoted by
+$x \in \mathbb{R}^n$, and for $i^+_{[N]}$,% ${\cal U}^j$ is the stack of ${\cal U}_i^j$'s such that
+%$u_k^j$ is as in (\ref{u_separable}) for $k=1,\cdots,M_j$ and $j=1,\cdots,N$. 
+% Note that we have $\mathbf{G}^j(.)=\mathbf{G}^i(.),\; \forall j,i$, as the constraints for different nodes are common with complete overlapping\footnote{Partial overlapping can be handled accordingly which is beyond the scope of this paper.}. The distributed version of the problem (\ref{dist}) can be obtained by considering the local estimates $x^j$'s instead of the decision variable $x$ and the local estimates $u^j$'s instead of the uncertain variable $u$. For each agent $j$, estimate of the corresponding uncertain variable is within the uncertainty sets as below
+\begin{align*}
+{\cal U}_i^j=\{u_i^j \in \mathbb{R}^{m_i^j}:h_i^j: \mathbb{R}^{m_i^j} \rightarrow \mathbb{R}\;,\;h_i^j(u_i^j) \leq 0\}\;.
+\end{align*}
+%where each $h_i^j$ is assumed to be scalar valued function.
+While the local cost is the function of the global network state, the uncertainties that appear at the individual node are not shared with the rest of the network and are strictly local. Note that the minimizer, $x^{\star}$, in ${\cal RO}$ problem (\ref{dist}) has to be the same for all $f_j$'s. Let $x^j$ be the local estimate of $x$ at node $j$. The node $j$ is required to communicate with other nodes in the network to agree upon the same local values for $x^j$'s which minimizes $f(x)$, unless the trivial case of $f_i(.)=f_j(.),\; \forall i,\;j$. The distributed version of the problem (\ref{dist}) can be obtained by considering the local estimates $x^j$'s instead of the decision variable $x$ as follows
+% Furthermore, for each $i=1,\cdots,M$, the uncertainty optimal value, $u_i^{\star}$, has to be the same for all $g_i^j$'s at different nodes. This requires node $j$ to communicate with other nodes in the network to agree upon a common value of $u_i$ that maximizes $g_i^j$'s. Hence, we also have to invoke the consensus for uncertainties through the communication of the nodes with their neighbors through the Laplacian ${L}$. Hence, the goal of distributed ${\cal RO}$ problem (\ref{dist}) is minimizing the cost function while maintaining the constraints of network graph topology for information exchange such that every uncertain variable maximizes the associated constraint in a constraint-wise manner. We follow the approach in \cite{wang2011} and firstly introduced in \cite{elia2010} to exploit the graph Laplacian for imposing the agreement among the estimations as follows
+\begin{align} \label{dro4}
+&\min_{x^j,\; j^+_{[M]}}  \sum_{j=1}^M f_j(x^j)\\
+&\;\;\text{s.t.}\;\;\underset{u_1^j\in {\cal U}_1^j}{\max}\; g^j_1(x^j,u^j_1)\leq 0\;,\;j^+_{[M]},\nonumber\\
+&\;\;\;\;\;\;\;\;\underset{u_2^j\in {\cal U}_2^j}{\max}\; g^j_2(x^j,u^j_2)\leq 0\;,\;j^+_{[M]},\nonumber\\
+& \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; \vdots \nonumber\\
+&\;\;\;\;\;\;\;\underset{u_N^j\in {\cal U}_N^j}{\max}\; g^j_N(x^j,u^j_N)\leq 0\;,\;j^+_{[M]},\nonumber\\
+&\;\;\;\;\;\;\;\;\; \mathbb{L}\mathbf{x}=0\;,\nonumber
+\end{align}
+where the stack of $x^j$ for $j^+_{[M]}$ is denoted by $\mathbf{x}$, that is, $\mathbf{x}=[x^1,x^2,\cdots,x^M]$. We further define $\mathbb{L}:=L\otimes I_n$, in which, $\otimes$ is the appropriate Kronecker product. 
+
+% TODO: merge 52 and 53
+% TODO: use compact index notation
+
+% Since $L$ is the Laplacian matrix for the network, we have $L\mathds{1}=0$, where $\mathds{1}\in \mathbb{R}^N$ is a vector of all ones. Since $L$ has a unique eigenvalue at the origin, the null space of $L$ is spanned by the vector $\mathds{1}$. Hence, the null space of $\mathbb{L}$ is spanned by $\mathds{1}\otimes I_n$ and for any $z\in \mathds{R}^n$, we have $\mathds{1}\otimes I_n z= \mathds{1}\otimes z$, $\mathbb{L}\mathds{1}\otimes z=0$ and null space of $\mathbb{L}$ is the consensus space. Hence, $\mathbb{L} {\bf x}=0$ guarantees $x^j=x^i,\; \forall j,i$. 
+% Furthermore, $\mathbf{L}:=L\otimes I_{m}$ is imposing consensus for $u$, where $m= \sum_{k=1}^N m_k$. Similarly, $\mathbf{L} \mathbf{u}=0$ guarantees that $u^j=u^i,\; \forall j,i$.
+The Lagrangian function associated with problem (\ref{dro4}) can be written as
+\begin{align*}
+{\cal L}=&\sum_{j=1}^M f_j(x^j)+\mu^\top \mathbb{L}\mathbf{x}\\
+&+\sum_{j=1}^M \sum_{i=1}^N \lambda_i^j \left(g_i^j(x^j,u_i^j)-(v_i^j)^\top h_i^j(u_i^j)\right)\;,
+\end{align*}
+where $\mu \in \mathbb{R}^{Mn}$, and $\lambda^j \in \mathbb{R}_+^N$, and $v^j \in \mathbb{R}_+^N$ are Lagrangian multipliers. Based on the formulation of ${\cal RO}$ dynamics in (\ref{pd_dynamics}), the distributed continuous-time solver can be written as
+% \begin{align}\label{dist3}
+% &\dot{x}^{j}=-\nabla_{x^{j}}f_{j}(x^{j})+  \sum_{i \in {\cal N}_j} \eta_{ji} (\mu^i-\mu^j)- \sum_{k=1}^{M} \; \lambda_k^j \frac{\partial g_k^j(x^j,u_k^j)}{\partial x^j}\nonumber\\
+% &\dot{\mu}^{j}=- \sum_{i \in {\cal N}_j} \eta_{ji} (x^j-x^i) \nonumber\\
+% &\dot{\zeta}^{j}=- \sum_{i \in {\cal N}_j} \eta_{ji} (u^j-u^i) \nonumber\\
+% &\dot{\lambda}_{j}=[\mathbf{G}^j(x^j,u^j)-v^{j \top} h^j(u^j)]^+_{\lambda^j}\\
+% &u^{j}=\lambda^{j \top} (\frac{\partial \mathbf{G}^j(x^j,u^j)}{\partial u^j}-\frac{\partial h^j(u^j)}{\partial u^j} v^j)^\top+  \sum_{i \in {\cal N}_j} \eta_{ji} (\zeta^i-\zeta^j)\nonumber\\
+% &v_k^{j}=[\lambda^{j \top} h^j(u^j)]^+_{v^j}.\nonumber\\
+% &\dot{\lambda}_k^{j}=[g_k^j(x^{j},u_k^j)-v_k^j h_k^j(u_k^j)]^+_{\lambda_k^j},\;k=1,\cdots,M_j\\
+% &u_k^{j}=\lambda_k^j (\frac{\partial g_k^j(x^j,u_k^j)}{\partial u_k^j}-v_k^j \frac{\partial h_k^j(u_k^j)}{\partial u_k^j})^\top,\;k=1,\cdots,M_j\nonumber\\
+% &v_k^{j}=[\lambda_k^j h_k^j(u_k^j)]^+_{v_k^j},\;k=1,\cdots,M_j\nonumber
+% \end{align}
+
+\begin{align}
+\label{distributed_dynamics}
+\left\{
+\begin{array}{cl}
+\vspace{2mm}
+&\dot{x}^j=-\nabla_{x^{j}}f_{j}(x^{j})- \sum_{i=1}^N \lambda_i^j \nabla_{x^j}g_i^j(x^j,u_i^j)-{\mathbb{L}_j}\mu\\
+\vspace{2mm}
+&\dot{\mu}^j={\mathbb{L}_j}\mathbf{x}\\
+\vspace{2mm}
+&{\dot {\lambda}_i^j}=[g_i^j(x^j,u_i^j)-v_i^j h_i^j(u_i^j)]^+_{\lambda_i^j}\\
+\vspace{2mm}
+&{\dot {u}_i^j}=\nabla_{u_i^j}g_i^j(x^j,u_i^j)- 
+v_i^j \nabla_{u_i^j} h_i^j(u_i^j)\\
+\vspace{2mm}
+&{\dot {v}_i^j}=[\lambda_i^j h_i^j(u_i^j)]^+_{v_i^j}
+\end{array}
+\right.,
+\end{align}
+
+for $i^+_{[N]}$ and $j^+_{[M]}$ where ${\mathbb{L}_j}$ is the $j^{th}$ block row of ${\mathbb{L}}$. ${\cal RO}$ problem (\ref{dist}) can be solved in a distributed fashion by the above dynamics as each node $j$ can optimize only the $j$-dependent term in the cost function and meet all the consensus constraints by communicating only with its neighboring nodes. We see communication among the nodes' neighbors in $x$ and $\mu$ dynamics through the network Laplacian. The other dynamical equations are solved locally at each node $j$. Note that the only coupling among dynamics of individual agents comes from the network topology representation $L$. This requires that relevant dual variables are exchanged over the network. Convergence property of the above system to the optimal ${\cal RO}$ solution of (\ref{dist}) follows from Theorem \ref{maintheorem}.
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliography{2.References}
+\bibliographystyle{ieeetr}
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{k1.jpg}}]
+{Keivan Ebrahimi} received bachelor's and master's degree in electrical engineering from Sharif University of Technology, Tehran, Iran in 2012 and 2014. He is a Ph.D. candidate in electrical and computer engineering at Iowa State University (ISU), Ames, IA, USA. He is currently a principal data scientist at Tarana Wireless in Milpitas, CA, USA. He received the College of Engineering fellowship at Iowa State University in 2015 and has been selected for the Rock Star Spot Award for stellar contribution and performance in View Inc. COVID-SENSE product, May 2020. He filed three patents to the United States Patents and Trademarks Office for “Environmental Adjustment using Artificial Intelligence”, “Identifying and Reducing Health Risks and Tracking Occupancy in a Facility”, and “Immersive Collaboration of Remote Participants via Media Displays”. His research interests include adversarial machine learning and deep learning, computer vision, robust optimization, control theory and dynamical systems.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{elia.pdf}}]
+{Prof. Nicola Elia} received the Laurea degree in Electrical Engineering from the Politecnico di Torino, Turin, Italy in 1987 and the Ph.D. degree in Electrical Engineering and Computer Science from the Massachusetts Institute of Technology (MIT), Cambridge, MA, USA in 1996. He is currently the Vincentine-Hermes-Luh Chair Professor of Electrical and Computer Engineering at the University of Minnesota (UMN), Twin Cities, MN, USA. Before joining UMN in 2018, and since 1999, he was a faculty with the department of Electrical and Computer Engineering at Iowa State University, Ames, IA, USA. He was a Postdoctoral Associate at the Laboratory for Information and Decision Systems at MIT from 1996 to 1999. He was a Control Engineer with the Fiat research Center, Turin, Italy, from 1987 to 1990. Dr. Elia received the NSF Career Award and he is a Fellow of the IEEE. His research interests include computational methods for controller design, communication systems with access to feedback, control with communication constraints, and network distributed systems.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{umesh.jpeg}}]
+{Prof. Umesh Vaidya} received the Ph.D. degree in mechanical engineering from the University of California at Santa Barbara, Santa Barbara, CA, in
+2004. He was a Research Engineer at the United Technologies Research Center (UTRC), East Hartford, CT, USA. He is currently a professor in the Department of Mechanical Engineering, Clemson University, S.C., USA. Before joining Clemson University in 2019, and since 2006, he was a faculty with the department of Electrical and Computer Engineering at Iowa State University. He is the recipient of 2012 National Science Foundation CAREER award. His current research interests include dynamical systems and control theory.
+\end{IEEEbiography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\begin{center}
+    \onecolumn
+    \Large \bf{Supplementary material}
+\end{center}
+\subsection{Lemma \ref{saddle.lem_perturbed} [Saddle property]}
+
+Under Assumption \ref{assume_feasible}, an optimal solution $x_\varepsilon^\star$ exists and it is unique as $f(x)+\varepsilon\sum_{i=1}^N{\cal G}_i(x)$ is strictly convex. For such $x_\varepsilon^\star$, the lower level optimizations have a saddle point.
+This means that for all $u_i,v_i\geq 0$\;,
+\begin{align} \label{lowsadl1.eq_perturbed}
+g_i(x_\varepsilon^\star,u_i)-(v_{i,\varepsilon}^\star)^\top h_i(u_i)\leq g(x_\varepsilon^\star,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\;.
+\end{align}
+Multiplying left and right sides with $\lambda_i\geq 0$, we have for all $\lambda_i\geq 0, u_i,v_i\geq 0$ that
+\begin{align*}
+\lambda_i(g_i(x_\varepsilon^\star,u_i)-(v_{i,\varepsilon}^\star)^\top h_i(u_i))\leq \lambda_i(g(x_\varepsilon^\star,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star))\;.
+\end{align*}
+Summing over $i$ and adding
+\begin{align*}
+f(x_\varepsilon^\star)+\sum_{i=1}^N \varepsilon \big(g_i(x_\varepsilon^\star,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)
+\end{align*}
+on both sides leads to
+\begin{align}
+&f(x_\varepsilon^\star)+\sum_{i=1}
+^N\lambda_i(g_i(x_\varepsilon^\star,u_i)- (v_{i,\varepsilon}^\star)^\top h_i(u)) \nonumber\\
+&+\sum_{i=1}^N \varepsilon \big(g_i(x_\varepsilon^\star,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big) \nonumber\\
+\leq \; &f(x_\varepsilon^\star)+\sum_{i=1}^N (\lambda_i+\varepsilon) \big(g_i(x_\varepsilon^\star,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)\;, \label{sadl1.eq_perturbed}
+\end{align}
+for all $\lambda\geq 0,u,v\geq 0$\;.
+
+Now consider the function ${\cal L}_\varepsilon(x,\lambda,u_\varepsilon^\star,v)$ which equals to
+\begin{align*}
+f(x)+\sum_{i=1}^N (\lambda_i+\varepsilon) \big(g_i(x,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)\;.
+\end{align*}
+This function is convex in $(x,v)$ and concave in $\lambda$, also it is the Lagrangian of the following optimization problem
+\begin{align*}
+&\min_{x}f(x)+\varepsilon \sum_{i=1}^N \big(g_i(x,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)\\
+&\;\;\text{s.t.}\;\;\;g_i(x,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\leq 0,\;\forall i\;.
+\end{align*}
+Since $h_i(u_{i,\varepsilon}^\star)\leq 0$, then $v_i^\top h_i(u_{i,\varepsilon}^\star)\leq 0$. Also the constraint 
+\begin{align*}
+g_i(x,u_{i,\varepsilon}^\star)\leq v_i^\top h_i(u_{i,\varepsilon}^\star)
+\end{align*}
+is strengthen if $v_i^\top h_i(u_{i,\varepsilon}^\star)<0$. 
+We can interpret $v_i$ as a parameter and consider
+\begin{align*}
+&\mu_\varepsilon(v)=\min_{x}f(x)+\varepsilon \sum_{i=1}^N g_i(x,u_{i,\varepsilon}^\star)\\
+&\;\;\text{s.t.}\;\;\;g_i(x,u_{i,\varepsilon}^\star)\leq v_i^\top h_i(u_{i,\varepsilon}^\star),\; \forall i\;,
+\end{align*}
+with $v_i$ restricted to those such that $v_i^\top h_i(u_{i,\varepsilon}^\star)=0$. We can then consider  
+\begin{align*}
+&\tilde{\mu}_\varepsilon(v)=\min_{x}f(x)+\varepsilon \sum_{i=1}^N g_i(x,u_{i,\varepsilon}^\star)\\
+&\;\;\text{s.t.}\;\;\; g_i(x,u_{i,\varepsilon}^\star)\leq 0,\; \forall i \;.
+\end{align*}
+This problem is the upper optimization, whose saddle point satisfies
+\begin{align*}
+&f(x_\varepsilon^\star)+\sum_{i=1}^N (\lambda_i+\varepsilon) g_i(x_\varepsilon^\star,u_{i,\varepsilon}^\star)\\
+\leq \; &f(x)+\sum_{i=1}^N (\lambda_{i,\varepsilon}^\star+\varepsilon) g_i(x,u_{i,\varepsilon}^\star)\;,
+\end{align*}
+for all $x$ and $\lambda \geq 0$\;. Subtracting $(\lambda_i+\varepsilon) v_i^\top h_i(u_{i,\varepsilon}^\star)$ (equals zero) from the left side and $(\lambda_{i^,\varepsilon}^\star+\varepsilon) v_i^\top  h_i(u_{i,\varepsilon}^\star)$ (again zero) from the right side, we get
+\begin{align*}
+&f(x_\varepsilon^\star)+\sum_{i=1}^N (\lambda_i+\varepsilon) \big(g_i(x_\varepsilon^\star,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)\\
+\leq \; &f(x)+\sum_{i=1}^N (\lambda_{i,\varepsilon}^\star+\varepsilon) \big(g_i(x,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)\;.
+\end{align*}
+Since (\ref{sadl1.eq_perturbed}) holds for all $v_i$ including the one such that $v_i^\top h_i(u_{i,\varepsilon}^\star)=0$, we have
+\begin{align}
+&f(x_\varepsilon^\star)+\sum_{i=1}
+^N\lambda_i(g_i(x_\varepsilon^\star,u_i)- (v_{i,\varepsilon}^\star)^\top h_i(u)) \nonumber\\
+&+\sum_{i=1}^N \varepsilon \big(g_i(x_\varepsilon^\star,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)\nonumber\\
+\leq \; &f(x)+\sum_{i=1}^N (\lambda_{i,\varepsilon}^\star+\varepsilon) \big(g_i(x,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)\label{restrict.eq_perturbed2}\;,
+\end{align}
+for all $x,\lambda\geq 0,u$, and $v\geq 0$ such that $v_i^\top h_i(u_{i,\varepsilon}^\star)=0$\;. Moreover, one can get the following inequality from (\ref{lowsadl1.eq_perturbed})
+\begin{align*}
+&f(x_\varepsilon^\star)+\sum_{i=1} (\lambda_i+\varepsilon) \big(g_i(x_\varepsilon^\star,u_i)-(v_{i,\varepsilon}^\star)^\top h_i(u_i)\big)\\
+\leq \; &f(x_\varepsilon^\star)+\sum_{i=1} \lambda_i \big(g(x_\varepsilon^\star,u_i)-(v_{i,\varepsilon}^\star)^\top h_i(u_i)\big)\\
+&+\sum_{i=1} \varepsilon \big(g(x_\varepsilon^\star,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)\;,
+\end{align*}
+for all $x,\lambda\geq 0,u$, and $v\geq 0$ such that $v_i^\top h_i(u_{i,\varepsilon}^\star)=0$\;. Combining this with (\ref{restrict.eq_perturbed2}), we get
+\begin{align}
+&f(x_\varepsilon^\star)+\sum_{i=1}^N (\lambda_i+\varepsilon)\big(g_i(x_\varepsilon^\star,u_i)- (v_{i,\varepsilon}^\star)^\top h_i(u)\big) \nonumber\\
+\leq \; &f(x)+\sum_{i=1}^N (\lambda_{i,\varepsilon}^\star+\varepsilon) \big(g_i(x,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star)\big)\label{restrict.eq_perturbed}\;,
+\end{align}
+for all $x,\lambda\geq 0,u$, and $v\geq 0$ such that $v_i^\top h_i(u_{i,\varepsilon}^\star)=0$\;. Finally, we can remove the constraint on $v_i$, 
+%{\color{red} as follows: for $v_i$ such that $v_i^\top h_i(u_i^\star)=0$, we have
+%\[f(x)+\sum_i \lambda_i^\star g_i(x,u_i^\star)=f(x)+\sum_i \lambda_i^\star g_i(x,u_i^\star)-\lambda_i^\star v_i^\top h_i(u_i^\star)\]
+%since for general $\tilde v_i\geq 0$ we have $-\tilde v_i h_i(u_i^\star)\geq 0= -v_i^\top h_i(u_i^\star)$
+%\[0=-\lambda_i^\star v_i^\top h_i(u_i^\star)\leq -\lambda_i^\star \tilde v_i^\top h_i(u_i^\star)\]
+%}
+and have (\ref{restrict.eq_perturbed}) for all $x,\lambda\geq 0,u,v\geq 0$ as $-v_i^\top h_i(u_{i,\varepsilon}^\star)\geq 0$ still makes the above equation valid. Thus, we have shown that any optimal solution to (\ref{perturbed_RO}) and (\ref{dual.eq_perturbed}) satisfies the saddle property on ${\cal L}$, namely (\ref{saddle_perturbed}).
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iffalse
+\subsection{Lemma \ref{projected} and \ref{projected-pert} [${\cal RO}$ and ${\cal RO}_\varepsilon$ are projected dynamics]}
+The proof of Lemma \ref{projected} follows along the lines of the construction outlined in \cite{cherukuri2016} which is mentioned here for convenience of the reader. Note that the lemma for ${\cal RO}_\varepsilon$ dynamics is proved below and the proof for ${\cal RO}$ dynamics follows trivially by setting $\varepsilon=0$\;.
+
+We consider the ${\cal RO}_\varepsilon$ dynamics (\ref{pd_dynamics-pert}) remembering that it was compactly written as $\dot z={\cal Z}^{\cal RO}_\varepsilon(z)$ where $z=(x,\lambda,u,v)$. We aim to show that ${\cal Z}^{\cal RO}_\varepsilon(z)=\Pi_{\mathcal S}(z,{\cal Z}_\varepsilon(z))$ for all $z \in {\mathbb S}$ where ${\mathbb S}=\mathbb{R}^n\times \mathbb{R}^N_{+}\times \mathbb{R}^M\times \mathbb{R}^K_+$ and
+\begin{align} \label{pd_dynamics_no_projection}
+{\cal Z}_\varepsilon(z):=
+\left[\begin{array}{cc}
+\vspace{2mm}
+-\nabla_x f(x)-\sum_{i=1}^N (\lambda_i+\varepsilon) \nabla_x g_i(x,u_i)\\
+\vspace{2mm}
+g_i(x,u_i)-v_i^\top h_i(u_i)\\
+\vspace{2mm}
+\nabla_{u_i}g_i(x,u_i)-\sum_{j=1}^{K_i} v_{ij} \nabla_{u_i} h_{ij}(u_i)\\
+\vspace{2mm}
+(\lambda_i+\varepsilon) h_i(u_i)
+\end{array}\right]\;.
+\end{align}
+Note that ${\cal Z}^{\cal RO}_\varepsilon={\cal Z}_\varepsilon$ over interior of $\text{int}(\mathbb S)$. Consider any point $z$ on the boundary of $\mathbb S$. Let ${\cal I}_\lambda \subset \{1,\cdots,N\}$ be the set of indices where $\lambda_i=0$ and $g_i(x,u_i)-v_i^\top h_i(u_i)<0$\;. Moreover, for each $i$, let ${\cal I}_{v_i} \subset \{1,\cdots,K_i\}$ be the set of indices for which $v_{ik}=0$ and $(\varepsilon+\lambda_i) h_{ik}(u_i)<0$. Then, there exists $\tilde \delta > 0$ such that for all $\delta \in [0,\tilde \delta)$ and for any $j \in \{1,\cdots,n+N+M+K\}$, we have $\big(\text{proj}_{\mathbb S}(z+\delta {\cal Z}_\varepsilon(z))\big)_j$ equal to
+
+\begin{align*}
+\left\{
+\begin{array}{cl}
+0 & \text{if} \; j-n \in {\cal I}_\lambda\\
+0 & \text{if} \; j-P \in {\cal I}_{v_1}\\
+0 &  \text{if} \; j-P-K_1 \in {\cal I}_{v_2}\\
+0 &  \text{if} \; j-P-K_2 \in {\cal I}_{v_3}\\
+\vdots & \vdots\\
+0 & \text{if} \; j-P-Q \in {\cal I}_{v_n}\\
+\big(z+\delta {\cal Z}_\varepsilon(z)\big)_j & \text{otherwise}
+\end{array}\right.,
+\end{align*}
+where $P=n+N+M$ and $Q=\sum_{p=1}^{n-1} K_p$\;.
+
+The projection definition in (\ref{projection_operator}) yields
+\begin{align*}
+\big(\Pi_{\mathbb S}(z,{\cal Z}_\varepsilon(z))\big)_j=\left\{
+\begin{array}{cl}
+0 & \text{if} \; j-n \in {\cal I}_\lambda\\
+0 & \text{if} \; j-P \in {\cal I}_{v_1}\\
+0 &  \text{if} \; j-P-K_1 \in {\cal I}_{v_2}\\
+0 &  \text{if} \; j-P-K_2 \in {\cal I}_{v_3}\\
+\vdots & \vdots\\
+0 & \text{if} \; j-P-Q \in {\cal I}_{v_n}\\
+\big({\cal Z}_\varepsilon(z)\big)_j & \text{otherwise}
+\end{array}\right\;.
+\end{align*}
+
+We showed that ${\cal Z}^{\cal RO}_\varepsilon(z)=\Pi_{\mathcal S}(z,{\cal Z}_\varepsilon(z))$ for all $z$ on the boundary of ${\mathbb S}$ which concludes the proof of Lemma \ref{projected} (for $\varepsilon=0$).
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\subsection{Lemma \ref{monotonicity-pert} [Monotonicity property]}
+
+Considering (\ref{Lya_function-pert}) for the dynamics (\ref{pd_dynamics}), we can reproduce the proof of Lemma \ref{monotonicity} as below.
+
+Note that
+\begin{align}
+V_\varepsilon=\frac{1}{2}\big(&\Vert x-x_\varepsilon^\star\Vert^2+\Vert \lambda-\lambda_\varepsilon^\star \Vert^2+\nonumber\\
+&\sum_{i=1}^N\lambda_{i,\varepsilon}^\star \Vert u_i-u_{i,\varepsilon}^\star\Vert^2+ \sum_{i=1}^N\Vert v_i-v_{i,\varepsilon}^\star\Vert^2\big)\;, \label{Lya_function-pert}
+\end{align}
+and
+\begin{align}
+\mathfrak{L}_{{\cal Z}^{{\cal RO}_\varepsilon}}V_\varepsilon(z)=&\;(x-x_\varepsilon^\star)^\top(-\nabla_x f(x)-\sum_{i=1}^N\lambda_i \nabla_x g_i(x,u_i))\nonumber\\
++&\sum_{i=1}^N(\lambda_i-\lambda_{i,\varepsilon}^\star) [g_i(x,u_i)-v_i^\top h_i(u_i)]_{\lambda_i}^{\varepsilon+}\nonumber\\
++&\sum_{i=1}^N\lambda_{i,\varepsilon}^\star(u_i-u_{i,\varepsilon}^\star)^\top (\nabla_{u_i} g_i(x,u_i)-v_{i}^\top \nabla_{u_i} h_{i}(u_i))\nonumber\\
++&\sum_{i=1}^N (v_{i}-v_{i,\varepsilon}^\star)^\top [\lambda_i\; h_{i}(u_i)]_{v_{i}}^+\;.
+\end{align}
+By convex and concave under-estimator properties according to Assumption \ref{assume1}, one can write \cite[Section~3.1.3]{boyd2004}
+\begin{align}
+&(x_\varepsilon^\star-x)^\top \nabla_x f(x) \leq f(x_\varepsilon^\star)-f(x)\;,\label{under_estimator_1}\\
+&(x_\varepsilon^\star-x)^\top \nabla_x g_i(x,u_i) \leq g_i(x_\varepsilon^\star,u_i)-g_i(x,u_i)\;,\label{under_estimator_2}\\
+&(u_i-u_{i,\varepsilon}^\star)^\top \nabla_{u_i} g_i(x,u_i) \leq g_i(x,u_i)-g_i(x,u_{i,\varepsilon}^\star)\;,\label{under_estimator_3}\\
+&(u_{i,\varepsilon}^\star-u_i)^\top \nabla_{u_i} h_{ij}(u_i) \leq h_{ij}(u_{i,\varepsilon}^\star)-h_{ij}(u_i)\;.\label{under_estimator_4}
+\end{align}
+
+Using the fact that the projection operator is non-expansive, we have that
+\begin{align}
+&(\lambda_i-\lambda_{i,\varepsilon}^\star) [g_i(x,u_i)-v_i^\top h_i(u_i)]_{\lambda_i}^{\varepsilon+} \nonumber\\
+&\leq (\lambda_i-\lambda_{i,\varepsilon}^\star) (g_i(x,u_i)-v_i^\top h_i(u_i))\;,
+\end{align}
+and
+\begin{align}
+&(v_{i}-v_{i,\varepsilon}^\star)^\top [\lambda_i\; h_{i}(u_i)]_{v_i}^+
+\leq(v_{i}-v_{i,\varepsilon}^\star)^\top \lambda_i\; h_{i}(u_i)\;.
+\end{align}
+
+By substitution, we have
+\begin{align}
+&\mathfrak{L}_{{\cal Z}^{{\cal RO}_\varepsilon}}V_\varepsilon(z) \leq f(x_\varepsilon^\star)-f(x)+\sum_{i=1}^N\lambda_i (g_i(x_\varepsilon^\star,u_i)-g_i(x,u_i))\nonumber\\
+&+\sum_{i=1}^N(\lambda_i-\lambda_{i,\varepsilon}^\star)(g_i(x,u_i)-v_i^\top h_i(u_i))\nonumber\\
+&+\sum_{i=1}^N \lambda_{i,\varepsilon}^\star (g_i(x,u_i)-g_i(x,u_{i,\varepsilon}^\star)+v_i^\top (h_i(u_{i,\varepsilon}^\star)-h_i(u_i))\nonumber\\
+&+\sum_{i=1}^N (v_{i}-v_{i,\varepsilon}^\star)^\top\lambda_i h_{i}(u_i)\;. \label{vdot_first}
+\end{align}
+
+After simplification, we obtain
+\begin{align*}
+\mathfrak{L}_{{\cal Z}^{{\cal RO}_\varepsilon}}V_\varepsilon(z) \leq \; &f(x_\varepsilon^\star)-f(x)\\
+&+\sum_{i=1}^N\lambda_i \Big(g_i(x_\varepsilon^\star,u_i)-(v_{i,\varepsilon}^\star)^\top h_i(u_i))\Big)\\
+&-\sum_{i=1}^N\lambda_{i,\varepsilon}^\star \Big(g_i(x,u_{i,\varepsilon}^\star)-v_i^\top h_i(u_{i,\varepsilon}^\star))\Big)\;.
+\end{align*}
+
+%From strict convexity, $\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)=0$ only if $x=x^\star$, which leads to 
+%\begin{align*}
+%&\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)\leq T\\
+%&+\sum_{i=1}^N\lambda_i \Big(g_i(x^\star,u_i)-(v_i^\star)^\top h_i(u_i))\Big)\\
+%&- \sum_{i=1}^N\lambda_i^\star \Big(g_i(x^\star,u_i^\star)-v_i^\top h_i(u_i^\star))\Big)\;.
+%\end{align*}
+%from KKT $g_i(x^\star,u_i^\star)=0$, so
+%$\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)=0$ if
+%\begin{align*}
+%&\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)\leq T\\
+%&+ \sum_{i=1}^N\lambda_i \Big(g_i(x^\star,u_i)-(v_i^\star)^\top h_i(u_i))\Big)\\
+%&- \sum_{i=1}^N\lambda_i^\star\Big(v_i^\top h_i(u_i^\star))\Big)=0\;.
+%\end{align*}
+Adding and subtracting ${\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)$ yields
+\begin{align} \label{deriv_v}
+\mathfrak{L}_{{\cal Z}^{{\cal RO}_\varepsilon}}V_\varepsilon(z)\leq&\; {\cal L}_\varepsilon(x_\varepsilon^\star,\lambda,u,v_\varepsilon^\star)-{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)\\
+&+{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)-{\cal L}_\varepsilon(x,\lambda_\varepsilon^\star,u_\varepsilon^\star,v) \;.\nonumber
+\end{align}
+Note that from \ref{saddle.lem} (saddle property),
+\begin{align*}{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda,u,v_\varepsilon^\star)-{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)\leq 0\;,
+\\
+{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)-{\cal L}_\varepsilon(x,\lambda_\varepsilon^\star,u_\varepsilon^\star,v)\leq 0\;.
+\end{align*}
+Hence, 
+\begin{align} \label{deriv_v2}
+\mathfrak{L}_{{\cal Z}^{{\cal RO}_\varepsilon}}V_\varepsilon(z)\leq&\; {\cal L}_\varepsilon(x_\varepsilon^\star,\lambda,u,v_\varepsilon^\star)-{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)\\
+&+{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)-{\cal L}_\varepsilon(x,\lambda_\varepsilon^\star,u_\varepsilon^\star,v)\leq 0 \;.\nonumber
+\end{align}
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\subsection{Lemma \ref{uniq_exis} and \ref{uniq_exis-pert} [Existence, uniqueness and continuity of solutions]}
+
+The proof of this lemma follows closely along the lines of proof for the existence and uniqueness of solution for primal-dual dynamical system from \cite[Lemma~4.3]{cherukuri2016}. Note that the lemma for the dynamics ${\cal RO}_\varepsilon$ is proved below and the proof for the dynamics ${\cal RO}$ follows by setting $\varepsilon=0$.
+
+To prove the lemma \ref{uniq_exis}, we need the following proposition \cite[Theorem~2.5]{nagurney1996}.
+\begin{proposition} \label{proposition_projected}
+If $F$ in the projected dynamical system (\ref{projected_dynamics}) is Lipschitz on ${\cal K}$, we have the following existence, uniqueness, and continuity w.r.t. the initial condition results for the solutions of the projected dynamics (\ref{projected_dynamics}):
+\begin{enumerate}
+\item For any $y_{0} \in {\cal K}$, there exists a unique solution $t \rightarrow y(t)$ of the projected system (\ref{projected_dynamics}) with $y(0)=y_{0}$ defined in $[0,\infty)$.
+\item Consider a sequence of points $\{y_{k}\}_{k=1}^\infty \subset {\mathcal K}$ with $lim_{k \rightarrow \infty}=y$. Then, the sequence of solutions $\{t \rightarrow \gamma_k(t)\}_{k=1}^\infty$ of the projected dynamics (\ref{projected_dynamics}) with $\gamma_k(0)=y_k$ for all $k$, converges to the solution $t \rightarrow \gamma(t)$ of (\ref{projected_dynamics}) with $\gamma(0)=y$ uniformly on every compact set of $[0,\infty)$.
+\end{enumerate}
+\end{proposition}
+
+Now, for the convenience of the reader, we present the proof of Lemma \ref{uniq_exis}, which reproduces \cite[Lemma~4.3]{cherukuri2016}, and is based on Lemma \ref{projected}, \ref{monotonicity}, \ref{projected-pert}, \ref{monotonicity-pert}, and Proposition \ref{proposition_projected}. The Lipschitz condition in Proposition \ref{proposition_projected} is tricky as the ${\cal RO}_\varepsilon$ dynamics (\ref{pd_dynamics}) does not have it. The remedy is to modify the vector field (\ref{pd_dynamics_no_projection}) to obtain the Lipschitz property, remembering that ${\cal Z}^{{\cal RO}_\varepsilon}(z)$ is the projection of the vector field (\ref{pd_dynamics_no_projection}) on ${\mathbb S}$. If the solution of ${\cal Z}^{{\cal RO}_\varepsilon}(z)$ exists, it remains in a known bounded set according to the monotonicity property. This implies that by having an initial point, we always have a bounded set for which the values of the vector field outside this set have no effect on the solution which starts at that initial point. Hence, we can modify the vector field for the outside points to obtain the Lipschitz property without loss of generality. The details of this remedy can be seen in the following proof for Lemma \ref{uniq_exis}.
+
+\begin{proof} [Existence, uniqueness and continuity of solutions]\\
+Consider the initial point $z(0) \in {\mathbb S}$ and let $\varepsilon > 0$. For $V$ in (\ref{Lya_function}), let ${\cal W}_\zeta:=V^{-1}(\leq V(z(0))+\zeta)$ be convex, compact, and $V^{-1}(\leq V(z(0))) \subset \text{int} \; {\cal W}_\zeta$. Let $\mathbb{S}_0:=\mathbb{R}^n\times \mathbb{R}^N\times \mathbb{R}^M\times \mathbb{R}^K$ and ${\cal Z}_\varepsilon^{{\cal W}_\zeta}: \mathbb{S}_0 \rightarrow \mathbb{S}_0$ be defined as
+
+\begin{align*}
+{\cal Z}_\varepsilon^{{\cal W}_\zeta}(z)=\left\{
+\begin{array}{cl}
+{\cal Z}_\varepsilon(z) & \text{on} \; {{\cal W}_\zeta}\\
+{\cal Z}_\varepsilon(\text{proj}_{{\cal W}_\zeta}(z)) & \text{on} \; z \in \mathbb{S}_0 \text{\textbackslash} {{\cal W}_\zeta}
+\end{array}\right.,
+\end{align*}
+where ${\cal Z}_\varepsilon$ is defined in (\ref{pd_dynamics_no_projection}).
+
+The vector field ${\cal Z}_\varepsilon^{{\cal W}_\zeta}$ is Lipschitz on $\mathbb{S}_0$, as proved below. The functions $f$, $g_i$, and $h_i$ are local Lipschitz under Assumption \ref{assume1}. Then ${\cal Z}_\varepsilon$ is Lipschitz in the compact set ${\cal W}_\zeta$ with the Lipschitz constant $K>0$. On the other hand, the map $\text{proj}_{{\cal W}_\zeta}$ is Lipschitz with constant $1$ \cite[Proposition~2.4.1]{clarke1983}. Let $z_1,z_2 \in \mathbb S_0$. Then, the Lipschitz property of the map ${\cal Z}_\varepsilon^{{\cal W}_\zeta}$ comes from the following derivations
+\begin{align*}
+\parallel {\cal Z}_\varepsilon^{{\cal W}_\zeta}(z_1)-{\cal Z}_\varepsilon^{{\cal W}_\zeta}(z_2) & \parallel\\
+&=\parallel {\cal Z}_\varepsilon(\text{proj}_{{\cal W}_\zeta}(z_1))-{\cal Z}_\varepsilon(\text{proj}_{{\cal W}_\zeta}(z_2)) \parallel\\
+&\leq K \parallel \text{proj}_{{\cal W}_\zeta}(z_1)-\text{proj}_{{\cal W}_\zeta}(z_2) \parallel\\
+&\leq K \parallel z_1-z_2 \parallel\;.
+\end{align*}
+
+Now, as we established the Lipschitz property for the vector field ${\cal Z}_\varepsilon^{{\cal W}_\zeta}$, Proposition \ref{proposition_projected} can be used to show the existence, uniqueness, and continuity of solutions of projected ${\cal RO}_\varepsilon$ dynamics ${\cal Z}_\varepsilon^{{\cal W}_\zeta, {\cal RO}_\varepsilon}$ w.r.t. the initial conditions noting that ${\cal Z}_\varepsilon^{{\cal W}_\zeta, {\cal RO}_\varepsilon}:\mathbb S \rightarrow \mathbb S_0$ is derived by projecting the map ${\cal Z}_\varepsilon^{{\cal W}_\zeta}$ on the set $\mathbb S$, that is,
+\begin{align*}
+{\cal Z}_\varepsilon^{{\cal W}_\zeta, {\cal RO}_\varepsilon}(z):=\Pi_{\mathbb S}(z,{\cal Z}_\varepsilon^{{\cal W}_\zeta}(z))\;, \forall z \in \mathbb S\;.
+\end{align*}
+
+The last part of the proof is showing that solutions of the maps ${\cal Z}_\varepsilon^{{\cal W}_\zeta, {\cal RO}_\varepsilon}$ and ${\cal Z}_\varepsilon^{{\cal W}_\zeta}$ are the same in ${\cal W}_\zeta \cap \mathbb S$\;.
+
+From ${\cal Z}_\varepsilon^{{\cal RO}_\varepsilon}(z)=\Pi_{\mathcal S}(z,{\cal Z}_\varepsilon(z))$ in the proof of Lemma \ref{projected}, we conclude that ${\cal Z}_\varepsilon^{{\cal RO}_\varepsilon(z)}={\cal Z}_\varepsilon^{{\cal W}_\zeta, {\cal RO}_\varepsilon}(z)$ on ${\cal W}_\zeta \cap \mathbb S$\;. The proposition \ref{proposition_projected} applies to the solutions of ${\cal Z}_\varepsilon^{{\cal W}_\zeta,{\cal RO}_\varepsilon}$ with ${\cal K}=\mathbb S$ as the map ${\cal Z}_\varepsilon^{{\cal W}_\zeta}$ is Lipschitz by construction. Let $t \rightarrow \tilde z(t)$ any solution of ${\cal Z}_\varepsilon^{{\cal W}_\zeta,{\cal RO}_\varepsilon}$ starting in the set ${\cal W}_\zeta \cap \mathbb S$\;. The solution is absolutely continuous and $V$ is continuously differentiable. Hence, the map $t \rightarrow V(\tilde z(t))$ is differentiable almost everywhere on $[0,\infty)$, and then,
+\begin{align*}
+\frac{d}{dt}V(\tilde z(t))=\mathfrak{L}_{{\cal Z}_\varepsilon^{{\cal W}_\zeta,{\cal RO}_\varepsilon}} V(\tilde z(t))\;,
+\end{align*}
+almost everywhere on $[0,\infty)$. From the monotonicity property and the fact that $\mathfrak{L}_{{\cal Z}_\varepsilon^{{\cal W}_\zeta,{\cal RO}_\varepsilon}} V=\mathfrak{L}_{{\cal Z}_\varepsilon^{{\cal RO}_\varepsilon}} V$ over ${\cal W}_\zeta \cap \mathbb S$, $V$ is non-increasing along the solution. Hence, the solution $t \rightarrow \tilde z(t)$ remains in ${\cal W}_\zeta \cap \mathbb S$. Moreover, $t \rightarrow \tilde z(t)$ is also a solution of ${\cal Z}_\varepsilon^{{\cal RO}_\varepsilon}$ which means the existence of solution of ${\cal Z}_\varepsilon^{{\cal RO}_\varepsilon}$ starting from any point in ${\cal W}_\zeta \cap \mathbb S$. This solution remains in ${\cal W}_\zeta \cap \mathbb S$ according to the monotonicity property and hence, is also a solution of ${\cal Z}_\varepsilon^{{\cal W}_\zeta,{\cal RO}_\varepsilon}$. From the equivalence of the solutions of these maps in the set ${\cal W}_\zeta \cap \mathbb S$ and noting the fact that solutions of ${\cal Z}_\varepsilon^{{\cal W}_\zeta,{\cal RO}_\varepsilon}$ exist while unique and continuous, we conclude that solutions of ${\cal Z}_\varepsilon^{{\cal RO}_\varepsilon}$ starting from $V^{-1}(z(0))$ exist and are unique and continuous w.r.t. the initial condition $z(0)$. This completes the proof as the choice of the initial condition is arbitrary.
+\end{proof}
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\subsection{Theorem \ref{kkt<=>eq.thm-pert} [Optimal solution and equilibrium point]}
+In order to prove Theorem \ref{kkt<=>eq.thm-pert}, we first mention two lemmas. 
+
+\begin{lemma}\label{kkttoeq.lem_perturbed}
+Any KKT point $z_\varepsilon^\star=(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)$ of ${\cal RO}_\varepsilon$ is an equilibrium point of ${\cal RO}$ dynamics (\ref{pd_dynamics}).
+\end{lemma}
+\begin{proof}
+Any equilibrium point, $\bar{z_\varepsilon}=(\bar{x_\varepsilon},\bar{\lambda_\varepsilon},\bar{u_\varepsilon},\bar{v_\varepsilon})$, of the dynamical system (\ref{pd_dynamics-pert}) satisfies
+
+\begin{align*}
+&\nabla_x f(\bar x_\varepsilon)+\sum_{i=1}^N (\bar \lambda_{i,\varepsilon}+\varepsilon) \nabla_x g_i(\bar x_\varepsilon,\bar u_{i,\varepsilon})=0\;,\\
+&g_{i}(\bar x_\varepsilon,\bar u_{i,\varepsilon})-\bar v_{i,\varepsilon}^\top h_i(\bar u_{i,\varepsilon})\leq 0,\;\bar \lambda_{i,\varepsilon}\geq 0\;,\\
+&\bar \lambda_{i,\varepsilon}(g_{i}(\bar x_\varepsilon,\bar u_{i,\varepsilon})-\bar v_{i,\varepsilon}^\top h_i(\bar u_{i,\varepsilon}))=0\;,\\
+&\nabla_{u_i} g_i(\bar x_\varepsilon,\bar u_{i,\varepsilon})-\bar v_{i,\varepsilon}^\top \nabla_{u_i} h_i(\bar u_{i,\varepsilon})=0\;,\\
+&(\bar \lambda_{i,\varepsilon}+\varepsilon) h_{ij}(\bar u_{i,\varepsilon})\leq 0,\; \bar v_{ij,\varepsilon}\geq 0\;,\\
+&\bar v_{ij,\varepsilon} (\bar \lambda_{i,\varepsilon}+\varepsilon) h_{ij}(\bar u_{i,\varepsilon})=0\;,
+\end{align*}
+for $j^+_{[K_i]}$ and $i^+_{[N]}$\;.
+
+Substituting $z_\varepsilon^\star$ for $\bar{z_\varepsilon}$, and using the fact that $\lambda_{i,\varepsilon}^\star+\varepsilon>0$ for all $i^+_{[N]}$, it is immediate to verify that the optimal point $z_\varepsilon^\star$, satisfying (\ref{kkt1_perturbed})-(\ref{kkt4_perturbed}), also satisfies the above equilibrium conditions and therefore is an equilibrium point of ${\cal RO}$ dynamics (\ref{pd_dynamics}).
+\end{proof}
+
+On the other hand, we have the following lemma which states the inverse side.
+\begin{lemma}\label{poseqto kkt.lem_perturbed}
+Suppose that dynamical system (\ref{pd_dynamics-pert}) has an equilibrium point
+$\bar z_\varepsilon=(\bar x_\varepsilon,\bar \lambda_\varepsilon, \bar u_\varepsilon,\bar v_\varepsilon)$. Then, $\bar z_\varepsilon$ satisfies the KKT conditions (\ref{kkt1_perturbed})-(\ref{kkt4_perturbed}).
+\end{lemma}
+\begin{proof}
+
+The equilibrium point satisfies the following conditions
+\begin{align*}
+&\nabla_x f(\bar x_\varepsilon)+\sum_{i=1}^N (\bar \lambda_{i,\varepsilon}+\varepsilon) \nabla_x g_i(\bar x_\varepsilon,\bar u_{i,\varepsilon})=0\;,\\
+&g_{i}(\bar x_\varepsilon,\bar u_{i,\varepsilon})-\bar v_{i,\varepsilon}^\top h_i(\bar u_{i,\varepsilon})\leq 0,\;\bar \lambda_{i,\varepsilon}\geq 0\;,\\
+&\bar \lambda_{i,\varepsilon}(g_{i}(\bar x_\varepsilon,\bar u_{i,\varepsilon})-\bar v_{i,\varepsilon}^\top h_i(\bar u_{i,\varepsilon}))=0\;,\\
+&\nabla_{u_i} g_i(\bar x_\varepsilon,\bar u_{i,\varepsilon})-\bar v_{i,\varepsilon}^\top \nabla_{u_i} h_i(\bar u_{i,\varepsilon})=0\;,\\
+&(\bar \lambda_{i,\varepsilon}+\varepsilon) h_{ij}(\bar u_{i,\varepsilon})\leq 0,\; \bar v_{ij,\varepsilon}\geq 0\;,\\
+&\bar v_{ij,\varepsilon} (\bar \lambda_{i,\varepsilon}+\varepsilon) h_{ij}(\bar u_{i,\varepsilon})=0\;,
+\end{align*}
+for $i^+_{[N]}$ and $J^+_{[K_I]}$\;. On the other hand, the KKT conditions are
+\begin{align*}
+&\nabla_x f(x^\star_\varepsilon)+  \sum_{i=1}^N (\lambda_{i,\varepsilon}^\star+\varepsilon) \nabla_x g_i(x^\star_\varepsilon,u^\star_{i,\varepsilon})=0\;,\\
+&g_i(x^\star_\varepsilon,u^\star_{i,\varepsilon})\leq 0\;,\;\lambda_{i,\varepsilon}^\star\geq 0\;,\;\lambda_{i,\varepsilon}^\star g_i(x^\star_\varepsilon,u^\star_{i,\varepsilon})=0\;,\\
+&\nabla_{u_i}g_i(x^\star_\varepsilon,u_{i,\varepsilon}^\star)-(v_{i,\varepsilon}^\star)^\top \nabla_{u_i}h_i(u^\star_{i,\varepsilon})=0\;,\\
+&h_{ij}(u_{i,\varepsilon}^\star)\leq 0\;,\;v_{ij,\varepsilon}^\star\geq 0\;,\;v_{ij,\varepsilon}^\star h_{ij}(u_{i,\varepsilon}^\star)=0\;,
+\end{align*}
+for $i^+_{[N]}$ and $J^+_{[K_I]}$\;.
+
+Substituting $z_\varepsilon^\star$ with $\bar{z_\varepsilon}$, and using the fact that $\lambda_{i,\varepsilon}^\star+\varepsilon>0$ for all $i^+_{[N]}$, it is immediate to verify that the equilibrium point $\bar z_\varepsilon$ satisfies the above (\ref{kkt1_perturbed})-(\ref{kkt4_perturbed}) and therefore is an optimal point of (\ref{perturbed_RO}). \qed
+\end{proof}
+
+The proof of Theorem \ref{kkt<=>eq.thm-pert} follows from Lemmas \ref{kkttoeq.lem_perturbed} and \ref{poseqto kkt.lem_perturbed}.
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\subsection{Theorem \ref{maintheorempert} [Convergence]}
+
+Let $z_\varepsilon^\star=(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)$ be an optimal ${\cal RO}_\varepsilon$ solution for $i^+_{[N]}$. The lemma \ref{uniq_exis-pert} implies that a unique solution of dynamics ${\cal RO}_\varepsilon$ ${\cal Z}^{{\cal RO}_\varepsilon}$ exists starting from any point in the compact set $\mathbb P_\varepsilon=V_\varepsilon^{-1}(\leq \delta) \cap \mathbb S$ for any $\delta>0$. We now call this solution $\bar \gamma_\varepsilon(t)$.
+
+From Lemma \ref{omega_invariance}, the omega-limit set of $\bar \gamma_\varepsilon(t)$ is invariant and invariance principle for discontinuous Caratheodory systems \cite[Proposition~2.1]{cherukuri2016} (simplified version of \cite[Proposition~3]{bacciotti2006nonpathological}) implies that $\bar \gamma_\varepsilon(t)$ converges to the largest invariant set in $\text{cl}({\cal M}_\varepsilon)$ where ${\cal M}_\varepsilon:=\{z \in \mathbb P_\varepsilon\,|\, \mathfrak{L}_{{\cal Z}^{{\cal RO}_\varepsilon}}V_\varepsilon(z)=0\}$.
+
+Next, we characterize the set ${\cal M}_\varepsilon$ where $\mathfrak{L}_{{\cal Z}^{{\cal RO}_\varepsilon}}V_\varepsilon(z)=0$ by defining
+\begin{align}
+\bar{{\cal M}_\varepsilon}:=& \left\{z \in \mathbb P_\varepsilon\,|\,\lambda\geq 0, v_i\geq 0, \forall i, \nonumber\\
+&{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda,u,v_\varepsilon^\star)-{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)=0 \nonumber\\
+&\left.{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)-{\cal L}(x,\lambda_\varepsilon^\star,u_\varepsilon^\star,v)=0\;\right\}\;. \label{sad-pert}
+\end{align}
+From the inequality in (\ref{deriv_v2}), it follows that ${\cal M}_\varepsilon \subseteq \bar{\cal M}_\varepsilon$. We then prove that every point in $\bar{\cal M}_\varepsilon$ is an optimal ${\cal RO}_\varepsilon$ solution.
+
+From the strict convexity of $f$, it follows that $x=x_\varepsilon^\star$ on $\bar{\cal M}_\varepsilon$. From (\ref{sad-pert}), any point in $\bar{\cal M}_\varepsilon$ achieves the optimal cost of ${\cal RO}_\varepsilon$. Let $\bar{z}=(x_\varepsilon^\star,\bar{\lambda},\bar{u},\bar{v})\in \bar{\cal M}_\varepsilon$\;. Then, in general, 
+\begin{align*}
+\begin{array}{l}
+{\cal L}_\varepsilon(x_\varepsilon^\star,\bar{\lambda},\bar{u},v_\varepsilon^\star)\leq {\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)\;,\\
+&\left.{\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v_\varepsilon^\star)\leq {\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,\bar{v})\;.
+\end{array}
+\end{align*}
+But since $\bar{z} \in \bar {\cal M}_\varepsilon$, equality must hold above. This means that
+\begin{align*}
+\begin{array}{l}
+\bar{v}=\argmax{v \geq 0}\; {\cal L}_\varepsilon(x_\varepsilon^\star,\lambda_\varepsilon^\star,u_\varepsilon^\star,v)\;,\\
+(\bar{\lambda},\bar{u})=\argmax{u,\lambda \geq 0}\; {\cal L}_\varepsilon(x_\varepsilon^\star,\lambda,u,v_\varepsilon^\star)\;.
+\end{array}
+\end{align*}
+Therefore, $\bar{z}$ is an optimal ${\cal RO}_\varepsilon$ solution. Therefore, any point in $\bar{{\cal M}}_\varepsilon$ is an optimal ${\cal RO}$ solution. On the other hand, any optimal solution ${\cal RO}_\varepsilon$ is an equilibrium of ${\cal RO}_\varepsilon$ dynamics (\ref{pd_dynamics-pert}) according to Theorem \ref{kkt<=>eq.thm-pert} and therefore is in ${\cal M}_\varepsilon$. Thus, ${\cal M}_\varepsilon=\bar{\cal M}}_\varepsilon$. As $\delta>0$ is arbitrary, we conclude that the set of optimal ${\cal RO}_\varepsilon$ solutions is globally asymptotically stable on $\mathbb S$.
+
+\fi
+\newpage
+\onecolumn
+\section{Reviewers' comments}
+\noindent Reviewers' general / neutral / positive comments in {\color{black}BLACK}\\
+Reviewers' actionable comments in {\color{red}RED}\\
+Responses in {\color{blue}BLUE}\\
+%Changes in the paper based on the reviewers' comments in {\color{blue}BLUE}\\
+Pending items in {\color{yellow}YELLOW}\\
+
+\subsection{Review250451 (Reviewer7)}
+
+Summary: 
+This paper is concerned with robust optimization problems where the cost function and constraints are convex with respect to the decision variable, concave with respect to the uncertain variable, and the uncertainty sets are convex. Motivated by the need for distributed solutions of such problems they provide the following contributions:
+
+i) they construct a dynamical system whose rest points coincide with the solutions of the robust optimization problem\\
+ii) they show global asymptotic convergence of the dynamical system to a robust solution\\
+iii) they compare their approach, through numerical results, with other existing techniques
+
+Overall opinion:
+I find the paper well written and easy to follow, with some minor exceptions in the Introductions (see below for more details). The results are interesting both from a theoretical and from an applicative perspective. I am very much inclined to support publication of this work, although there are some important elements that need to be adjusted before doing so. These regard mainly two aspects: i) comparison with literature, ii) better clarifying what is the technical challenge.
+
+Major:
+
+1. [Style]
+While the technical portions of the paper flow well, {\color{red}the introduction does not feel similarly polished or organized. The authors are, at the same time, providing an overview of the literature, and presenting their results, which makes it difficult to keep track of everything. Also they seem to be going back and forth between different related article loosing the focus. The use of language and punctuation could also be improved.} {\color{blue} We made changes to the introduction section to make it more clear and easy to follow}\\
+For example:\\ 
+- {\color{red}"where the traditional RC method cannot held find". What is the traditional method?} {\color{blue} By "traditional RC method", we mean the robust counterpart method that is traditionally used for solving robust optimization problems. The term "traditional" is omitted to avoid confusion.}\\
+- {\color{red}I would add a paragraph before "An alternative randomized approach"} {\color{blue} Done.}\\
+- {\color{red} LP, QP, SOCP, etc are well known acronyms in our community, but they have never been introduced} {\color{blue} This comment is addressed by defining the acronyms.}\\
+- "the pessimizing oracle" pessimizing? {\color{blue} Refer to "Cutting-set methods for robust convex optimization with pessimizing oracles".}
+
+2. [Literature]
+Could the authors clarify the following important points in regards to the literature:\\
+- {\color{red}Is there any known exact solution (i.e., not scenario-based) to the general robust convex optimization problem they consider? If so, what is their computational complexity?} {\color{blue} There is no such a solution as much as the authors know.}\\
+- {\color{red}Is there any known primal dual reformulation akin to the one they present?} {\color{blue} There is no such a formulation as much as the authors know.}\\
+- {\color{red}What is the closest work in the literature?} {\color{blue} Reference \cite{cherukuri2016}}\\
+- {\color{red}Scenario approach usually does not require the constraints to be concave in the uncertain parameter. I would clarify this.} {\color{blue} This comment is addressed in the paper.}
+
+3. [Technical part]\\
+{\color{red}- Does the result in Lemma 1 also holds in the other direction (i.e., if we find a saddle point, then we have an optimal RO solution)? Perhaps this is hidden in the proof of thm 4. In any case, if the answer is positive, I think it would make sense to include this in Lemma 1 so as to justify the idea of looking for a saddle point which is behind the dynamics in 17.} {\color{blue} Other direction does not hold as the RO problem is not jointly concave in $\lambda$ and $u$.}\\
+{\color{red}- Again for Lemma 1: the lemma seems to suggest that we can swap the max and mins so as to group them together, and essentially end up with a max-min problem. What is the challenge in this resulting max-min problem?} {\color{blue} The challenge is the lack of joint concavity in $\lambda$ and $u$ which causes the RO problem not fit in a convex-concave setting.}\\
+{\color{red}- As authors notice, dynamics (17) is not exactly a gradient descent/ascent (in particular $\lambda_i$ is missing in $\dot u_i$). Can the author elaborate on this? That is: why do we need this modification and what is the rationale/idea behind it? I imagine this answer to be connected to the previous points.} {\color{blue} We will elaborate the issue with the gradient descent-ascent primal-dual dynamics for robust optimization and the reason we need a modified ${\cal RO}$ dynamics: Although the ${\cal RO}$ problem is jointly-convex in $x$ and $v_i$, it is not jointly-concave in $\lambda_i$ and $u_i$. Hence, the primal-dual dynamics (with $\lambda_i$ in $\dot u_i$ dynamics) is not converging to the $\cal{\cal RO}$ solution if $\lambda_i$ reaches zero before $u_i$ reaches its optimal value. In other words, the $u_i$ dynamics freeze when $\lambda_i$ is getting to zero. That's why we modified the primal-dual dynamics with the new ${\cal RO}$ dynamics which changes the stability results and proofs significantly. Sub-section \ref{examples_and_comments} is added to elaborate on this.}\\
+{\color{red}- The fact that the algorithm can be distributed is based on the idea that the uncertain constraints are local. I would emphasize this.}\\
+{\color{red}- Any result on the convergence speed of the dynamics?} {\color{blue} As convergence results cannot be presented for a continuous-time dynamics, please refer to the discrete-time version of out method in \cite{ebrahimi2019} for convergence speed analysis. Remark \ref{convergence_speed} is added to mention this.}\\
+{\color{red}- In terms of computational time, which approach (scenario vs dynamics)
+seemed more efficient?} {\color{blue} ${\cal RO}$ dynamics is more efficient than the scenario sampling approach. The difference in efficiency gets bigger and bigger as the size of the constraint set grows.}
+
+4. [Organization]
+{\color{red}I find the idea of presenting first all the results with the assumption of $\lambda^\star_i>0$, and then again all results without this assumption a bit disturbing. Is there no better way to do so? Two obvious options are i) presenting everything together, ii) only mention the results when $\lambda^\star_i=0$ for some $i$ without stating them.} {\color{blue} The paper is re-organized as this comment is received from the reviewers. In the new edition of the paper, we don't have two separate sections, one talking about the results for positive $\lambda^\star_i$s and the other for perturbed dynamics. Instead, the perturbed section is merged within the main section in the definition of ${\cal RO}$ problem in (\ref{RO}).}
+
+\subsection{Review250469 (Reviewer10)}
+
+Summary of the paper
+
+The paper presents an approach to solve robust optimization problems based on leveraging the dynamics of some ad-hoc continuous time dynamical systems, whose trajectories converge on the optimum of the original optimization problem.
+
+The benefits of the proposed approach is to be able solve RO problems in more general terms, and with more ease than the standard approach of deriving first, and solving then, the associated robust counterpart formulations.
+
+The paper thus contributes with detailed characterizations of the proposed dynamical system in terms of equilibria, convergence, and stability properties.
+
+Besides formulating the results in the centralized computations settings, the authors show also that the approach is amenable to distributed implementations (in static, undirected and lossless networks).
+
+Opinion on the paper
+
+The paper is very well written, structured in the way I would have structured it, bringing new contributions (very elegant ones I would say) and mathematically rigorous. For me there is very little more to add than for me this is an excellent manuscript.
+
+{\color{red}I feel like I have no comments for the authors on how to improve the manuscript besides trivial ones (e.g., note 1 on page 3 is pending).} {\color{blue} The footnote is completed.}
+
+\subsection{Review250467 (Reviewer21)}
+
+This paper proposes a method to solve a class of robust optimization problems by combining the outer minimization over the decision variable with the inner maximization over the uncertain variable through the Lagrangian, i.e.,  writing the robust optimization problem as a single optimization problem of the unified Lagrangian over the decision variable, uncertain variable, and the Lagrange multipliers. A continuous dynamics is proposed whose set of equilibria is shown to be globally asymptotic stable, and is shown to be equivalent to set of the robust optimization problem. The analysis is considered separately for the case when all the constraints are inactive at optimality and when they are not. The distributedness of the continuous dynamics for a certain class of optimization problems is also discussed.
+
+The problem considered is interesting and timely. The general presentation is mostly clear. However, {\color{red}the technical writing is not clear at several places which prevents from verifying the correctness of the results. Furthermore, according to this reviewer, the contributions do not justify a full length paper. A properly revised technical note might be acceptable. Details are provided below. 
+
+It is implied in Assumption 1 that the argument of $f$ includes the uncertain variable $u$, but that is not the case in the technical developments in the paper.} {\color{blue}This is correct. We added $u$ to the arguments of $f$ and presented the updated proofs for this case.}
+
+{\color{red}Section VI on distributed implementation is incremental in value and it is disingenuous to claim it to a major/novel contribution. It is hardly surprising (especially given the vast literature on this by now) that a separable cost function and decoupled constraints allows a distributed implementation. This could be dropped altogether for a technical note.} {\color{blue}The distributed section is removed to address the reviewer's comment. The reviewer should notice how the un-intuitive dynamics (see discussion in Section \ref{examples_and_comments}) fits the computation of the Lie Derivative based on the unconventional function $V$ which is quadratic in the error w.r.t an optimal solution $z^\star=(x^\star,\lambda^\star,u^\star,v^\star)$ but weights the error in the $u$ variables w.r.t. the optimal dual variables, $\lambda^\star$, of the upper optimization. Discovering both the dynamical system and the Lyapunov function is our main achievement in this paper, as they do not follow from simple extension of existing approaches.}
+
+{\color{red}“Note that the minimize $x^\star$  in ...  has to be the same for all $f_j$’s” in Section VI: does it mean that all the $f_j$’s are assumed to have the same minimum?} {\color{blue} 
+The distributed section is removed from the paper.}
+
+{\color{red}There is a lot of overlap between the unperturbed and the perturbed dynamics. Just like the proofs, the entire discussion of one of these could be moved to the supplementary material for a technical note. Accordingly, the simulation section could include only one case study which clearly highlights the novelty of the paper.} {\color{blue} The paper is restructured significantly to merge unperturbed and perturbed sections.} 
+
+Proof of Lemma 1:\\
+{\color{red}“ ...  and the constraint $g_i(x, u_i^\star) \leq v_i^\top h_i(u_i^\star)$ is strengthen if $v^\top h_i(u_i^\star)<0$: do not understand what it means or where it is used. why does $\tilde \mu$ depend on $v$?} {\color{blue} As this statement was incremental in value, it is removed from the proof.}
+
+{\color{red}what does “top optimization” refer to?} {\color{blue} Whenever “top optimization” was used, it is changed to “upper-level optimization” for clarity.}
+
+{\color{red}do not understand the logic behind “.., which still makes the above equation valid” towards the end} {\color{blue} This ambiguity is removed with the proper description in the proof of Lemma \ref{saddle.lem}.}
+ 
+%{\color{red}Proof of Lemma 13: Eq (58) looks incomplete in comparison to Eq (57), even after accounting for $\bar \lambda_N = 0$. Furthermore, not clear how $\bar z_{N-1}$ satisfies KKT as claimed, because Eqs (57) and (58) do not cover all conditions in the KKT condition.}
+%{\color{red} Proof of Theorem 5: Not obvious  why  the  inequalities $\mathcal{L}(x^\star, \bar \lambda, \bar u, v^\star) \leq \mathcal{L}(x^\star, \lambda^\star, u^\star, v^\star)$, ...  are  true. Please use arguments from the proof of Lemma 1 to justify.}
+%{\color{red}Not clear why is $\bar z$ an optimal RO solution as claimed. Please provide more details.}
+%{\color{yellow} I don't exactly understand the reviewer's above points. This might be an important point though. We need to check the proof of Lemme \ref{kkt<=>eq.sec} once again.}
+
+(Relatively) minor issues:\\
+{\color{red}In the statement of Assumption 3, why mention “(9) and (11)” when they are both equivalent.} {\color{blue} This was to emphasizing the equivalence. Assumption 3 is removed in the new version of the paper.}
+
+{\color{red}The opening sentence of Remark appears to be grammatically incorrect and hence can not be understood; $\tilde \lambda$ not defined until that point in the paper} {\color{blue} Correct, this is edited now.}
+
+{\color{red}Inconsistency between Eq(32) evolving over $\cdots × \mathbb{R}_{+ \varepsilon}^N × \cdots$ and later defining $\lambda = \tilde \lambda + \varepsilon$} {\color{blue} The set is modified.}
+
+{\color{red}Proofread the paper for missing subscripts and missing mathcal script} {\color{blue} This is done as much as we could.}
+
+\end{document}
