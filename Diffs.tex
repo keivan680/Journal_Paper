@@ -1,0 +1,211 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{letterpaper, margin=1in}
+\usepackage{color}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\title{\Large List of Revisions\\
+\vspace{0.5em}
+\large Robust Optimization via Continuous-Time Dynamics}
+\author{Response to Reviewer Comments}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Overview}
+This document provides a comprehensive list of all revisions made to the manuscript ``Robust Optimization via Continuous-Time Dynamics'' in response to reviewer comments. All changes in the revised manuscript are marked in {\color{blue}blue}.
+
+\section{Major Structural Changes}
+
+\subsection{Abstract}
+\begin{itemize}
+\item Completely rewritten to be more concise and focused
+\item Reduced length from 15+ lines to 8 lines
+\item Emphasized model-free approach and real-time capabilities
+\item Added specific mention of numerical examples and applications
+\end{itemize}
+
+\subsection{Introduction}
+\begin{itemize}
+\item Added new subsection ``Main Contributions'' (Section I.A) explicitly listing 6 key contributions
+\item Added new subsection ``Comparison with Existing Methods'' (Section I.B) with comprehensive comparison table
+\item Table I: Added detailed comparison of RO dynamics with existing methods including:
+  \begin{itemize}
+  \item Robust Counterpart methods
+  \item Scenario Sampling approaches
+  \item Oracle-based methods
+  \item Cutting Plane algorithms
+  \end{itemize}
+\item Updated literature review with state-of-the-art references and modern approaches
+\item Reorganized for better clarity and logical flow
+\end{itemize}
+
+\section{Technical Content Additions}
+
+\subsection{Problem Formulation (Section III)}
+\begin{itemize}
+\item Added Remark on Justification of Assumption 1 explaining convex-concave structure
+\item Added Remark on Justification of Assumption 2 regarding Slater conditions
+\item Added comprehensive Remark on Problem Formulation Clarifications including:
+  \begin{itemize}
+  \item Classical vs. our formulation differences
+  \item Non-smoothness considerations
+  \item Role of $c_i$ terms
+  \item Why separate $c_i$ and $\lambda_i$ instead of combined $\gamma_i$
+  \end{itemize}
+\item Added Remark on Justification and Relaxation of Assumption 3
+\item Extended discussion on proximal/regularization methods
+\item Added clarification on uncertainty set notation ($h_{ij}$, $K_i$)
+\end{itemize}
+
+\subsection{Duality and KKT Conditions (Section IV)}
+\begin{itemize}
+\item Added Remark on Necessity of Lagrangian Analysis explaining unified approach
+\item Added Remark on KKT Conditions for Robust Optimization
+\item Added Remark on Set Compactness under Convex Assumptions
+\item Added Remark on Extension to Nonlinear Constraints
+\item Enhanced explanation of saddle point property novelty
+\item Clarified differences from standard KKT conditions
+\end{itemize}
+
+\subsection{RO Dynamics (Section V)}
+\begin{itemize}
+\item Added comprehensive Remark on Why Standard Primal-Dual Dynamics Fail
+\item Added detailed Algorithm 23 explanation with step-by-step discussion
+\item Added Z parameter introduction immediately after equation (23)
+\item Enhanced Remark on Projected Dynamics Justification
+\item Improved explanation of equilibrium points and convergence
+\end{itemize}
+
+\subsection{Convergence Analysis (Section V-D)}
+\begin{itemize}
+\item Added new subsection on Convergence Rate Analysis
+\item Added new subsection on Stability Analysis
+\item Enhanced proof of Theorem 4 with clearer conclusion steps
+\item Moved relevant content from Appendix B to main text
+\item Added detailed convergence properties discussion
+\end{itemize}
+
+\subsection{Simulations (Section VI)}
+\begin{itemize}
+\item Added new example: Robust Portfolio Optimization with Nonlinear Constraints
+\item Enhanced comparison with modern algorithms
+\item Updated discussion of results relative to state-of-the-art methods
+\item Added more diverse test cases
+\end{itemize}
+
+\section{Formatting and Language Corrections}
+
+\subsection{Article Usage}
+\begin{itemize}
+\item Removed definite articles from all figure captions:
+  \begin{itemize}
+  \item Figure 1: ``The trajectories'' $\rightarrow$ ``Trajectories''
+  \item Figure 2: ``The trajectories'' $\rightarrow$ ``Trajectories''
+  \item Figure 3: ``The intersection'' $\rightarrow$ ``Intersection''
+  \item Figure 4: ``The trajectories'' $\rightarrow$ ``Trajectories''
+  \end{itemize}
+\item Removed articles from section titles:
+  \begin{itemize}
+  \item ``Saddle property of the optimal RO solution'' $\rightarrow$ ``Saddle property of optimal RO solution''
+  \item ``Equivalence of the KKT and equilibrium points'' $\rightarrow$ ``Equivalence of KKT and equilibrium points''
+  \end{itemize}
+\end{itemize}
+
+\subsection{Notation and Formula Corrections}
+\begin{itemize}
+\item Fixed duplicate ``RC'' abbreviation explanation (removed redundancy before equation 9)
+\item Added explanation for ``RHS'' abbreviation after inequality (51)
+\item Clarified superscript ``$\epsilon^+$'' in equation (43)
+\item Fixed expression ``$\lim_{k \to \infty}=y$'' to ``$\lim_{k \to \infty} y_k=y$'' in Proposition 6
+\item Corrected quotation marks throughout manuscript (fixed reversed quotation marks)
+\item Ensured consistent mathematical notation formatting
+\item Fixed equation referencing order issues
+\end{itemize}
+
+\subsection{Grammar and Language}
+\begin{itemize}
+\item Comprehensive grammar review and corrections throughout
+\item Improved clarity of technical descriptions
+\item Shortened lengthy sentences for better readability
+\item Replaced ``the paper'' with ``this paper'' consistently
+\item Enhanced overall writing clarity and conciseness
+\end{itemize}
+
+\section{Additional Clarifications}
+
+\subsection{Theoretical Contributions}
+\begin{itemize}
+\item Clarified novelty of Lemma 1 (saddle point property for non-convex-concave Lagrangians)
+\item Enhanced justification for Proposition 6
+\item Added explanation of why Lagrangian function (15) analysis is necessary
+\item Improved self-evidence of Theorem 4 proof conclusion
+\item Added discussion on continuity assumptions
+\end{itemize}
+
+\subsection{Practical Considerations}
+\begin{itemize}
+\item Added empirical strategies for selecting $C$ parameters
+\item Included discussion on real-time implementation capabilities
+\item Enhanced explanation of decentralized implementation possibilities
+\item Added practical examples for uncertainty set construction
+\end{itemize}
+
+\section{Response to Specific Reviewer Concerns}
+
+\subsection{Reviewer 4}
+\begin{itemize}
+\item Addressed unclear improvements over existing results (new contributions section)
+\item Fixed all language and grammar issues
+\item Corrected article usage in captions and titles
+\item Fixed formula italics consistency
+\item Corrected quotation marks throughout
+\end{itemize}
+
+\subsection{Reviewer 5}
+\begin{itemize}
+\item Reorganized introduction with explicit contributions
+\item Added detailed Algorithm 23 explanation
+\item Fixed equation referencing order
+\item Moved Appendix B content to main text
+\item Addressed all specific notation issues
+\item Updated to include modern algorithms in comparison
+\end{itemize}
+
+\subsection{Reviewer 6}
+\begin{itemize}
+\item Clarified problem formulation motivations
+\item Explained role of $c_i$ terms
+\item Addressed non-smoothness considerations
+\item Clarified Lemma 1 novelty
+\item Added discussion on nonlinear constraints
+\item Explained set compactness under convex assumptions
+\end{itemize}
+
+\subsection{Reviewer 10}
+\begin{itemize}
+\item Maintained article format with substantial technical depth added
+\item Shortened abstract significantly
+\item Improved writing clarity throughout
+\item Added missing technical content (convergence analysis, stability)
+\item Included practical robust optimization examples
+\item Enhanced theoretical justifications
+\end{itemize}
+
+\section{Summary Statistics}
+
+\begin{itemize}
+\item Total number of new remarks added: 15+
+\item New subsections created: 5
+\item Figures with updated captions: 4
+\item New example added: 1 (Portfolio Optimization)
+\item Approximate percentage of text marked in blue: 35\%
+\item References updated with modern citations: 10+
+\end{itemize}
+
+\vspace{1em}
+\noindent\textbf{Note:} All changes listed above are marked with {\color{blue}blue color} in the revised manuscript for easy identification during the review process.
+
+\end{document}
