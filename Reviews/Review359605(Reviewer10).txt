@@ -1,6 +1,8 @@
-The reviewer acknowledges the authors’ efforts in addressing a relevant
+The reviewer acknowledges the authors' efforts in addressing a relevant
 and timely problem. The core idea presented is original and points
-toward a promising research direction with potential impact. However,
+toward a promising research direction with potential impact. 
+
+However,
 the current manuscript has several important limitations in terms of
 technical depth and presentation, which make it unsuitable for
 publication as a full research article.

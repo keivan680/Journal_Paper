@@ -3482,11 +3482,11 @@ between column types.}%
 \else %%%%%%%%%%%%%%%%%%%%%% Updated %%%%%%%%%%%%%%%%%%%
 %   \def\@oddhead{\hbox{}\scriptsize\leftmark \hfil \thepage}%
    \if@web
-   \def\@oddhead{\vbox{\vbox{\vspace*{-5pt}\includegraphics[width=\logowidth]{\logoname.eps}}\hskip-3pc\null\hskip\logowidth
+   \def\@oddhead{\vbox{%\vbox{\vspace*{-5pt}\includegraphics[width=\logowidth]{\logoname.eps}}\hskip-3pc\null\hskip\logowidth
          \vbox{\begin{tabular}{@{\hspace*{43pt}}p{\firstpagerule}@{}}\\[-32pt]{\vbox{\hsize\firstpagerule\scriptsize\textsf\leftmark \hfill \textsf\thepage\hbox{}\par\vspace*{-3pt} 
          \vbox{\color{subsectioncolor}\hrule height1pt width\firstpagerule depth0pt} }}\end{tabular}} }}%
    \else\if@print
-   \def\@oddhead{\vbox{\vbox{\vspace*{-5pt}\includegraphics[width=\logowidth]{\logoname.eps}}\hskip-3pc\null\hskip\logowidth
+   \def\@oddhead{\vbox{%\vbox{\vspace*{-5pt}\includegraphics[width=\logowidth]{\logoname.eps}}\hskip-3pc\null\hskip\logowidth
          \vbox{\begin{tabular}{@{\hspace*{43pt}}p{\firstpagerule}@{}}\\[-32pt]{\vbox{\hsize\firstpagerule\scriptsize\textsf\leftmark \hfill \textsf\thepage\hbox{}\par\vspace*{-3pt} 
          \vbox{\color{subsectioncolor}\hrule height1pt width\firstpagerule depth0pt} }}\end{tabular}} }}%
    \else
@@ -3495,12 +3495,12 @@ between column types.}%
    \if@web 
    \def\@evenhead{\begin{tabular}{@{}p{\firstpagerule}@{}}\\[-38pt]{\vbox{\hsize\firstpagerule\scriptsize\textsf\thepage \hfill \textsf\leftmark\hbox{}\par\vspace*{-3pt} 
          \vbox{\color{subsectioncolor}\hrule height1pt width\firstpagerule depth0pt} }}\end{tabular}\hskip-5pc\null\hskip\logowidth
-         \lower-7.5pt\vbox{\vspace*{-4pt}\vbox{\includegraphics[width=\logowidth]{\logoname.eps}}}}%
-%         \lower-7.5pt\vbox{\vspace*{-4pt}\vbox{\includegraphics[width=\logowidth]{\logoname.eps}}}}%
+         }%\lower-7.5pt\vbox{\vspace*{-4pt}\vbox{\includegraphics[width=\logowidth]{\logoname.eps}}}}%
+%         }%\lower-7.5pt\vbox{\vspace*{-4pt}\vbox{\includegraphics[width=\logowidth]{\logoname.eps}}}}%
    \else\if@print
    \def\@evenhead{\begin{tabular}{@{}p{\firstpagerule}@{}}\\[-38pt]{\vbox{\hsize\firstpagerule\scriptsize\textsf\thepage \hfill \textsf\leftmark\hbox{}\par\vspace*{-3pt} 
          \vbox{\color{subsectioncolor}\hrule height1pt width\firstpagerule depth0pt} }}\end{tabular}\hskip-5pc\null\hskip\logowidth
-         \lower-7.5pt\vbox{\vspace*{-4pt}\vbox{\includegraphics[width=\logowidth]{\logoname.eps}}}}%
+         }%\lower-7.5pt\vbox{\vspace*{-4pt}\vbox{\includegraphics[width=\logowidth]{\logoname.eps}}}}%
    \else
    \PackageError{mypackage}{NEED OPTION "web" or "print" in documentclass !!!}{help text}
    \fi\fi 

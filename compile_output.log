@@ -1,0 +1,47 @@
+=========================================
+Starting PDF creation for: Main_Cleaned_Revised.tex
+=========================================
+
+Step 1: Converting EPS files to PDF...
+-----------------------------------------
+Skipping: ellipsoids.pdf (already up to date)
+Skipping: trajectories_1_main.pdf (already up to date)
+Skipping: trajectories_1_perturbed_eps0.001.pdf (already up to date)
+Skipping: trajectories_1_perturbed_eps0.01.pdf (already up to date)
+Skipping: trajectories_2_main.pdf (already up to date)
+Skipping: trajectories_2_perturbed_eps0.001.pdf (already up to date)
+Skipping: trajectories_2_perturbed_eps0.01.pdf (already up to date)
+Skipping: trajectories_3_main.pdf (already up to date)
+Skipping: trajectories_3_perturbed_eps0.001.pdf (already up to date)
+Skipping: trajectories_3_perturbed_eps0.01.pdf (already up to date)
+Skipping: trajectories_4_main.pdf (already up to date)
+Skipping: trajectories_4_perturbed_eps0.001.pdf (already up to date)
+Skipping: trajectories_4_perturbed_eps0.01.pdf (already up to date)
+Skipping: trajectories_5_main.pdf (already up to date)
+Skipping: trajectories_5_perturbed_eps0.001.pdf (already up to date)
+Skipping: trajectories_5_perturbed_eps0.01.pdf (already up to date)
+Skipping: trajectories_geometric.pdf (already up to date)
+Skipping: trajectories_intersection.pdf (already up to date)
+Skipping: trajectories_nonlinear_exp_no_RC.pdf (already up to date)
+Skipping: trajectories_norm_intersection.pdf (already up to date)
+Processed 20 EPS files, converted 0
+
+Step 2: Running LaTeX compilation...
+-----------------------------------------
+Running first pdflatex pass...
+First pass completed (PDF created, though there may be warnings)
+Running bibtex...
+Bibtex completed successfully
+Running second pdflatex pass...
+Second pass completed (PDF updated)
+Running third pdflatex pass...
+Third pass completed (all references resolved)
+
+=========================================
+SUCCESS: Main_Cleaned_Revised.pdf created (3.61 MB)
+PDF contains 22 pages
+=========================================
+
+Cleaning up auxiliary files...
+Cleanup complete.
+Done!

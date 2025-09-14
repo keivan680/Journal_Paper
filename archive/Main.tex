@@ -2,6 +2,8 @@
 \usepackage{generic}
 \pdfminorversion=4 
 
+\let\proof\relax
+\let\endproof\relax
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{epsfig}
@@ -151,6 +153,7 @@ Compared with existing ${\cal RO}$ methods, we point out that most existing algo
 In this paper, we provide the architecture of such a dynamical system that converges to the optimal robust solution for a large class of ${\cal RO}$ problems.
 
 Although our approach is inspired by the work on primal-dual systems \cite{arrow1958,feijer2010}, it presents significant architectural and convergence challenges described in the paper. A key technical contribution is finding the right architecture of the dynamical system for which a non-standard Lyapunov function can help to prove global convergence to an optimal ${\cal RO}$ solution. The proposed continuous-time optimization system can solve a general class of ${\cal RO}$ problems where the cost function and the constraints are convex (concave) with respect to the decision variables (uncertain variables) and the uncertainty sets are convex\footnote{Preliminary convergence results for a special formulation appeared without proofs in \cite{ebrahimi2019continuous}. In this paper, we generalize the problem formulation and provide complete proofs, which are the core of our contributions.}. This class includes all the cases in \cite[~Table 1]{gorissen20152}. 
+%{\color{blue}The primal-dual gradient dynamics, firstly introduced in \cite{arrow1958}, is a continuous-time approach to find the solution (both primal and dual) of a regular (non-robust) optimization problem in a centralized \cite{feijer2010} or distributed manner \cite{bertsekas1989}. The primal-dual dynamics are also at the heart of various discrete-time algorithms for solving optimization problems. In the current paper, we provide a construction of a new continuous-time dynamical system that is capable of solving ${\cal RO}$ problems.
 
 %paper extends the results presented in \cite{ebrahimi2019continuous}. In particular, we relax the strict concavity assumption of the constraints functions with respect to (w.r.t.) the uncertainty variable from \cite{ebrahimi2019continuous} and consider the uncertainty also in the objective function. Furthermore, we extend the results from \cite{ebrahimi2019continuous} to the case where not all constraints are assumed to be active. The distributed implementation of ${\cal RO}$ is also new to this paper. The discrete-time version of the ${\cal RO}$ dynamics is already appeared in our previous works \cite{ebrahimi2019cdc} and \cite{esfandiari2019}}.
 
@@ -1132,6 +1135,7 @@ Considering $x_i \in \mathbb{R}^k$ for $k=2$ or $k=3$, the problem can be define
 \begin{align*}
     \sum_{(i,j) \in {\cal A}} f_{ij}(x_i,x_j)
 \end{align*}
+%{\color{brown} Are the $x_j$ with index $j$ are the anchor points..}{\color{blue} I thought it took it from boyd's book I will check}
 where ${\cal A}$ is the set of all links, and $f_{ij}:\mathbb{R}^k \times \mathbb{R}^k \rightarrow \mathbb{R}$ is the cost function that represents the length of the link interconnection such as $\parallel x_i-x_j \parallel$ with the Euclidean norm or the $l_p$-norm. In this case, the location and placement problem is convex. Other form of the problem including non-negative weights for distances is
 \begin{align*}
     \sum_{(i,j) \in {\cal A}} w_{ij} \parallel x_i - x_j \parallel\;.
@@ -1870,108 +1874,5 @@ But since $\bar{z} \in \bar {\cal M}_\varepsilon$, equality must hold above. Thi
 Therefore, $\bar{z}$ is an optimal ${\cal RO}_\varepsilon$ solution. Therefore, any point in $\bar{{\cal M}}_\varepsilon$ is an optimal ${\cal RO}$ solution. On the other hand, any optimal solution ${\cal RO}_\varepsilon$ is an equilibrium of ${\cal RO}_\varepsilon$ dynamics (\ref{pd_dynamics-pert}) according to Theorem \ref{kkt<=>eq.thm-pert} and therefore is in ${\cal M}_\varepsilon$. Thus, ${\cal M}_\varepsilon=\bar{\cal M}}_\varepsilon$. As $\delta>0$ is arbitrary, we conclude that the set of optimal ${\cal RO}_\varepsilon$ solutions is globally asymptotically stable on $\mathbb S$.
 
 \fi
-\newpage
-\onecolumn
-\section{Reviewers' comments}
-\noindent Reviewers' general / neutral / positive comments in {\color{black}BLACK}\\
-Reviewers' actionable comments in {\color{red}RED}\\
-Responses in BLUE\\
-%Changes in the paper based on the reviewers' comments in BLUE\\
-Pending items in {\color{yellow}YELLOW}\\
-
-\subsection{Review250451 (Reviewer7)}
-
-Summary: 
-This paper is concerned with robust optimization problems where the cost function and constraints are convex with respect to the decision variable, concave with respect to the uncertain variable, and the uncertainty sets are convex. Motivated by the need for distributed solutions of such problems they provide the following contributions:
-
-i) they construct a dynamical system whose rest points coincide with the solutions of the robust optimization problem\\
-ii) they show global asymptotic convergence of the dynamical system to a robust solution\\
-iii) they compare their approach, through numerical results, with other existing techniques
-
-Overall opinion:
-I find the paper well written and easy to follow, with some minor exceptions in the Introductions (see below for more details). The results are interesting both from a theoretical and from an applicative perspective. I am very much inclined to support publication of this work, although there are some important elements that need to be adjusted before doing so. These regard mainly two aspects: i) comparison with literature, ii) better clarifying what is the technical challenge.
-
-Major:
-
-1. [Style]
-While the technical portions of the paper flow well, {\color{red}the introduction does not feel similarly polished or organized. The authors are, at the same time, providing an overview of the literature, and presenting their results, which makes it difficult to keep track of everything. Also they seem to be going back and forth between different related article loosing the focus. The use of language and punctuation could also be improved.} {\color{blue} We made changes to the introduction section to make it more clear and easy to follow}\\
-For example:\\ 
-- {\color{red}"where the traditional RC method cannot held find". What is the traditional method?} {\color{blue} By "traditional RC method", we mean the robust counterpart method that is traditionally used for solving robust optimization problems. The term "traditional" is omitted to avoid confusion.}\\
-- {\color{red}I would add a paragraph before "An alternative randomized approach"} {\color{blue} Done.}\\
-- {\color{red} LP, QP, SOCP, etc are well known acronyms in our community, but they have never been introduced} {\color{blue} This comment is addressed by defining the acronyms.}\\
-- "the pessimizing oracle" pessimizing? {\color{blue} Refer to "Cutting-set methods for robust convex optimization with pessimizing oracles".}
-
-2. [Literature]
-Could the authors clarify the following important points in regards to the literature:\\
-- {\color{red}Is there any known exact solution (i.e., not scenario-based) to the general robust convex optimization problem they consider? If so, what is their computational complexity?} {\color{blue} There is no such a solution as much as the authors know.}\\
-- {\color{red}Is there any known primal dual reformulation akin to the one they present?} {\color{blue} There is no such a formulation as much as the authors know.}\\
-- {\color{red}What is the closest work in the literature?} {\color{blue} Reference \cite{cherukuri2016}}\\
-- {\color{red}Scenario approach usually does not require the constraints to be concave in the uncertain parameter. I would clarify this.} {\color{blue} This comment is addressed in the paper.}
-
-3. [Technical part]\\
-{\color{red}- Does the result in Lemma 1 also holds in the other direction (i.e., if we find a saddle point, then we have an optimal RO solution)? Perhaps this is hidden in the proof of thm 4. In any case, if the answer is positive, I think it would make sense to include this in Lemma 1 so as to justify the idea of looking for a saddle point which is behind the dynamics in 17.} {\color{blue} Other direction does not hold as the RO problem is not jointly concave in $\lambda$ and $u$.}\\
-{\color{red}- Again for Lemma 1: the lemma seems to suggest that we can swap the max and mins so as to group them together, and essentially end up with a max-min problem. What is the challenge in this resulting max-min problem?} {\color{blue} The challenge is the lack of joint concavity in $\lambda$ and $u$ which causes the RO problem not fit in a convex-concave setting.}\\
-{\color{red}- As authors notice, dynamics (17) is not exactly a gradient descent/ascent (in particular $\lambda_i$ is missing in $\dot u_i$). Can the author elaborate on this? That is: why do we need this modification and what is the rationale/idea behind it? I imagine this answer to be connected to the previous points.} {\color{blue} We will elaborate the issue with the gradient descent-ascent primal-dual dynamics for robust optimization and the reason we need a modified ${\cal RO}$ dynamics: Although the ${\cal RO}$ problem is jointly-convex in $x$ and $v_i$, it is not jointly-concave in $\lambda_i$ and $u_i$. Hence, the primal-dual dynamics (with $\lambda_i$ in $\dot u_i$ dynamics) is not converging to the $\cal{\cal RO}$ solution if $\lambda_i$ reaches zero before $u_i$ reaches its optimal value. In other words, the $u_i$ dynamics freeze when $\lambda_i$ is getting to zero. That's why we modified the primal-dual dynamics with the new ${\cal RO}$ dynamics which changes the stability results and proofs significantly. Sub-section \ref{examples_and_comments} is added to elaborate on this.}\\
-{\color{red}- The fact that the algorithm can be distributed is based on the idea that the uncertain constraints are local. I would emphasize this.}\\
-{\color{red}- Any result on the convergence speed of the dynamics?} {\color{blue} As convergence results cannot be presented for a continuous-time dynamics, please refer to the discrete-time version of out method in \cite{ebrahimi2019} for convergence speed analysis. Remark \ref{convergence_speed} is added to mention this.}\\
-{\color{red}- In terms of computational time, which approach (scenario vs dynamics)
-seemed more efficient?} {\color{blue} ${\cal RO}$ dynamics is more efficient than the scenario sampling approach. The difference in efficiency gets bigger and bigger as the size of the constraint set grows.}
-
-4. [Organization]
-{\color{red}I find the idea of presenting first all the results with the assumption of $\lambda^\star_i>0$, and then again all results without this assumption a bit disturbing. Is there no better way to do so? Two obvious options are i) presenting everything together, ii) only mention the results when $\lambda^\star_i=0$ for some $i$ without stating them.} {\color{blue} The paper is re-organized as this comment is received from the reviewers. In the new edition of the paper, we don't have two separate sections, one talking about the results for positive $\lambda^\star_i$s and the other for perturbed dynamics. Instead, the perturbed section is merged within the main section in the definition of ${\cal RO}$ problem in (\ref{RO}).}
-
-\subsection{Review250469 (Reviewer10)}
-
-Summary of the paper
-
-The paper presents an approach to solve robust optimization problems based on leveraging the dynamics of some ad-hoc continuous time dynamical systems, whose trajectories converge on the optimum of the original optimization problem.
-
-The benefits of the proposed approach is to be able solve RO problems in more general terms, and with more ease than the standard approach of deriving first, and solving then, the associated robust counterpart formulations.
-
-The paper thus contributes with detailed characterizations of the proposed dynamical system in terms of equilibria, convergence, and stability properties.
-
-Besides formulating the results in the centralized computations settings, the authors show also that the approach is amenable to distributed implementations (in static, undirected and lossless networks).
-
-Opinion on the paper
-
-The paper is very well written, structured in the way I would have structured it, bringing new contributions (very elegant ones I would say) and mathematically rigorous. For me there is very little more to add than for me this is an excellent manuscript.
-
-{\color{red}I feel like I have no comments for the authors on how to improve the manuscript besides trivial ones (e.g., note 1 on page 3 is pending).} {\color{blue} The footnote is completed.}
-
-\subsection{Review250467 (Reviewer21)}
-
-This paper proposes a method to solve a class of robust optimization problems by combining the outer minimization over the decision variable with the inner maximization over the uncertain variable through the Lagrangian, i.e.,  writing the robust optimization problem as a single optimization problem of the unified Lagrangian over the decision variable, uncertain variable, and the Lagrange multipliers. A continuous dynamics is proposed whose set of equilibria is shown to be globally asymptotic stable, and is shown to be equivalent to set of the robust optimization problem. The analysis is considered separately for the case when all the constraints are inactive at optimality and when they are not. The distributedness of the continuous dynamics for a certain class of optimization problems is also discussed.
-
-The problem considered is interesting and timely. The general presentation is mostly clear. However, {\color{red}the technical writing is not clear at several places which prevents from verifying the correctness of the results. Furthermore, according to this reviewer, the contributions do not justify a full length paper. A properly revised technical note might be acceptable. Details are provided below. 
-
-It is implied in Assumption 1 that the argument of $f$ includes the uncertain variable $u$, but that is not the case in the technical developments in the paper.} {\color{blue}This is correct. We added $u$ to the arguments of $f$ and presented the updated proofs for this case.}
-
-{\color{red}Section VI on distributed implementation is incremental in value and it is disingenuous to claim it to a major/novel contribution. It is hardly surprising (especially given the vast literature on this by now) that a separable cost function and decoupled constraints allows a distributed implementation. This could be dropped altogether for a technical note.} {\color{blue}The distributed section is removed to address the reviewer's comment. The reviewer should notice how the un-intuitive dynamics (see discussion in Section \ref{examples_and_comments}) fits the computation of the Lie Derivative based on the unconventional function $V$ which is quadratic in the error w.r.t an optimal solution $z^\star=(x^\star,\lambda^\star,u^\star,v^\star)$ but weights the error in the $u$ variables w.r.t. the optimal dual variables, $\lambda^\star$, of the upper optimization. Discovering both the dynamical system and the Lyapunov function is our main achievement in this paper, as they do not follow from simple extension of existing approaches.}
-
-{\color{red}“Note that the minimize $x^\star$  in ...  has to be the same for all $f_j$’s” in Section VI: does it mean that all the $f_j$’s are assumed to have the same minimum?} {\color{blue} 
-The distributed section is removed from the paper.}
-
-{\color{red}There is a lot of overlap between the unperturbed and the perturbed dynamics. Just like the proofs, the entire discussion of one of these could be moved to the supplementary material for a technical note. Accordingly, the simulation section could include only one case study which clearly highlights the novelty of the paper.} {\color{blue} The paper is restructured significantly to merge unperturbed and perturbed sections.} 
-
-Proof of Lemma 1:\\
-{\color{red}“ ...  and the constraint $g_i(x, u_i^\star) \leq v_i^\top h_i(u_i^\star)$ is strengthen if $v^\top h_i(u_i^\star)<0$: do not understand what it means or where it is used. why does $\tilde \mu$ depend on $v$?} {\color{blue} As this statement was incremental in value, it is removed from the proof.}
-
-{\color{red}what does “top optimization” refer to?} {\color{blue} Whenever “top optimization” was used, it is changed to “upper-level optimization” for clarity.}
-
-{\color{red}do not understand the logic behind “.., which still makes the above equation valid” towards the end} {\color{blue} This ambiguity is removed with the proper description in the proof of Lemma \ref{saddle.lem}.}
- 
-%{\color{red}Proof of Lemma 13: Eq (58) looks incomplete in comparison to Eq (57), even after accounting for $\bar \lambda_N = 0$. Furthermore, not clear how $\bar z_{N-1}$ satisfies KKT as claimed, because Eqs (57) and (58) do not cover all conditions in the KKT condition.}
-%{\color{red} Proof of Theorem 5: Not obvious  why  the  inequalities $\mathcal{L}(x^\star, \bar \lambda, \bar u, v^\star) \leq \mathcal{L}(x^\star, \lambda^\star, u^\star, v^\star)$, ...  are  true. Please use arguments from the proof of Lemma 1 to justify.}
-%{\color{red}Not clear why is $\bar z$ an optimal RO solution as claimed. Please provide more details.}
-%{\color{yellow} I don't exactly understand the reviewer's above points. This might be an important point though. We need to check the proof of Lemme \ref{kkt<=>eq.sec} once again.}
-
-(Relatively) minor issues:\\
-{\color{red}In the statement of Assumption 3, why mention “(9) and (11)” when they are both equivalent.} {\color{blue} This was to emphasizing the equivalence. Assumption 3 is removed in the new version of the paper.}
-
-{\color{red}The opening sentence of Remark appears to be grammatically incorrect and hence can not be understood; $\tilde \lambda$ not defined until that point in the paper} {\color{blue} Correct, this is edited now.}
-
-{\color{red}Inconsistency between Eq(32) evolving over $\cdots × \mathbb{R}_{+ \varepsilon}^N × \cdots$ and later defining $\lambda = \tilde \lambda + \varepsilon$} {\color{blue} The set is modified.}
-
-{\color{red}Proofread the paper for missing subscripts and missing mathcal script} {\color{blue} This is done as much as we could.}
 
 \end{document}

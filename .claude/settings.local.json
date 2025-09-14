@@ -1,11 +1,123 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
-      "Bash(python3:*)",
+      "Bash(afplay:*)",
       "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(echo:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
       "Bash(cp:*)",
-      "Bash(grep:*)"
+      "Bash(mv:*)",
+      "Bash(chmod:*)",
+      "Bash(sed:*)",
+      "Bash(dos2unix:*)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git stash:*)",
+      "Bash(git pull:*)",
+      "Bash(git push:*)",
+      "Bash(git rebase:*)",
+      "Bash(brew install:*)",
+      "Bash(brew services:*)",
+      "Bash(rsync:*)",
+      "Bash(scp:*)",
+      "Bash(ssh:*)",
+      "Bash(az network nsg rule list:*)",
+      "Bash(./deploy_to_vm.sh)",
+      "Bash(/Users/kebrahimi/Documents/tensurf_brain_nt8_backend/servers/fix-env.sh:*)",
+      "Bash(/Users/kebrahimi/Documents/tensurf_brain_nt8_backend/backend/tblsai/test_tbcsad_format_fix.py)",
+      "Bash(/Users/kebrahimi/Documents/tensurf_brain_nt8_backend/backend/tblsai/fix_json_templates.py)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:azure.microsoft.com)",
+      "WebFetch(domain:www.helicone.ai)",
+      "Bash(claude --version)",
+      "Bash(claude mcp:*)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:github.com)",
+      "mcp__filesystem__read_text_file",
+      "mcp__filesystem__list_allowed_directories",
+      "Bash(npm run build:*)",
+      "Bash(git clone:*)",
+      "Bash(./install_essential_mcp_servers.sh:*)",
+      "Bash(./install_additional_mcp_servers.sh:*)",
+      "Bash(npm search:*)",
+      "Bash(./install_all_mcp_servers.sh:*)",
+      "Bash(uv tool install:*)",
+      "WebFetch(domain:www.sharkindicators.com)",
+      "Bash(uv run:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(git config:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(git log:*)",
+      "WebFetch(domain:www.bluewavetrading.com)",
+      "mcp__filesystem__directory_tree",
+      "mcp__filesystem__list_directory",
+      "Bash(true)",
+      "Bash(kill:*)",
+      "Bash(export:*)",
+      "Bash(dotnet --version)",
+      "Bash(~/.dotnet/dotnet:*)",
+      "Bash(uv pip install:*)",
+      "mcp__filesystem__read_media_file",
+      "Bash(pkill:*)",
+      "Bash(source:*)",
+      "Bash(rag-status)",
+      "Bash(pdftotext:*)",
+      "Bash(awk:*)",
+      "Bash(find:*)",
+      "Bash(sed:*)",
+      "Bash(./create_pdf.sh:*)",
+      "Bash(pdflatex:*)",
+      "Bash(if [ -f /Library/TeX/texbin/pdflatex ])",
+      "Bash(then /Library/TeX/texbin/pdflatex)",
+      "Bash(else pdflatex)",
+      "Bash(fi:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Glass.aiff"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Hero.aiff"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Pop.aiff"
+          }
+        ]
+      }
+    ]
   }
 }
