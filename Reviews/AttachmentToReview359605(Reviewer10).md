@@ -37,7 +37,7 @@ results—but may be overly rigid for practical modeling purposes. The reviewer 
 
 • Remark 4 raises an important technical point but would benefit from clearer formulation and improved writing. From the reviewer's perspective, the content of the remark could be more effectively communicated if it were split into two separate parts, each addressing a distinct aspect of the discussion. This would enhance clarity and better highlight the significance of the observation.
 
-• From the reviewer's perspective, the conclusion presented in the final paragraph of the proof of Theorem 4 is neither straightforward nor self-evident. To improve clarity and support the argument, further elaboration and justification are recommended.
+T
 
 • The requirement imposed in Corollary 1 is quite strong and may pose challenges in both theoretical analysis and practical implementation. The reviewer acknowledges that the assumption—particularly the strict complementarity condition—is introduced to avoid degeneracy and to ensure the existence of a Lyapunov function with a guaranteed negative rate of change. While this is a mathematically sound approach, it relies on a structural regularity that may not hold in many realistic settings.
 
