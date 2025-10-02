@@ -7,10 +7,11 @@ Thank you for your guidance on handling the proof revision carefully. I complete
 === KEY FINDINGS ===
 
 1. CRITICAL ISSUE - Theorem 4 Proof:
-   - The current revision completely restructured the proof with 6 labeled steps
+   - Reviewer 10's actual comment: "the conclusion presented in the final paragraph of the proof of Theorem 4 is neither straightforward nor self-evident" (AttachmentToReview359605(Reviewer10).md, line 1304)
+   - The current revision completely restructured the ENTIRE proof with 6 labeled steps
    - This looks like a wholesale AI rewrite and will raise red flags
    - RECOMMENDATION: Revert to original proof structure immediately
-   - Add ONLY minimal clarification to address Reviewer 10's specific concern
+   - Add ONLY clarification to the FINAL PARAGRAPH as reviewer specifically requested
    - The original proof was ~30 lines; new one is ~60 lines - too dramatic
 
 2. Theorem 4.19 Verification:
@@ -93,9 +94,10 @@ APPROPRIATE MAJOR CHANGES (when reviewer explicitly requests):
 - Consolidating contributions → Reviewer 4 asked → We did it → Good
 
 INAPPROPRIATE MAJOR CHANGE (current situation):
-- Reviewer 10 criticized "hand-waving" in proof's FINAL PARAGRAPH only
+- Reviewer 10's exact words: "the conclusion presented in the final paragraph of the proof of Theorem 4 is neither straightforward nor self-evident"
+- Criticism is specific to FINAL PARAGRAPH only
 - This is a request to CLARIFY a specific point, not RESTRUCTURE entire proof
-- Our response: completely restructured proof with 6 labeled steps
+- Our response: completely restructured entire proof with 6 labeled steps
 - Result: looks like defensive overreaction + possible AI assistance
 
 My assessment:
