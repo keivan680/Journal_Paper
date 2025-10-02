@@ -661,20 +661,6 @@ The omega-limit set of any solution of the $\mathcal{RO}$ dynamics (\ref{pd_dyna
 \label{omega_invariance}
 \end{lemma}
 
-\rev{The following lemma establishes that trajectories converge to a single point when the limit set consists of stable equilibria.}
-\begin{lemma}[\rev{Singleton $\omega$-limit under Lyapunov stability}]\label{singleton_omega}
-\rev{Let $\gamma(\cdot)$ be any solution of (\ref{pd_dynamics}) with $\omega(\gamma)\subseteq{\cal M}$, where ${\cal M}$ is a set of equilibria.
-Assume each $z\in{\cal M}$ is Lyapunov stable in the sense of Lyapunov (ISL).
-Then $\omega(\gamma)=\{z^\star\}$ is a singleton and $\gamma(t)\to z^\star$.}
-\end{lemma}
-\begin{proof}
-\rev{Since $\gamma(\cdot)$ is bounded, $\omega(\gamma)$ is nonempty; pick $z^\star\in\omega(\gamma)$.
-Given $\varepsilon>0$, let $\delta(\varepsilon)$ be the ISL radius at $z^\star$.
-Because $z^\star$ is a limit point, there exists $T$ with $\|\gamma(T)-z^\star\|<\delta(\varepsilon)$.
-By ISL applied to the time-shifted trajectory $t\mapsto \gamma(T+t)$, we have $\|\gamma(t)-z^\star\|<\varepsilon$ for all $t\ge T$.
-Since $\varepsilon>0$ is arbitrary, $\gamma(t)\to z^\star$ and $\omega(\gamma)=\{z^\star\}$.}
-\end{proof}
-
 Finally, we have the main convergence result.
 \begin{theorem}\label{maintheorem}[Convergence]
 \rev{Under Assumptions \ref{assume1} and \ref{assume_feasible}, the trajectories of ${\cal RO}$ dynamics \eqref{pd_dynamics} converge to an optimal ${\cal RO}$ solution for any initial condition in $\mathbb{S}=\mathbb{R}^n\times \mathbb{R}^N_{+}\times \mathbb{R}^M\times \mathbb{R}^K_+$. In particular, each trajectory converges to a single point in the set of optimal ${\cal RO}$ solutions.}
@@ -736,7 +722,7 @@ i.e., every limit point of the trajectory is an optimal ${\cal RO}$ solution.}
 \rev{\textbf{Step 5 (point convergence to a single optimal solution).}
 We now justify the final claim. Every point in ${\cal M}$ is an equilibrium and is Lyapunov stable in the sense of Lyapunov (ISL); this property follows from the Lyapunov function $V$ constructed in Lemma \ref{monotonicity}, which shows that $\dot{V} \leq 0$ along trajectories, establishing stability of equilibria.
 
-Applying Lemma \ref{singleton_omega} to $\bar\gamma(\cdot)$ with ${\cal M}$ as the set of equilibria (which are all ISL by the above argument), we obtain that $\bar\gamma(t)$ converges to a single point $z^\star\in{\cal M}$, i.e., to a single optimal ${\cal RO}$ solution.}
+Since the system has a Lyapunov function $V$ with $\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)\le 0$ and all equilibria in ${\cal M}$ are Lyapunov stable, the system is semistable by \cite[Theorem~4.19]{haddad}. Therefore, $\bar\gamma(t)$ converges to a single point $z^\star\in{\cal M}$, i.e., to a single optimal ${\cal RO}$ solution.}
 
 \medskip
 \rev{\textbf{Step 6 (globality).}
