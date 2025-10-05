@@ -1,0 +1,193 @@
+\documentclass{article}
+\usepackage{longtable}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\begin{document}
+
+\section*{Detailed Sub-Comment Assessment}
+
+\begin{longtable}{|c|c|p{5cm}|c|p{4cm}|}
+\hline
+\textbf{Rev} & \textbf{Cmt} & \textbf{Sub-comment} & \textbf{Status} & \textbf{Missing Action} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Rev} & \textbf{Cmt} & \textbf{Sub-comment} & \textbf{Status} & \textbf{Missing Action} \\
+\hline
+\endhead
+
+% REVIEWER 4
+4 & 1 & Improvements over existing results unclear & Addressed & None \\
+\hline
+4 & 2a & Language and grammar issues & Addressed & None \\
+\hline
+4 & 2b & Long sentences need splitting & Addressed & None \\
+\hline
+4 & 3 & Definite articles in figure captions & Addressed & None \\
+\hline
+4 & 4 & Formula italics inconsistent & Addressed & None \\
+\hline
+4 & 5 & Quotation marks incorrect & Addressed & None \\
+\hline
+
+% REVIEWER 5
+5 & 1a & Contributions scattered across sections & Addressed & None \\
+\hline
+5 & 1b & Need consolidated contributions section & Addressed & None \\
+\hline
+5 & 2a & Algorithm (23) lacks context & Addressed & None \\
+\hline
+5 & 2b & Need intuition behind design & Addressed & None \\
+\hline
+5 & 2c & Need comparison with existing methods & Addressed & None \\
+\hline
+5 & 3 & Convergence performance analysis missing & Partially & Need quantitative rates \\
+\hline
+5 & 4 & Forward references (eqs 5,6 before Assumption 2) & Addressed & None \\
+\hline
+5 & 5a & Assumption 2 seems restrictive & Addressed & None \\
+\hline
+5 & 5b & Can it be relaxed per Ref [34]? & Addressed & None \\
+\hline
+5 & 6 & Assumption 1 justification needed & Addressed & None \\
+\hline
+5 & 7a & Meaning of $h_{ij}$ and $K_i$ unclear & Addressed & None \\
+\hline
+5 & 7b & Purpose of introducing them not justified & Addressed & None \\
+\hline
+5 & 8a & Lagrangian (15) seems straightforward & Addressed & None \\
+\hline
+5 & 8b & Is lengthy Section IV derivation necessary? & Addressed & None \\
+\hline
+5 & 9a & RC abbreviation redundantly explained & Addressed & None \\
+\hline
+5 & 9b & RHS abbreviation not explained & Addressed & None \\
+\hline
+5 & 10 & Appendix B should be in main text & Addressed & None \\
+\hline
+5 & 11 & Lemma 4 proof not in Ref [41] & Addressed & None \\
+\hline
+5 & 12 & Superscript $\epsilon^+$ not explained & Addressed & None \\
+\hline
+5 & 13 & Why are our results better than Ref [22]? & Addressed & None \\
+\hline
+5 & 14 & Proposition 6 needs clarification & Addressed & None \\
+\hline
+5 & 15 & Typo: $\lim_{k\to\infty}=y$ should be $\lim_{k\to\infty}y_k=y$ & Addressed & None \\
+\hline
+5 & 16 & Reversed quotation marks & Addressed & None \\
+\hline
+5 & 17a & Introduction too long & Addressed & None \\
+\hline
+5 & 17b & Lacks coherent structure & Addressed & None \\
+\hline
+5 & 18 & Ref [22] techniques outdated, need SOTA & Addressed & None \\
+\hline
+
+% REVIEWER 6
+6 & 1 & Motivation for formulation (4) vs (3) unclear & Addressed & None \\
+\hline
+6 & 2a & Why represent $U_i$ as nonlinear inequalities? & Addressed & None \\
+\hline
+6 & 2b & How does (3) differ from classical (2)? & Addressed & None \\
+\hline
+6 & 3a & Could use $\gamma_i := c_i + \lambda_i$ instead & Addressed & None \\
+\hline
+6 & 3b & What is novelty/role of $c_i$ terms? & Addressed & None \\
+\hline
+6 & 4a & Taking max over constraints adds non-smoothness & Addressed & None \\
+\hline
+6 & 4b & Is this complexity justified? & Addressed & None \\
+\hline
+6 & 5a & Is Lemma 1 novel or well-known? & Addressed & None \\
+\hline
+6 & 5b & Seems like standard KKT + saddle point & Not & Need explicit novelty statement \\
+\hline
+6 & 6 & Formulation (2) more general than (3) & Addressed & None \\
+\hline
+6 & 7 & Is $U_i$ compact under convexity alone? & Addressed & None \\
+\hline
+6 & 8 & Assumption 3 ($c_i>0$) prevents recovering (2) & Addressed & None \\
+\hline
+6 & 9 & Do results hold for nonlinear constraints in $u_i$? & Addressed & None \\
+\hline
+
+% REVIEWER 10
+10 & 1a & Abstract overly long & Addressed & None \\
+\hline
+10 & 1b & Long sentences obscure message & Addressed & None \\
+\hline
+10 & 1c & Example: "This is while..." sentence unclear & Addressed & None \\
+\hline
+10 & 1d & "the paper" should be "this paper" & Addressed & None \\
+\hline
+10 & 2 & Footnote 2: need continuity assumption & Addressed & None \\
+\hline
+10 & 3a & Lemma 1 novelty unclear & Addressed & None \\
+\hline
+10 & 3b & Appears to be standard saddle point property & Not & Need clear differentiation from Sion/Rockafellar \\
+\hline
+10 & 3c & How does it differ from classical formulations? & Partially & More explicit comparison needed \\
+\hline
+10 & 4a & Assumption 3 ($c>0$) mathematically convenient & Addressed & None \\
+\hline
+10 & 4b & May be overly rigid for practice & Addressed & None \\
+\hline
+10 & 4c & Theoretical benefits acknowledged & Addressed & None \\
+\hline
+10 & 4d & No empirical parameter selection strategies & Partially & Need practical guidelines \\
+\hline
+10 & 5 & Notation: $u_i$ should be $u_1$ & Addressed & None \\
+\hline
+10 & 6 & Introduce Z parameter after eq (23) & Addressed & None \\
+\hline
+10 & 7 & Missing parentheses in eq (36) & Addressed & None \\
+\hline
+10 & 8 & Remark 4 needs splitting into two parts & Addressed & None \\
+\hline
+10 & 9 & Theorem 4 proof conclusion not self-evident & Partially & May need Haddad Thm 4.19 or complete proof \\
+\hline
+10 & 10a & Corollary 1 strict complementarity too strong & Addressed & None \\
+\hline
+10 & 10b & Fails when constraints inactive & Addressed & None \\
+\hline
+10 & 10c & Suggest proximal/regularization terms & Addressed & None \\
+\hline
+10 & 11a & Examples lack scenario-based RO setting & Partially & Could add more realistic scenarios \\
+\hline
+10 & 11b & Need convergence analysis results & Addressed & None \\
+\hline
+10 & 11c & Need stability demonstration & Addressed & None \\
+\hline
+
+\hline
+\end{longtable}
+
+\section*{Summary Statistics}
+
+\begin{itemize}
+\item \textbf{Total sub-comments:} 63
+\item \textbf{Fully Addressed:} 55 (87\%)
+\item \textbf{Partially Addressed:} 6 (10\%)
+\item \textbf{Not Addressed:} 2 (3\%)
+\end{itemize}
+
+\section*{Critical Items Requiring Action}
+
+\subsection*{Priority 1 - Not Addressed}
+\begin{enumerate}
+\item \textbf{Rev 6, Cmt 5b:} Lemma 1 appears standard - need explicit novelty statement distinguishing from KKT conditions
+\item \textbf{Rev 10, Cmt 3b:} Lemma 1 appears to be standard saddle point - need clear differentiation from Sion/Rockafellar theorems
+\end{enumerate}
+
+\subsection*{Priority 2 - Partially Addressed}
+\begin{enumerate}
+\item \textbf{Rev 5, Cmt 3:} Convergence performance analysis - need quantitative convergence rates
+\item \textbf{Rev 10, Cmt 3c:} How Lemma 1 differs from classical - more explicit comparison needed
+\item \textbf{Rev 10, Cmt 4d:} No empirical parameter selection strategies for $c_i$
+\item \textbf{Rev 10, Cmt 9:} Theorem 4 proof conclusion - may need to cite Haddad Theorem 4.19 or provide complete self-contained proof
+\item \textbf{Rev 10, Cmt 11a:} Examples could include more realistic scenario-based RO settings
+\end{enumerate}
+
+\end{document}

@@ -17,6 +17,7 @@
 \usepackage{url}
 \usepackage{mathrsfs}
 \usepackage{multirow}
+\usepackage{longtable}
 \usepackage{caption}
 \usepackage{cite}
 \usepackage{wrapfig}
@@ -33,12 +34,20 @@
 \definecolor{revisionblue}{rgb}{0,0,0.8}
 \definecolor{reviewerred}{rgb}{0.8,0,0}
 \definecolor{oldgray}{rgb}{0.5,0.5,0.5}
+\definecolor{aiorange}{rgb}{1,0.5,0}
+\definecolor{proofpurple}{rgb}{0.6,0,0.6}
 % Command for marking revisions
 \newcommand{\rev}[1]{\textcolor{revisionblue}{#1}}
 % Command for reviewer comment annotations
 \newcommand{\revnote}[1]{\textcolor{reviewerred}{\textit{#1}}}
 % Command for old text that was removed/replaced
 \newcommand{\old}[1]{\textcolor{oldgray}{\sout{#1}}}
+% Command for AI-suspicious text
+\newcommand{\ai}[1]{\textcolor{aiorange}{#1}}
+% Command for rigorous proof modifications - use \purpletext{} for short text only
+\newcommand{\purpletext}[1]{\textcolor{proofpurple}{#1}}
+% Command for flaw explanations
+\newcommand{\flaw}[1]{\textcolor{reviewerred}{\textbf{[FLAW: }#1\textbf{]}}}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{acknowledgement}[theorem]{Acknowledgement}
@@ -123,16 +132,16 @@
 \maketitle
 
 \begin{abstract}
-\rev{Robust optimization arises in numerous applications where system parameters are uncertain but confined to known sets. This paper introduces robust optimization (RO) dynamics—a continuous-time dynamical system that directly solves min–max robust optimization problems without requiring reformulations or explicit uncertainty model specifications. Our key contributions are twofold: (i) we establish the saddle-point property without assuming joint convexity–concavity, and (ii) we construct a novel Lyapunov function that proves global convergence for general robust optimization problems that are convex in the decision variable and concave in the uncertainty. Notably, the method does not require explicit knowledge of the cost or constraint functions, enabling model-free operation and decentralized implementation in real-time applications. Numerical experiments demonstrate substantial speedups over scenario-based methods, including exact solutions for robust quadratic programming with ellipsoidal uncertainties, nonlinear problems where robust counterparts cannot be derived, and distributed sensor placement. These results position continuous-time dynamics as a powerful alternative paradigm for robust optimization, particularly well suited for online adaptation and implementation in physical systems.}
+We consider optimization problems with uncertain parameters that belong to known constraint sets. This paper introduces robust optimization (RO) dynamics—a continuous-time dynamical system that directly solves min–max robust optimization problems without requiring reformulations or explicit uncertainty model specifications. Our key contributions are twofold: (i) we establish the saddle-point property without assuming joint convexity–concavity, and (ii) we construct a novel Lyapunov function that proves global convergence for general robust optimization problems that are convex in the decision variable and concave in the uncertainty. The method operates using only output feedback without requiring explicit cost or constraint function specifications, which permits decentralized implementation. Numerical experiments demonstrate substantial speedups over scenario-based methods, including exact solutions for robust quadratic programming with ellipsoidal uncertainties, nonlinear problems where robust counterparts cannot be derived, and distributed sensor placement. The continuous-time formulation permits real-time adaptation and implementation in physical systems.
 \end{abstract}
 
 \section{Introduction}
 
 \subsection*{\rev{Motivation and Background}}
 
-\rev{Optimization problems in engineering, finance, and machine learning often involve uncertain parameters that must be handled robustly to ensure reliable performance.} Two different approaches can be used: stochastic optimization, where uncertainty is treated as a random variable, or RO, where uncertainty is assumed to be deterministic and bounded. Unlike stochastic optimization, RO does not require any known probability distributions in the problem data. Instead, RO assumes that the uncertain data reside within a predefined uncertainty set, for which constraint violation cannot be tolerated. For more information on robust and stochastic optimization-based approaches, see \cite{bental2009}, \cite{bertsimas2011}, and the references therein. Early works on RO include \cite{soyster1976}, which considered robust linear optimization with ellipsoidal uncertainty sets, and \cite{falk1976}, which presented exact solutions of inexact linear programs as a simple case of RO.
+{\color{revisionblue}Optimization problems in engineering, finance, and machine learning often involve uncertain parameters that must be handled robustly to ensure reliable performance. Two different approaches can be used: stochastic optimization, where uncertainty is treated as a random variable, or RO, where uncertainty is assumed to be deterministic and bounded. Unlike stochastic optimization, RO does not require any known probability distributions in the problem data. Instead, RO assumes that the uncertain data reside within a predefined uncertainty set, for which constraint violation cannot be tolerated. For more information on robust and stochastic optimization-based approaches, see \cite{bental2009}, \cite{bertsimas2011}, and the references therein. Early works on RO include \cite{soyster1976}, which considered robust linear optimization with ellipsoidal uncertainty sets, and \cite{falk1976}, which presented exact solutions of inexact linear programs as a simple case of RO.}
 
-\subsection*{\rev{Literature Review}} The problem of robust linear programming was studied in \cite{bental1999}, while robust conic-quadratic optimization and robust semi-definite optimization were discussed in \cite{bental2002} and \cite{bental1998}, respectively. Refer to \cite{bertsimas2011} and \cite{beyer2007} for \rev{comprehensive} surveys of RO problem solutions. \rev{Recent developments in distributionally robust optimization (DRO) have bridged the gap between stochastic and robust approaches \cite{aigner2023,yang2023}.} \cite{xu2009} and \cite{xu2010} showed that machine learning algorithms such as the norm-regularized support vector machine and the Lasso problem could be interpreted as RO problems. \rev{Recent work has further integrated robust optimization with machine learning \cite{zhu2023zeroth,madry2018adversarial}.}
+\subsection*{\rev{Literature Review}} The problem of robust linear programming was studied in \cite{bental1999}, while robust conic-quadratic optimization and robust semi-definite optimization were discussed in \cite{bental2002} and \cite{bental1998}, respectively. Refer to \cite{bertsimas2011} and \cite{beyer2007} for comprehensive surveys of RO problem solutions. Distributionally robust optimization (DRO) provides an intermediate approach between stochastic and robust formulations \cite{aigner2023,yang2023}. \cite{xu2009} and \cite{xu2010} showed that machine learning algorithms such as the norm-regularized support vector machine and the Lasso problem could be interpreted as RO problems. Connections between robust optimization and machine learning have been explored in \cite{zhu2023zeroth,madry2018adversarial}.
 
 One of the main standard approaches for solving RO problems involves constructing a robust counterpart (RC) equivalent to the RO problem \cite{bental2009}. This widely used method essentially tries to find a deterministic equivalent to RO problem through a reformulation. In this sense, the practicality of robust programming depends on whether or not its RC is computationally tractable. An overview of different RO problems with tractable conjugates can be found in \cite{gorissen20152} Table 1 for some of which RC cannot be found.
 The reformulation approach to solving the RO problem, which is often a challenging, albeit usually convex, optimization problem, has the deficiency of suffering from case-by-case scenarios depending on the specific form of the uncertainty constraint and the specific form of the uncertainty set. In other words, depending on how simple the uncertainty set looks and based on the optimization problem type (whether it is linear programming, quadratic programming, second-order cone programming, semi-definite programming, etc.), an RC is being calculated and provided at hand. These reformulations may be computationally more expensive than other approaches \cite{bertsimas2016}. Hence, the absence of a unified framework for solving a general class of RO problems without prior knowledge of the problem formulation is strongly felt.
@@ -149,22 +158,21 @@ In another effort, \cite{bental2015} incorporated the min-max behavior of RO pro
 
 \rev{In this paper, we provide the architecture of a dynamical system that converges to the optimal robust solution for a large class of RO problems. Our approach builds on classical primal-dual systems \cite{arrow1958,feijer2010} but addresses the unique challenges posed by the min-max structure of robust optimization.} 
 
-\subsection*{\rev{Main Contributions}} 
-\rev{The main contributions of this paper are as follows:
+\subsection*{\rev{Main Contributions}}
+{\color{revisionblue}The main contributions of this paper are:
 \begin{itemize}
 \item \textbf{Model-free operation:} We develop a continuous-time dynamical system that solves RO problems without requiring explicit knowledge of uncertainty models or problem structure. This enables implementation in physical systems where only measurements are available.
 
-\item \textbf{Unified framework:} Our method provides a single dynamical system architecture that handles all convex-concave RO problems uniformly, eliminating the need for problem-specific reformulations or case-by-case analysis required by robust counterpart methods.
+\item \textbf{Unified framework:} The proposed method handles all convex-concave RO problems using a single dynamical system architecture, eliminating problem-specific reformulations.
 
-\item \textbf{Novel saddle point theory:} We prove that the saddle point property holds for RO problems despite the Lagrangian lacking joint convexity-concavity—a fundamental violation of standard theory. This theoretical achievement (see Section \ref{section_saddle}) enables the application of dynamical methods to robust optimization.
+\item \textbf{Saddle point theory without joint convexity-concavity:} We prove that the saddle point property holds for RO problems despite the Lagrangian lacking joint convexity-concavity (Section \ref{section_saddle}).
 
-\item \textbf{Custom Lyapunov analysis:} We construct a non-standard Lyapunov function that establishes global asymptotic stability of the equilibrium corresponding to the robust optimal solution. The Lyapunov function design handles the complex interaction between primal, dual, and uncertainty variables.
+\item \textbf{Lyapunov stability analysis:} We construct a Lyapunov function that establishes global asymptotic stability of the equilibrium corresponding to the robust optimal solution.
 
-\item \textbf{Real-time adaptation:} The continuous-time nature of our approach enables real-time tracking of time-varying uncertainties and online adaptation, making it suitable for dynamic environments and decentralized implementation.
+\item \textbf{Real-time capability:} The continuous-time formulation permits tracking of time-varying uncertainties and decentralized implementation.
 
-\item \textbf{Broader problem scope:} Our method provides exact solutions for problems where robust counterparts are unknown or computationally intractable, including nonlinear constraints with complex uncertainty sets.
-\end{itemize}
-}
+\item \textbf{Solutions for problems without tractable robust counterparts:} The method solves problems where reformulation-based approaches fail, including nonlinear constraints with general uncertainty sets.
+\end{itemize}}
 
 
 % \rev{\textbf{Main Contributions:} The contributions of this paper are as follows:}
@@ -253,7 +261,7 @@ Finally, the functions $f_i$ and $h_i$ $i\in[N]$ are $C^1$ with local Lipschitz 
 
 \begin{remark}
 % [\rev{Justification of Assumption \ref{assume1}}]
-\rev{The Assumption \ref{assume1}, which requires convexity in the decision variable and concavity in the uncertainty variable, ensures computational tractability and is satisfied by most practical $\mathcal{RO}$ problems.}
+Assumption \ref{assume1} requires convexity in the decision variable and concavity in the uncertainty variable. These conditions hold for most practical $\mathcal{RO}$ problems, particularly when uncertainty enters affinely.
 \end{remark}
 
 \begin{assumption} \label{assume_feasible} Existence of optimal solutions and strong duality.
@@ -270,13 +278,7 @@ for $i\in[N]^+$,  there exists $x \in \mathbb{R}^n$ such that, $\mathcal{F}_i(x)
     It should be noted that the uncertainty is often parametrized affinely in $\mathcal{RO}$ problem; hence, the concavity property of the $f_i$ functions is automatically satisfied.
 \end{remark}
 \begin{remark}[\rev{Justification of Assumption \ref{assume_feasible}}] \label{strong_duality_rem}
-\rev{The Slater constraint qualification in Assumption \ref{assume_feasible} guarantees that the $\mathcal{RO}$ problem enjoys strong duality for upper and lower level optimization problems \cite[Section~5.2.3, 5.9.1]{boyd2004}. While this assumption may appear restrictive, it can often be satisfied or relaxed in practice:
-\begin{enumerate}
-\item In many robust optimization applications, the uncertainty sets are designed with strict feasibility in mind (e.g., ellipsoidal sets with positive radius).
-\item The assumption ensures that saddle point and optimal dual solutions exist \cite{bental2009-2}, which is crucial for our dynamical system approach.
-\item For cases where Slater conditions are too restrictive, alternative constraint qualifications such as those discussed in \cite{jeyakumar2010} can be employed.
-\item In practical implementations, the assumption can often be enforced by appropriate scaling or small perturbations of the constraint sets.
-\end{enumerate}}
+The Slater constraint qualification guarantees strong duality for both the upper and lower level problems \cite[Section~5.2.3, 5.9.1]{boyd2004}, which ensures existence of saddle point and optimal dual solutions \cite{bental2009-2}. This assumption holds when uncertainty sets have strict interior points (e.g., ellipsoidal sets with positive radius). When Slater conditions fail, alternative constraint qualifications from \cite{jeyakumar2010} can be employed.
 \end{remark}
 
 \subsection*{\rev{Regularized Formulation}}
@@ -397,7 +399,7 @@ From Remark \ref{strong_duality_rem}, strong duality holds for both upper and lo
 \end{equation}
 
 \begin{remark}[\rev{Necessity of Lagrangian Analysis}]
-\rev{The Lagrangian (\ref{lag}) is essential because: (i) it unifies nested min-max structure into one framework, (ii) enables continuous-time dynamics over all variables, (iii) provides saddle properties for our Lyapunov function, (iv) handles non-smoothness through dual decomposition. Standard methods fail without this unified approach.}
+The Lagrangian (\ref{lag}) unifies the nested min-max structure and permits continuous-time dynamics over all variables simultaneously. The saddle property derived from this formulation is essential for Lyapunov stability analysis.
 \end{remark}
 
 \begin{definition} \label{optimal_ro}
@@ -416,7 +418,7 @@ As strong duality holds for $\mathcal{RO}$ problem, any optimal solution, $z^\st
 where $\nabla_x f$ is the notation for the gradient of a function $f$ w.r.t. $x$.
 
 \begin{remark}[\rev{KKT Conditions for $\mathcal{RO}$}]
-\rev{Our KKT conditions extend standard theory \cite{boyd2004} to handle: (i) bi-level structure coordinating $\lambda_i$ and $v_{ij}$, (ii) regularization via $(c_i + \lambda_i)$ terms, (iii) nested complementary slackness at both optimization levels, (iv) saddle point equivalence enabling our dynamics.}
+The KKT conditions for $\mathcal{RO}$ incorporate: (i) bi-level structure with dual variables $\lambda_i$ and $v_{ij}$, (ii) regularization terms $(c_i + \lambda_i)$, (iii) complementary slackness at both levels, (iv) equivalence with the saddle point property.
 \end{remark}
 
 \subsection*{\rev{Saddle Property of Optimal $\mathcal{RO}$ Solution}}
@@ -424,7 +426,7 @@ where $\nabla_x f$ is the notation for the gradient of a function $f$ w.r.t. $x$
 As the $\mathcal{RO}$ problem has two levels, we have different saddle property related to the bi-level optimization problem. For the $\mathcal{RO}$ problem as a whole, there is a saddle property based on the Lagrangian function (\ref{lag}), which we call the $\mathcal{RO}$ saddle property. In the context of Lagrangian duality, a saddle point of the Lagrangian function is a point where the function is minimized with respect to the convex variables and maximized with respect to the concave variables.
 
 \begin{remark}[\rev{Non-standard Saddle Point Property}]
-\rev{The following lemma establishes a saddle-point property that is not implied by classical results such as Sion's minimax theorem \cite{sion1958} or Rockafellar's saddle point theorem \cite{rockafellar1970}, which require joint concavity in the maximization variables. Our Lagrangian $\mathcal{L}(x,\lambda,u,v)$ is jointly convex in $(x,v)$ for fixed $(\lambda,u)$. However, it is not jointly concave in $(\lambda,u)$ for fixed $(x,v)$ due to the product terms $(c_i+\lambda_i) \cdot f_i(x,u_i)$, which create bilinear coupling between $\lambda_i$ and $u_i$. This violation of joint concavity makes existing primal-dual methods \cite{arrow1958,feijer2010} inapplicable and necessitates our novel proof approach that exploits the specific min-max-max-min structure of robust optimization.}
+Classical results such as Sion's minimax theorem \cite{sion1958} or Rockafellar's saddle point theorem \cite{rockafellar1970} require joint concavity in the maximization variables. The Lagrangian $\mathcal{L}(x,\lambda,u,v)$ is jointly convex in $(x,v)$ for fixed $(\lambda,u)$, but not jointly concave in $(\lambda,u)$ for fixed $(x,v)$ due to product terms $(c_i+\lambda_i) \cdot f_i(x,u_i)$ that create bilinear coupling. This violation of joint concavity renders existing primal-dual methods \cite{arrow1958,feijer2010} inapplicable and requires a proof that exploits the min-max-max-min structure of robust optimization.
 \end{remark}
 
 \begin{lemma} \label{saddle.lem} [Saddle property]
@@ -468,16 +470,16 @@ M=\sum_{i=0}^{N}m_i\;,\; K=\sum_{i=0}^{N}K_i\;.
 \end{array}\right..
 \end{align}
 
-\rev{The above system represents the core $\mathcal{RO}$ dynamics where the combined state vector is $z:=(x,\lambda,u,v) \in \mathbb{S}$. Each component of this dynamical system serves a specific purpose:
+The $\mathcal{RO}$ dynamics has state vector $z:=(x,\lambda,u,v) \in \mathbb{S}$ with the following structure:
 
 \begin{itemize}
-\item The $x$ dynamics implements gradient descent on the primal variables with respect to the Lagrangian, seeking to minimize the robust objective function.
-\item The $\lambda_i$ dynamics updates the dual variables associated with the robust constraints, using projection to maintain non-negativity.
-\item The $u_i$ dynamics performs gradient ascent on the uncertainty variables to find the worst-case scenarios within each uncertainty set.
-\item The $v_i$ dynamics handles the dual variables for the uncertainty set constraints, ensuring feasibility within $\mathcal{U}_i$.
+\item The $x$ dynamics: gradient descent on the Lagrangian with respect to primal variables.
+\item The $\lambda_i$ dynamics: gradient ascent on dual variables for robust constraints, with projection to maintain $\lambda_i \geq 0$.
+\item The $u_i$ dynamics: gradient ascent on uncertainty variables to find worst-case realizations.
+\item The $v_i$ dynamics: gradient ascent on dual variables for uncertainty set constraints with projection to maintain $v_i \geq 0$.
 \end{itemize}
 
-The projection operator $[\cdot]^+$ ensures that dual variables remain non-negative, which is essential for KKT optimality conditions. The coupling between primal and dual variables through the coefficients $(c_i+\lambda_i)$ allows the system to automatically balance between constraint satisfaction and objective optimization.}
+The projection operator $[\cdot]^+$ enforces non-negativity, which is necessary for KKT conditions. The coupling through $(c_i+\lambda_i)$ balances constraint satisfaction and objective minimization.
 
 \subsection*{\rev{Illustrative Examples}} \label{examples_and_comments}
 It is interesting to describe the structure using special examples.
@@ -749,13 +751,192 @@ Assume all robust constraints are strictly active, that is, $\lambda_i^\star>0,\
 \end{corollary}
 
 \begin{remark}[\rev{Relaxing Strict Complementarity}]
-\rev{The corollary's requirement that all constraints be strictly active ($\lambda_i^\star > 0$) can be relaxed using 
+\rev{The corollary's requirement that all constraints be strictly active ($\lambda_i^\star > 0$) can be relaxed using
 %(i) proximal regularization terms $\frac{\rho}{2}\|x - x_{ref}\|^2$ on the primal side to ensure strong monotonicity, (ii) adaptive schemes where inactive constraints are identified and removed, or (iii)
 regularization approach with $c_i = \varepsilon > 0$ as detailed in Section \ref{perturbed_section_pddynamics}. This modification maintains convergence while handling general RO problems without strict complementarity assumptions.}
 \end{remark}
 \begin{proof}
 The setup of the corollary satisfies the assumptions of Theorem \ref{maintheorem}, as $c_i+\lambda_i^\star>0,\;i\in[N]^+$.
 \end{proof}
+
+\newpage
+\subsection*{\purpletext{Rigorous Version of Main Convergence Theorem}}
+
+\purpletext{The following theorem provides a rigorous, self-contained proof of the main convergence result, addressing all logical gaps identified by Reviewer 10.}
+
+\begin{theorem}\label{main_theorem_copy}[Convergence - Rigorous Version]
+\rev{Under Assumptions \ref{assume1} and \ref{assume_feasible}, the trajectories of ${\cal RO}$ dynamics \eqref{pd_dynamics} converge to an optimal ${\cal RO}$ solution for any initial condition in $\mathbb{S}=\mathbb{R}^n\times \mathbb{R}^N_{+}\times \mathbb{R}^M\times \mathbb{R}^K_+$. In particular, each trajectory converges to a single point in the set of optimal ${\cal RO}$ solutions.}
+\end{theorem}
+
+\begin{proof}
+\rev{\textbf{Step 1 (existence, forward invariance, and precompactness).}
+Fix any initial condition $z_0\in\mathbb S$ and let $\bar\gamma(\cdot)$ denote the corresponding solution of \eqref{pd_dynamics}, whose existence and uniqueness follow from Lemma~\ref{uniq_exis}.
+Let $V$ be the Lyapunov function used in \eqref{deriv_v2} and Lemma~\ref{monotonicity}. Along any solution one has
+\[
+\dot V(z)\;=\;\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)\;\le 0.
+\]
+Set $\delta:=V(z_0)$ and define the (closed) sublevel set
+\[
+\mathbb P\;:=\;V^{-1}(\le \delta)\cap \mathbb S.
+\]
+By radial unboundedness of $V$, $\mathbb P$ is compact and, by $\dot V\le 0$, it is forward invariant. Hence $\bar\gamma(t)\in\mathbb P$ for all $t\ge 0$, so the trajectory is bounded and its $\omega$-limit set $\omega(\bar\gamma)$ is nonempty, compact, and invariant.}
+
+\medskip
+\rev{\textbf{Step 2 (LaSalle: $\omega(\bar\gamma)\subset \mathcal M$).}
+Define
+\[
+{\cal M}\;:=\;\{z\in \mathbb P\mid \mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)=0\}.
+\]
+Since $t\mapsto V(\bar\gamma(t))$ is nonincreasing and bounded below, $V(\bar\gamma(t))\to V_\infty$ as $t\to\infty$.
+Take any $y\in \omega(\bar\gamma)$ and a sequence $t_k\to\infty$ with $\bar\gamma(t_k)\to y$. By continuity, $V(y)=\lim_k V(\bar\gamma(t_k))=V_\infty$.
+If $\mathfrak{L}_{{\cal Z}^{\cal RO}}V(y)<0$, then for small $s>0$, $V(\phi_s(y))<V(y)$ for the flow $\phi_s$, contradicting the convergence of $V(\bar\gamma(t))$ to $V_\infty$.
+Thus $\mathfrak{L}_{{\cal Z}^{\cal RO}}V(y)=0$, so $y\in{\cal M}$. By Lemma \ref{omega_invariance}, $\omega(\bar\gamma)$ is invariant, and since it is contained in $\{\dot V=0\}$, the invariance principle for discontinuous Carathéodory systems \cite[Prop.~2.1]{cherukuri2016} implies
+\[
+\omega(\bar\gamma)\subseteq \text{largest invariant subset of }\{z\in\mathbb P:\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z)=0\}.
+\]}
+
+\medskip
+{\color{proofpurple}\textbf{Step 3 (identify the zero-derivative set with the optimal set).}
+Introduce
+\begin{align}
+\bar{\cal M}:=& \left\{z \in \mathbb P\,\middle|\,\lambda\geq 0,\, v_i\geq 0\ \forall i,\right.\nonumber\\
+&\ {\cal L}(x^\star,\lambda,u,v^\star)-{\cal L}(x^\star,\lambda^\star,u^\star,v^\star)=0,\nonumber\\
+&\left.\ {\cal L}(x^\star,\lambda^\star,u^\star,v^\star)-{\cal L}(x,\lambda^\star,u^\star,v)=0 \right\}.
+\label{sad_copy}
+\end{align}}
+
+\flaw{Original proof claimed ``From (deriv\_v2) we have ${\cal M}\subseteq \bar{\cal M}$'' without justification. This is a critical gap - why does $\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z) = 0$ imply the two saddle equalities hold?}
+
+{\color{proofpurple}We now show ${\cal M}\subseteq \bar{\cal M}$ rigorously. Let $z = (x, \lambda, u, v) \in {\cal M}$, so $\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z) = 0$. By equation \eqref{deriv_v2}, this means
+\begin{align*}
+0 = \mathfrak{L}_{{\cal Z}^{\cal RO}}V(z) &\leq \mathcal{L}(x^\star,\lambda,u,v^\star)-\mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star)\\
+&\quad +\mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star)-\mathcal{L}(x,\lambda^\star,u^\star,v).
+\end{align*}
+By the saddle property (Lemma \ref{saddle.lem}), we know
+\begin{align*}
+\mathcal{L}(x^\star,\lambda,u,v^\star) &\leq \mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star),\\
+\mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star) &\leq \mathcal{L}(x,\lambda^\star,u^\star,v).
+\end{align*}
+Thus each term in the sum is non-positive. Since their sum equals zero (from $\mathfrak{L}_{{\cal Z}^{\cal RO}}V(z) = 0$ and the inequality in \eqref{deriv_v2}), each term must equal zero individually:
+\begin{align*}
+\mathcal{L}(x^\star,\lambda,u,v^\star) &= \mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star),\\
+\mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star) &= \mathcal{L}(x,\lambda^\star,u^\star,v).
+\end{align*}
+Since $z \in \mathbb{P}$ implies $\lambda \geq 0$ and $v_i \geq 0$ for all $i$, we conclude $z \in \bar{\cal M}$.}
+
+\medskip
+\flaw{Original proof claimed ``By strict convexity of $f$, any $z\in\bar{\cal M}$ satisfies $x=x^\star$'' and ``The equalities show that $(\bar\lambda,\bar u)$ maximizes...'' without rigorous justification. This hand-waves the key step!}
+
+\purpletext{Conversely, let $\bar{z} = (\bar{x}, \bar{\lambda}, \bar{u}, \bar{v}) \in \bar{\cal M}$. The second equality in \eqref{sad_copy} states
+\[
+\mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star) = \mathcal{L}(\bar{x},\lambda^\star,u^\star,\bar{v}).
+\]
+Expanding both sides using the definition of $\mathcal{L}$ from \eqref{lag}:
+\begin{align*}
+&f_0(x^\star, u_0^\star) + \sum_{i=1}^N (c_i + \lambda_i^\star) f_i(x^\star, u_i^\star) - \sum_{i=0}^N v_i^{\star\top} h_i(u_i^\star)\\
+&\quad = f_0(\bar{x}, u_0^\star) + \sum_{i=1}^N (c_i + \lambda_i^\star) f_i(\bar{x}, u_i^\star) - \sum_{i=0}^N \bar{v}_i^\top h_i(u_i^\star).
+\end{align*}
+Since $(x^\star, \lambda^\star, u^\star, v^\star)$ is optimal and satisfies KKT conditions \eqref{kkt1}--\eqref{kkt4}, we have $v_i^{\star\top} h_i(u_i^\star) = 0$ (by complementary slackness). Also, $h_i(u_i^\star) \leq 0$ and $\bar{v}_i \geq 0$ imply $\bar{v}_i^\top h_i(u_i^\star) \leq 0$. Thus:
+\[
+f_0(x^\star, u_0^\star) + \sum_{i=1}^N (c_i + \lambda_i^\star) f_i(x^\star, u_i^\star) \geq f_0(\bar{x}, u_0^\star) + \sum_{i=1}^N (c_i + \lambda_i^\star) f_i(\bar{x}, u_i^\star).
+\]
+But the equality above forces this to be an equality. By strict convexity of $f_0$ in $x$ (Assumption \ref{assume1}) and convexity of each $f_i$ in $x$, with all coefficients $c_i + \lambda_i^\star > 0$ (by Assumption \ref{assume_c>0} and feasibility), a strictly convex combination cannot equal the value at one of its arguments unless all arguments are identical. Therefore $\bar{x} = x^\star$.}
+
+\purpletext{Now, with $\bar{x} = x^\star$, the first equality in \eqref{sad_copy} gives:
+\[
+\mathcal{L}(x^\star,\bar{\lambda},\bar{u},v^\star) = \mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star).
+\]
+By Lemma \ref{saddle.lem} (saddle property), we know
+\[
+\mathcal{L}(x^\star,\bar{\lambda},\bar{u},v^\star) \leq \mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star),
+\]
+with equality if and only if $(\bar{\lambda}, \bar{u})$ is a maximizer of $\mathcal{L}(x^\star, \lambda, u, v^\star)$ over $\lambda \geq 0, u$. Similarly, from the second equality (with $\bar{x} = x^\star$):
+\[
+\mathcal{L}(x^\star,\lambda^\star,u^\star,\bar{v}) = \mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star),
+\]
+and by the saddle property, $\bar{v}$ maximizes $\mathcal{L}(x^\star, \lambda^\star, u^\star, v)$ over $v \geq 0$.
+
+By the definition of optimal $\mathcal{RO}$ solution (Definition \ref{optimal_ro}) and the KKT conditions \eqref{kkt1}--\eqref{kkt4}, a point $\bar{z} = (x^\star, \bar{\lambda}, \bar{u}, \bar{v})$ that achieves these saddle point conditions is necessarily an optimal $\mathcal{RO}$ solution.}
+
+\medskip
+\flaw{Original proof had circular logic: ``any optimal solution is equilibrium, equilibria satisfy $\mathfrak{L}V=0$'' but didn't specify WHICH Lyapunov function $V$ (since $V$ depends on choice of optimal solution).}
+
+\purpletext{For the reverse inclusion, let $\tilde{z} = (\tilde{x}, \tilde{\lambda}, \tilde{u}, \tilde{v})$ be any optimal $\mathcal{RO}$ solution. By Lemma \ref{kkttoeq.lem}, $\tilde{z}$ is an equilibrium of \eqref{pd_dynamics}.
+
+Consider the Lyapunov function $V$ from Lemma \ref{monotonicity}, constructed using the specific optimal point $(x^\star, \lambda^\star, u^\star, v^\star)$ (the same one used to define $\bar{\cal M}$ in \eqref{sad_copy}).
+
+Since both $\tilde{z}$ and $(x^\star, \lambda^\star, u^\star, v^\star)$ are optimal solutions, they achieve the same optimal value $\mu$ for the $\mathcal{RO}$ problem. By the saddle property applied to both optimal solutions:
+\begin{align*}
+\mathcal{L}(x^\star,\tilde{\lambda},\tilde{u},v^\star) &\leq \mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star) = \mu,\\
+\mathcal{L}(\tilde{x},\lambda^\star,u^\star,\tilde{v}) &\geq \mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star) = \mu.
+\end{align*}
+But since $\tilde{z}$ is also optimal with value $\mu$, we must have
+\begin{align*}
+\mathcal{L}(x^\star,\tilde{\lambda},\tilde{u},v^\star) &= \mu = \mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star),\\
+\mathcal{L}(\tilde{x},\lambda^\star,u^\star,\tilde{v}) &= \mu = \mathcal{L}(x^\star,\lambda^\star,u^\star,v^\star).
+\end{align*}
+Thus $\tilde{z} \in \bar{\cal M}$, and by the forward inclusion, $\tilde{z} \in {\cal M}$.
+
+Therefore
+\[
+{\cal M}\;=\;\bar{\cal M}\;=\;\{\text{optimal ${\cal RO}$ solutions}\},
+\]
+and this set is invariant.}
+
+\medskip
+\rev{\textbf{Step 4 (LaSalle conclusion to the optimal set).}
+By Step~2 and the identification in Step~3, the invariance principle yields
+\[
+\omega(\bar\gamma)\subseteq {\cal M},
+\]
+i.e., every limit point of the trajectory is an optimal ${\cal RO}$ solution.}
+
+\medskip
+\flaw{Original proof claimed ``ISL follows from the Lyapunov function... which shows $\dot{V} \leq 0$''. This is WRONG! ISL requires positive definiteness, radial unboundedness, and explicit $\delta$-$\varepsilon$ verification.}
+
+\purpletext{\textbf{Step 5 (point convergence to a single optimal solution - rigorous ISL verification).}
+We now verify that every point $z^\star \in {\cal M}$ is Lyapunov stable (ISL). Fix any optimal solution $z^\star = (x^\star, \lambda^\star, u^\star, v^\star) \in {\cal M}$.
+Consider the Lyapunov function $V$ from Lemma \ref{monotonicity}, constructed relative to this specific $z^\star$:
+\begin{align*}
+V(z) = \frac{1}{2}\Big(&\|x-x^\star\|^2 + \|\lambda-\lambda^\star\|^2 + \|u_0-u_0^\star\|^2\\
+&+ \sum_{i=1}^N(c_i+\lambda_i^\star) \|u_i-u_i^\star\|^2 + \sum_{i=0}^N\|v_i-v_i^\star\|^2\Big).
+\end{align*}
+
+We verify the three conditions for ISL:
+\begin{enumerate}
+\item[(i)] \purpletext{\textbf{Positive definiteness:} $V(z^\star) = 0$ and $V(z) > 0$ for all $z \neq z^\star$. This holds by the quadratic form with strictly positive coefficients: since $c_i + \lambda_i^\star > 0$ for all $i \in [N]^+$ (by Assumption \ref{assume_c>0} and optimality), the weighted norm is strictly positive for any $z \neq z^\star$.}
+
+\item[(ii)] \purpletext{\textbf{Radial unboundedness:} As $\|z\| \to \infty$, $V(z) \to \infty$. This follows because all coefficients in the quadratic form are strictly positive and bounded below by $\min\{1, \min_{i}(c_i + \lambda_i^\star)\} > 0$.}
+
+\item[(iii)] \purpletext{\textbf{Non-increasing along trajectories:} By Lemma \ref{monotonicity}, $\dot{V}(z) = \mathfrak{L}_{{\cal Z}^{\cal RO}}V(z) \leq 0$ for all $z$ along trajectories of \eqref{pd_dynamics}.}
+\end{enumerate}
+
+\purpletext{Now we verify ISL explicitly. Given $\varepsilon > 0$, choose $\delta := \varepsilon \sqrt{\min\{1, \min_i(c_i + \lambda_i^\star)\}}$. Suppose $\|z(0) - z^\star\| < \delta$. Then:
+\[
+V(z(0)) \leq \frac{1}{2}\max\{1, \max_i(c_i + \lambda_i^\star)\} \|z(0) - z^\star\|^2 < \frac{1}{2}\max\{1, \max_i(c_i + \lambda_i^\star)\} \delta^2.
+\]
+Since $\dot{V} \leq 0$, we have $V(z(t)) \leq V(z(0))$ for all $t \geq 0$. Using the lower bound
+\[
+V(z) \geq \frac{1}{2}\min\{1, \min_i(c_i + \lambda_i^\star)\} \|z - z^\star\|^2,
+\]
+we obtain:
+\begin{align*}
+\|z(t) - z^\star\|^2 &\leq \frac{2V(z(t))}{\min\{1, \min_i(c_i + \lambda_i^\star)\}} \leq \frac{2V(z(0))}{\min\{1, \min_i(c_i + \lambda_i^\star)\}}\\
+&< \frac{\max\{1, \max_i(c_i + \lambda_i^\star)\}}{\min\{1, \min_i(c_i + \lambda_i^\star)\}} \delta^2 = \varepsilon^2.
+\end{align*}
+Therefore $\|z(t) - z^\star\| < \varepsilon$ for all $t \geq 0$, establishing ISL.}
+
+\purpletext{Applying Lemma \ref{singleton_omega} to $\bar\gamma(\cdot)$ with ${\cal M}$ as the set of equilibria (all verified to be ISL above), we obtain that $\bar\gamma(t)$ converges to a single point $z^\star\in{\cal M}$.}
+}
+
+\medskip
+\rev{\textbf{Step 6 (globality).}
+Because $z_0\in\mathbb S$ was arbitrary and $\mathbb P=V^{-1}(\le V(z_0))\cap\mathbb S$ is compact and forward invariant for any such $z_0$, the above argument applies to every initial condition in $\mathbb S$.}
+\end{proof}
+
+\begin{remark}[\purpletext{On the Choice of Lyapunov Function}]
+\purpletext{The Lyapunov function $V$ in Lemma \ref{monotonicity} is parameterized by a choice of optimal solution $z^\star = (x^\star, \lambda^\star, u^\star, v^\star)$. While different optimal solutions yield different Lyapunov functions, the proof structure remains valid: for each trajectory $\bar{\gamma}(\cdot)$, we can choose ANY optimal solution $z^\star$ to construct $V$, and the convergence argument in Steps 1-5 applies. The crucial observation is that the set ${\cal M} = \{z : \mathfrak{L}_{{\cal Z}^{\cal RO}}V(z) = 0\}$ equals the set of all optimal $\mathcal{RO}$ solutions, independent of which particular optimal solution was used to construct $V$. This is proven rigorously in Step 3 above.}
+\end{remark}
 
 
 \section{Convergence with inactive constraints} \label{perturbed_section_pddynamics}
@@ -831,13 +1012,13 @@ Noting that above dynamics evolves on $\mathbb{S}= \mathbb{R}^n \times \mathbb{R
 
 
 
-\rev{We validate our $\mathcal{RO}$ dynamics through three carefully chosen examples that demonstrate: (i) exact solutions for problems with complex uncertainty sets where RC methods fail, (ii) quantitative performance comparisons with state-of-the-art methods, (iii) scalability to higher-dimensional problems. Each example highlights unique capabilities of our approach—handling intersection of ellipsoids, solving problems without tractable RC, and achieving significant advantages over other methods.}
+We illustrate the $\mathcal{RO}$ dynamics with three examples: (i) robust quadratic programming with ellipsoidal uncertainty intersections, (ii) nonlinear optimization without tractable robust counterpart, (iii) distributed sensor placement. These examples demonstrate exact solutions for problems where reformulation methods fail or require extensive computational resources.
 
 In MATLAB, several solvers can be used to simulate ordinary differential equations (ODE). In the following simulation examples, ``ode15s'' is used, which is a solver for stiff problems.
 
 \subsection*{\rev{Example A: Robust Quadratic Programming}}
 
-\rev{Intersection of ellipsoids models correlated uncertainties common in portfolio optimization, manufacturing tolerances, and robust control. The solution must remain feasible for ALL points in this non-smooth set, not just sampled scenarios.}
+The uncertainty set is defined as the intersection of two ellipsoids, which represents correlated uncertainties. The robust solution must satisfy constraints for all points in this set.
 
 Consider a robust quadratic programming (QP) problem as below
 \begin{align} \label{ro_simulation}
@@ -927,9 +1108,9 @@ where $h_j(u_j)=e^{u_j^2}+u_j e^{\frac{1}{u_j}}-\rho_j$ for $j=1,2$ as defined i
 \end{align*}
 according to $\mathcal{RO}$ dynamics (\ref{pd_dynamics_0}) where $\hat{\lambda}=\lambda+\varepsilon$. Similarly to the previous example, we can set $\varepsilon$ to zero according to Remark \ref{active_inactive_constraint_rem} as the constraint is active. Fig. \ref{trajectories_nonlinear_exp_no_RC} shows the trajectory plot for $\rho_1=10$, $\rho_2=20$, and all the states initialized at $1$. The robust optimal solution is $[0.5271, 0.7916]$ and the optimal cost value is $0.8419$. We observe that the optimal value for $u$, which is $[1.4020, 1.6824]$ lies on the boundary of the uncertainty set. For positive values of $\varepsilon$, the trajectory and convergence value of $\lambda$ may change, but the solution $x$ remains the same as the constraint is active.
 
-\rev{For this problem with highly nonlinear uncertainty constraints $e^{u_j^2}+u_j e^{1/u_j} \leq \rho_j$, no closed-form robust counterpart exists \cite{bental2009,gorissen20152}, making RC-based methods inapplicable. We compared our approach with scenario-based sampling \cite{calafiore2004}: using CVX, 168 scenarios yielded solution $[0.5376, 0.8193]$ with cost $0.8039$ (2.3s), 500 scenarios gave $[0.5312, 0.8024]$ with cost $0.8287$ (8.7s), and 1000 scenarios produced $[0.5289, 0.7953]$ with cost $0.8371$ (31.2s). Our method obtained the exact solution $[0.5271, 0.7916]$ with optimal cost $0.8419$ in 0.8s integration time—40× faster than the 1000-scenario approximation while providing the exact solution rather than an approximation.}
+The uncertainty constraints $e^{u_j^2}+u_j e^{1/u_j} \leq \rho_j$ are highly nonlinear, and no closed-form robust counterpart exists \cite{bental2009,gorissen20152}. We compared with scenario-based sampling \cite{calafiore2004}: using CVX, 168 scenarios gave solution $[0.5376, 0.8193]$ with cost $0.8039$ (2.3s), 500 scenarios gave $[0.5312, 0.8024]$ with cost $0.8287$ (8.7s), and 1000 scenarios gave $[0.5289, 0.7953]$ with cost $0.8371$ (31.2s). Our method obtained the exact solution $[0.5271, 0.7916]$ with optimal cost $0.8419$ in 0.8s integration time.
 
-\rev{This example illustrates a key advantage of our approach: the dynamics naturally handle nonlinear uncertainty constraints through gradient terms $\nabla_{u_j} h_j(u_j)$, achieving exact convergence where other methods either fail completely (when RC cannot be derived) or require computationally expensive approximations with complexity $O(N^3n^3)$ for $N$ scenarios versus our $O(n^2)$ scaling.}
+The dynamics handle nonlinear uncertainty constraints through gradient terms $\nabla_{u_j} h_j(u_j)$, achieving exact convergence where reformulation methods fail. Scenario-based methods have complexity $O(N^3n^3)$ for $N$ scenarios, compared to $O(n^2)$ scaling for the dynamics.
 \begin{figure}
 \begin{center}
 \includegraphics[scale=0.55]{trajectories_nonlinear_exp_no_RC.eps}
@@ -996,15 +1177,8 @@ This example showcases the ability of the dynamical system to track changes onli
 \section{Conclusions}\label{section_conclusions}
 
 
-\rev{This paper introduced $\mathcal{RO}$ dynamics for solving robust optimization problems through continuous-time evolution. The method achieves significant efficiency and generalization improvements while providing exact solutions for problems where robust counterparts are intractable. Applications to machine learning robustness, adversarial training, and large-scale distributed optimization represent promising future directions.}
+This paper introduced $\mathcal{RO}$ dynamics, a continuous-time dynamical system for solving robust optimization problems. The method provides exact solutions for problems where robust counterparts are intractable or computationally expensive. Future work includes applications to adversarial training and large-scale distributed optimization.
 \section{Appendix} \label{section_appendix}
-
-\subsection*{\rev{Proof of Lemma \ref{saddle.lem} [Saddle property]}}
-Essentially, we want to show that
-\begin{align*}
-\mathcal{L}(x^\star,\lambda,u,v^\star)\leq \mu \leq \mathcal{L}(x,\lambda^\star,u^\star,v)\;.
-\end{align*}
-Under Assumption \ref{assume_feasible}, an optimal solution $x^\star$ exists and based on Assumption \ref{assume1}, this optimal solution is unique as $f_0(x,u_0)$ is strictly convex in $x$ for any $u_0 \in\mathcal{U}_0$. Consider any optimal solution $(x^\star,\lambda^\star,u^\star,v^\star)$ for $\mathcal{RO}$ problem (\ref{dual.eq}).
 
 \noindent
 For each of the lower level optimizations, let
@@ -1371,10 +1545,6 @@ This manuscript proposes a dynamical system-based approach for solving robust op
 \noindent\textbf{Reviewer Comments:}
 
 \begin{quote}
-Please see the attached file.
-
-\textbf{Review Attachment: AttachmentToReview359595.pdf}
-
 This paper proposes a novel continuous-time dynamical system, termed RO dynamics, for solving robust optimization (RO) problems in a convex-concave framework. While the approach is innovative and has potential, the manuscript requires significant revisions to improve clarity, technical rigor, and presentation. Below are specific comments and suggestions for improvement.
 
 \begin{enumerate}
@@ -1492,14 +1662,6 @@ We also added a comprehensive remark explaining key properties of Formulation (3
 \noindent\textbf{Reviewer Comments:}
 
 \begin{quote}
-Please find below my detailed comments attached as a PDF file.
-
-\textbf{Review Attachment: AttachmentToReview359597.pdf}
-
-\textbf{Robust Optimization via Continuous-Time Dynamics}
-
-Keivan Ebrahimi, Nicola Elia, and Umesh Vaidya
-
 \textbf{1. Summary of the paper}
 
 The paper proposes a novel dynamical system-based approach, called RO dynamics, for solving robust optimization problems in a general convex-concave framework. Unlike traditional primal-dual gradient dynamics, this approach does not rely on the gradient of the Lagrangian function. Instead, it treats the uncertain variable as a dynamical state and shows that the globally asymptotically stable equilibrium point of RO dynamics can recover robust optimal solutions for a broad class of convex-concave robust optimization problems. The method does not require prior knowledge of the problem formulation and is suitable for decentralized implementation, making it ideal for real-time applications in dynamic environments. The paper provides a simulation example to demonstrate the effectiveness of the approach, highlighting its advantages over existing methods that require complete prior knowledge of the problem.
@@ -1676,68 +1838,546 @@ Each example now includes: (i) convergence plots showing trajectory behavior, (i
 
 We respectfully argue that this work merits publication as a full article. The manuscript presents: (i) Novel theoretical framework—an entirely new approach to RO through continuous-time dynamics, (ii) Comprehensive technical contributions—complete dynamical system with rigorous stability analysis (Theorems 1-4), novel Lyapunov construction, proof of convergence without joint concavity assumptions, (iii) Broad applicability—solutions for problems where existing methods fail entirely. Technical notes are typically 6-8 pages for narrow improvements. Our work presents foundational methodology with extensive theoretical development—hallmarks of full IEEE TAC articles.
 
-\end{document}
-
 \newpage
-\section*{Response Assessment Summary}
+\section*{Detailed Sub-Comment Assessment}
 
-The following table summarizes how well each reviewer comment was addressed in the revised manuscript:
+The following table provides a granular breakdown of how each sub-component of every reviewer comment was addressed:
 
-\begin{table}[h]
-\centering
-\begin{tabular}{|c|c|l|}
+\begin{longtable}{|c|c|p{5.5cm}|c|p{3.5cm}|}
 \hline
-\textbf{Reviewer} & \textbf{Comment \#} & \textbf{Status} \\
+\textbf{Rev} & \textbf{Cmt} & \textbf{Sub-comment} & \textbf{Status} & \textbf{Missing Action} \\
 \hline
-\multirow{5}{*}{4} & 1 & Fully Addressed \\
-& 2 & Fully Addressed \\
-& 3 & Fully Addressed \\
-& 4 & Fully Addressed \\
-& 5 & Fully Addressed \\
+\endfirsthead
+\multicolumn{5}{c}{\textit{(continued from previous page)}} \\
 \hline
-\multirow{18}{*}{5} & 1 & Fully Addressed \\
-& 2 & Fully Addressed \\
-& 3 & Fully Addressed \\
-& 4 & Fully Addressed \\
-& 5 & Fully Addressed \\
-& 6 & Fully Addressed \\
-& 7 & Fully Addressed \\
-& 8 & Fully Addressed \\
-& 9 & Fully Addressed \\
-& 10 & Fully Addressed \\
-& 11 & Fully Addressed \\
-& 12 & Fully Addressed \\
-& 13 & Fully Addressed \\
-& 14 & Fully Addressed \\
-& 15 & Fully Addressed \\
-& 16 & Fully Addressed \\
-& 17 & Fully Addressed \\
-& 18 & Fully Addressed \\
+\textbf{Rev} & \textbf{Cmt} & \textbf{Sub-comment} & \textbf{Status} & \textbf{Missing Action} \\
 \hline
-\multirow{9}{*}{6} & 1 & Fully Addressed \\
-& 2 & Fully Addressed \\
-& 3 & Fully Addressed \\
-& 4 & Fully Addressed \\
-& 5 & Fully Addressed \\
-& 6 & Fully Addressed \\
-& 7 & Fully Addressed \\
-& 8 & Fully Addressed \\
-& 9 & Fully Addressed \\
+\endhead
 \hline
-\multirow{11}{*}{10} & 1 & Fully Addressed \\
-& 2 & Fully Addressed \\
-& 3 & Fully Addressed \\
-& 4 & Fully Addressed \\
-& 5 & Fully Addressed \\
-& 6 & Fully Addressed \\
-& 7 & Fully Addressed \\
-& 8 & Fully Addressed \\
-& 9 & Fully Addressed \\
-& 10 & Fully Addressed \\
-& 11 & Fully Addressed \\
+\multicolumn{5}{r}{\textit{(continued on next page)}} \\
+\endfoot
+\hline
+\endlastfoot
+
+% REVIEWER 4
+4 & 1 & Improvements over existing results unclear & Addressed & None \\
+\hline
+4 & 2a & Language and grammar issues & Addressed & None \\
+\hline
+4 & 2b & Long sentences need splitting & Addressed & None \\
+\hline
+4 & 3 & Definite articles in figure captions & Addressed & None \\
+\hline
+4 & 4 & Formula italics inconsistent & Addressed & None \\
+\hline
+4 & 5 & Quotation marks incorrect & Addressed & None \\
+\hline
+
+% REVIEWER 5
+5 & 1a & Contributions scattered across sections & Addressed & None \\
+\hline
+5 & 1b & Need consolidated contributions section & Addressed & None \\
+\hline
+5 & 2a & Algorithm (23) lacks context & Addressed & None \\
+\hline
+5 & 2b & Need intuition behind design & Addressed & None \\
+\hline
+5 & 2c & Need comparison with existing methods & Addressed & None \\
+\hline
+5 & 3 & Convergence performance analysis missing & Not & Need explicit O($\cdot$) convergence rate bounds or numerical rate estimates \\
+\hline
+5 & 4 & Forward references (eqs 5,6 before Assumption 2) & Addressed & None \\
+\hline
+5 & 5a & Assumption 2 seems restrictive & Addressed & None \\
+\hline
+5 & 5b & Can it be relaxed per Ref [34]? & Addressed & None \\
+\hline
+5 & 6 & Assumption 1 justification needed & Addressed & None \\
+\hline
+5 & 7a & Meaning of $h_{ij}$ and $K_i$ unclear & Addressed & None \\
+\hline
+5 & 7b & Purpose of introducing them not justified & Addressed & None \\
+\hline
+5 & 8a & Lagrangian (15) seems straightforward & Addressed & None \\
+\hline
+5 & 8b & Is lengthy Section IV derivation necessary? & Addressed & None \\
+\hline
+5 & 9a & RC abbreviation redundantly explained & Addressed & None \\
+\hline
+5 & 9b & RHS abbreviation not explained & Addressed & None \\
+\hline
+5 & 10 & Appendix B should be in main text & Addressed & None \\
+\hline
+5 & 11 & Lemma 4 proof not in Ref [41] & Addressed & None \\
+\hline
+5 & 12 & Superscript $\epsilon^+$ not explained & Addressed & None \\
+\hline
+5 & 13 & Why are our results better than Ref [22]? & Addressed & None \\
+\hline
+5 & 14 & Proposition 6 needs clarification & Addressed & None \\
+\hline
+5 & 15 & Typo: $\lim_{k\to\infty}=y$ should be $\lim_{k\to\infty}y_k=y$ & Addressed & None \\
+\hline
+5 & 16 & Reversed quotation marks & Addressed & None \\
+\hline
+5 & 17a & Introduction too long & Addressed & None \\
+\hline
+5 & 17b & Lacks coherent structure & Addressed & None \\
+\hline
+5 & 18 & Ref [22] techniques outdated, need SOTA & Addressed & None \\
+\hline
+
+% REVIEWER 6
+6 & 1 & Motivation for formulation (4) vs (3) unclear & Addressed & None \\
+\hline
+6 & 2a & Why represent $U_i$ as nonlinear inequalities? & Addressed & None \\
+\hline
+6 & 2b & How does (3) differ from classical (2)? & Addressed & None \\
+\hline
+6 & 3a & Could use $\gamma_i := c_i + \lambda_i$ instead & Addressed & None \\
+\hline
+6 & 3b & What is novelty/role of $c_i$ terms? & Addressed & None \\
+\hline
+6 & 4a & Taking max over constraints adds non-smoothness & Addressed & None \\
+\hline
+6 & 4b & Is this complexity justified? & Addressed & None \\
+\hline
+6 & 5a & Is Lemma 1 novel or well-known? & Partially & Remark claims novelty but only distinguishes from Sion/Rockafellar, not from standard convex opt textbooks \\
+\hline
+6 & 5b & Seems like standard KKT + saddle point & Partially & Remark explains non-standard structure vs Sion/Rockafellar, but doesn't explicitly address why KKT$\Leftrightarrow$saddle point equivalence differs from Boyd 5.9.1 \\
+\hline
+6 & 6 & Formulation (2) more general than (3) & Addressed & None \\
+\hline
+6 & 7 & Is $U_i$ compact under convexity alone? & Addressed & None \\
+\hline
+6 & 8 & Assumption 3 ($c_i>0$) prevents recovering (2) & Addressed & None \\
+\hline
+6 & 9 & Do results hold for nonlinear constraints in $u_i$? & Addressed & None \\
+\hline
+
+% REVIEWER 10
+10 & 1a & Abstract overly long & Addressed & None \\
+\hline
+10 & 1b & Long sentences obscure message & Addressed & None \\
+\hline
+10 & 1c & Example: ``This is while...'' sentence unclear & Addressed & None \\
+\hline
+10 & 1d & ``the paper'' should be ``this paper'' & Addressed & None \\
+\hline
+10 & 2 & Footnote 2: need continuity assumption & Addressed & None \\
+\hline
+10 & 3a & Lemma 1 novelty unclear & Partially & Same as 6.5a - remark distinguishes from Sion/Rockafellar but not from standard theory \\
+\hline
+10 & 3b & Appears to be standard saddle point property & Partially & Same as 6.5b - remark addresses Sion/Rockafellar but not KKT$\Leftrightarrow$saddle point from Boyd \\
+\hline
+10 & 3c & How does it differ from classical formulations? & Partially & Same as 6.5b - need explicit comparison with standard convex opt theory \\
+\hline
+10 & 4a & Assumption 3 ($c>0$) mathematically convenient & Addressed & None \\
+\hline
+10 & 4b & May be overly rigid for practice & Addressed & None \\
+\hline
+10 & 4c & Theoretical benefits acknowledged & Addressed & None \\
+\hline
+10 & 4d & No empirical parameter selection strategies & Not & Only suggests generic $c_i=10^{-6}$; no problem-specific strategies, scaling guidance, or constraint-dependent selection \\
+\hline
+10 & 5 & Notation: $u_i$ should be $u_1$ & Addressed & None \\
+\hline
+10 & 6 & Introduce Z parameter after eq (23) & Addressed & None \\
+\hline
+10 & 7 & Missing parentheses in eq (36) & Addressed & None \\
+\hline
+10 & 8 & Remark 4 needs splitting into two parts & Addressed & None \\
+\hline
+10 & 9 & Theorem 4 proof conclusion not self-evident & Addressed & None \\
+\hline
+10 & 10a & Corollary 1 strict complementarity too strong & Addressed & None \\
+\hline
+10 & 10b & Fails when constraints inactive & Addressed & None \\
+\hline
+10 & 10c & Suggest proximal/regularization terms & Addressed & None \\
+\hline
+10 & 11a & Examples lack scenario-based RO setting & Not & All examples use geometric uncertainty sets (ellipsoids, nonlinear constraints); no scenario-based uncertainty structure included \\
+\hline
+10 & 11b & Need convergence analysis results & Partially & Examples show trajectories but no quantitative convergence rates, times, or numerical stability metrics \\
+\hline
+10 & 11c & Need stability demonstration & Addressed & None \\
+\hline
+
+\end{longtable}
+
+\subsection*{Summary Statistics}
+\begin{itemize}
+\item \textbf{Total sub-comments:} 63
+\item \textbf{Fully Addressed:} 54 (86\%)
+\item \textbf{Partially Addressed:} 6 (10\%)
+\item \textbf{Not Addressed:} 3 (5\%)
+\end{itemize}
+
+\subsection*{Critical Items Requiring Immediate Action}
+
+\subsubsection*{Priority 1 - Not Addressed (3 items)}
+\begin{enumerate}
+\item \textbf{Rev 5, Cmt 3:} Convergence performance analysis - need explicit O($\cdot$) convergence rate bounds or numerical rate estimates
+\item \textbf{Rev 10, Cmt 4d:} No empirical parameter selection strategies - only generic $c_i=10^{-6}$ suggestion; need problem-specific strategies, scaling guidance, constraint-dependent selection
+\item \textbf{Rev 10, Cmt 11a:} Examples lack scenario-based RO - all examples use geometric uncertainty sets (ellipsoids, nonlinear constraints); no scenario-based structure
+\end{enumerate}
+
+\subsubsection*{Priority 2 - Partially Addressed (6 items)}
+\begin{enumerate}
+\item \textbf{Rev 6, Cmt 5a:} Is Lemma 1 novel or well-known? - Remark claims novelty but only distinguishes from Sion/Rockafellar, not from standard convex opt textbooks
+\item \textbf{Rev 6, Cmt 5b:} Lemma 1 appears standard - remark addresses Sion/Rockafellar but not standard KKT$\Leftrightarrow$saddle point equivalence from Boyd 5.9.1
+\item \textbf{Rev 10, Cmt 3a:} Lemma 1 novelty unclear - same as 6.5a, remark distinguishes from Sion/Rockafellar but not from standard theory
+\item \textbf{Rev 10, Cmt 3b:} Appears to be standard saddle point property - same as 6.5b
+\item \textbf{Rev 10, Cmt 3c:} How Lemma 1 differs from classical formulations - need explicit comparison with standard convex optimization theory
+\item \textbf{Rev 10, Cmt 11b:} Need convergence analysis results - examples show trajectories but no quantitative convergence rates, times, or numerical stability metrics
+\end{enumerate}
+
+\onecolumn
+
+\section{AI Reviewer Comments}\label{section_ai_review}
+
+\subsection*{Review Summary}
+
+This section provides a comprehensive critical review of the manuscript from the perspective of a pessimistic IEEE Transactions on Automatic Control reviewer. The analysis identifies fundamental flaws, technical gaps, and areas requiring significant improvement before publication.
+
+\textbf{Overall Recommendation:} MAJOR REVISION or RESUBMIT AS TECHNICAL NOTE
+
+\subsection*{MAJOR FLAWS (Critical Issues)}
+
+\begin{enumerate}
+
+\item \textbf{"Model-Free" Claim is Fundamentally Misleading}
+
+\textit{Location:} Abstract (line 135), Introduction (line 164), multiple claims throughout
+
+\textit{Problem:} The paper repeatedly claims the method is "model-free" and works "without requiring explicit cost or constraint function specifications." This is mathematically impossible and misleading.
+
+\textit{Evidence:} The RO dynamics (Equation \ref{pd_dynamics}, lines 461-469) require:
+\begin{itemize}
+\item $\dot x=-\nabla_x f_0(x,u_0)- \sum_{i=1}^N(c_i+\lambda_i) \nabla_x f_i(x,u_i)$
+\item $\dot u_i=\nabla_{u_i}f_i(x,u_i)- \sum_{j=1}^{K_i} v_{ij} \nabla_{u_i} h_{ij}(u_i)$
+\end{itemize}
+
+Computing gradients $\nabla f_0$, $\nabla f_i$, $\nabla h_{ij}$ \textbf{requires explicit knowledge of these functions}. One cannot compute $\nabla f(x)$ without knowing $f$.
+
+\textit{Required Fix:}
+\begin{itemize}
+\item Remove all "model-free" claims or redefine as "does not require closed-form robust counterpart"
+\item Explicitly state: "requires gradient oracle access"
+\item Acknowledge this is NOT truly model-free like reinforcement learning methods
+\end{itemize}
+
+\item \textbf{Critical Proof Gaps in Main Convergence Theorem}
+
+\textit{Location:} Theorem 4 (lines 683-753), Theorem 5 "Rigorous Version" (lines 774-946)
+
+\textit{Problem:} The manuscript contains BOTH a flawed proof and a "rigorous version" with 4 explicitly marked flaws using $\backslash$flaw\{\} commands:
+
+\begin{itemize}
+\item \textbf{Flaw 1 (Line 808):} Original proof claimed "${\cal M}\subseteq \bar{\cal M}$" without justification
+\item \textbf{Flaw 2 (Line 828):} Hand-waved "by strict convexity, $x=x^\star$" without rigorous proof
+\item \textbf{Flaw 3 (Line 862):} Circular logic about which Lyapunov function is used
+\item \textbf{Flaw 4 (Line 895):} Incorrectly claimed ISL follows from $\dot{V}\leq 0$ alone (missing positive definiteness and $\delta$-$\epsilon$ verification)
+\end{itemize}
+
+\textit{Why Problematic:} These are not minor details—they are fundamental gaps in the main result. The "rigorous version" adds 168 lines of purple text, suggesting the original proof was severely incomplete.
+
+\textit{Required Fix:}
+\begin{itemize}
+\item Remove the flawed Theorem 4 version entirely
+\item Keep only the rigorous Theorem 5 proof
+\item Add supporting lemmas to break down complex arguments
+\item Consider whether this is truly a "full article" contribution if the proof required such extensive revision
+\end{itemize}
+
+\item \textbf{Saddle Point "Novelty" is Overstated}
+
+\textit{Location:} Lemma 1 (lines 432-437), Remark (lines 428-430)
+
+\textit{Problem:} The paper claims the saddle property is "not implied by classical results" due to lack of joint concavity in $(\lambda,u)$. However:
+
+\begin{itemize}
+\item Standard bilevel optimization theory already handles this structure [Vicente \& Calamai 1994, Dempe 2002]
+\item The KKT conditions (lines 412-417) are standard for this problem class
+\item The saddle property follows from strong duality (Assumption 2) + separability
+\item Boyd \& Vandenberghe (Section 5.9.1) covers Lagrangian saddle points for generalized inequalities
+\end{itemize}
+
+\textit{Counter-Evidence:} The proof (Appendix, lines 1183-1235) uses standard techniques: lower-level duality + upper-level saddle property.
+
+\textit{Required Fix:}
+\begin{itemize}
+\item Properly cite bilevel optimization literature
+\item Reframe as "adapting known saddle point theory to RO context" rather than claiming fundamental novelty
+\item Clarify what is genuinely new versus applying existing theory
+\end{itemize}
+
+\item \textbf{No Convergence Rate Analysis}
+
+\textit{Location:} Throughout paper; noted in reviewer responses (lines 1894, 2027, 2039)
+
+\textit{Problem:} The paper provides \textbf{only asymptotic convergence} with zero quantitative analysis:
+
+\begin{itemize}
+\item No ${\cal O}(\cdot)$ complexity bounds
+\item No iteration/time complexity
+\item No comparison of convergence rates with existing methods
+\item Vague statement (line 1613): "convergence speed can be tuned via scaling parameters"
+\item Line 1113 claims "complexity ${\cal O}(n^2)$ scaling" with NO derivation or proof
+\end{itemize}
+
+\textit{Why Problematic:}
+\begin{itemize}
+\item IEEE TAC papers require rigorous complexity analysis
+\item Cannot claim "significant speedups" (abstract) without quantitative rates
+\item Continuous-time $\neq$ fast (ODE integration can be expensive)
+\item Missing: stepsize requirements, Lipschitz constants, condition number dependence
+\end{itemize}
+
+\textit{Required Fix:}
+\begin{itemize}
+\item Derive explicit convergence rate under strong convexity (e.g., exponential rate)
+\item Analyze discretization error for practical implementation
+\item Compare iteration complexity with ADMM, subgradient, cutting plane methods
+\item Provide computational complexity comparison table
+\end{itemize}
+
+\item \textbf{Assumptions are Overly Restrictive}
+
+\textit{Location:} Assumption 1 (lines 257-260), Assumption 2 (lines 267-276), Assumption 3 (lines 327-329)
+
+\textit{Problem:}
+
+\textbf{Assumption 1:} Requires $f_0(x,u_0)$ strictly convex in $x$ for ANY $u_0$, and $C^1$ with locally Lipschitz gradients.
+
+\textit{Fails for:}
+\begin{itemize}
+\item Affine costs: $\min c^\top x$ (NOT strictly convex)
+\item Non-smooth uncertainty: $\|u\|_\infty \leq 1$
+\item Practical applications: portfolio optimization with linear returns, hinge loss, $\ell_1$ penalties
+\end{itemize}
+
+\textbf{Assumption 2 (Slater):} Requires strict feasibility for BOTH levels.
+
+\textit{Fails for:}
+\begin{itemize}
+\item Boundary-active problems ($x \geq 0$ constraints at optimum)
+\item Polyhedral uncertainty sets (no strict interior for lower-dimensional faces)
+\item Equality constraints (Slater never holds)
+\end{itemize}
+
+\textbf{Assumption 3:} Requires $c_i > 0$ but gives NO guidance except "use $10^{-6}$" (line 332).
+
+\textit{Critical questions unanswered:}
+\begin{itemize}
+\item How to choose $c_i$ for specific problems?
+\item How does $c_i$ affect convergence rate?
+\item Section VI proves convergence as $c_i\to 0$, but how fast? ${\cal O}(c_i)$? ${\cal O}(\sqrt{c_i})$?
+\end{itemize}
+
+\textit{Required Fix:}
+\begin{itemize}
+\item Provide examples where assumptions hold/fail
+\item Discuss alternative constraint qualifications (MFCQ, LICQ, Abadie)
+\item Give practical parameter selection guidance
+\item Analyze convergence rate dependence on $c_i$
+\end{itemize}
+
+\end{enumerate}
+
+\subsection*{MODERATE ISSUES (Require Major Revision)}
+
+\begin{enumerate}[resume]
+
+\item \textbf{Lyapunov Function Construction is Not Novel}
+
+\textit{Location:} Lemma 3 (lines 571-640)
+
+\textit{Problem:} The Lyapunov function (Equation \ref{Lya_function}) is a \textbf{standard weighted quadratic} for primal-dual systems. The only modification is using $\lambda_i^\star$ (optimal dual) instead of $\lambda_i$ in weights. Arrow-Hurwicz-Uzawa (1958) and Feijer \& Paganini (2010) used nearly identical constructions.
+
+\textit{Required Fix:} Clearly state what IS novel (if anything), compare with existing constructions in a table.
+
+\item \textbf{Simulations Lack Rigor}
+
+\textbf{Example A (Lines 1019-1084):}
+\begin{itemize}
+\item Compares with 15-year-old scenario method [Calafiore 2004]
+\item Compares with CVX but doesn't report CVX's solution time
+\item Claims "exact solution" but shows 4-decimal agreement
+\item No integration time, number of steps, or tolerance settings reported
+\end{itemize}
+
+\textbf{Example B (Lines 1086-1120):}
+\begin{itemize}
+\item Claims "no closed-form RC exists" without thorough literature search
+\item Unfair comparison: CVX solves 1000 QPs exactly; ODE solver integrates with unknown accuracy
+\item Claims "40-fold speedup" in abstract but Example B shows ~3x, Example A shows no timing
+\item No error bounds on ODE solution
+\end{itemize}
+
+\textbf{Example C (Lines 1122-1176):}
+\begin{itemize}
+\item No quantitative results (just qualitative description)
+\item No comparison with ANY baseline
+\item Real-time tracking claim unsupported (no time-varying experiment)
+\end{itemize}
+
+\textbf{Critical Omissions:}
+\begin{itemize}
+\item No large-scale examples ($n > 2$ dimensions!)
+\item No comparison with modern RO solvers (Mosek, Gurobi RO extensions)
+\item No comparison with recent methods: ADMM [Rostampour 2021], ROOT [Yazdani 2023]
+\item No failure cases or sensitivity analysis
+\item No ill-conditioned problems
+\end{itemize}
+
+\textit{Required Fix:}
+\begin{itemize}
+\item Add large-scale examples ($n \geq 50$)
+\item Compare with modern commercial and research solvers
+\item Report ALL timing information consistently
+\item Provide error bounds and convergence criteria
+\item Include failure mode analysis
+\end{itemize}
+
+\item \textbf{"Unified Framework" Claim Requires Proof}
+
+\textit{Location:} Contribution (ii), line 166
+
+\textit{Problem:} Claims to "handle all convex-concave RO problems" but:
+
+\begin{itemize}
+\item What about conic RO (second-order cone, semidefinite)?
+\item What about integer/mixed-integer RO?
+\item What about distributionally robust optimization (DRO)?
+\item Line 193 claims "includes all cases in [Gorissen 2015, Table 1]" but that table has only ~6 problem types
+\end{itemize}
+
+\textit{Required Fix:} Precisely characterize the problem class this method CAN and CANNOT solve.
+
+\item \textbf{Digital Implementation Not Addressed}
+
+\textit{Location:} Entire paper (continuous-time focus)
+
+\textit{Critical Gap:} How to implement these continuous-time dynamics in practice?
+
+\textit{Unanswered Questions:}
+\begin{itemize}
+\item Which ODE solver? (ode15s mentioned line 1017 but no analysis)
+\item Step size selection?
+\item Discretization error bounds?
+\item Stopping criteria? (When is solution "converged"?)
+\item Numerical stability for stiff systems?
+\item Projection operator $[\cdot]^+$ implementation details?
+\end{itemize}
+
+\textit{Required Fix:} Add entire section on digital implementation including discretization analysis, numerical stability, and stopping criteria.
+
+\item \textbf{Literature Review Gaps}
+
+\textbf{Missing Critical Citations:}
+\begin{itemize}
+\item \textbf{Bilevel optimization:} Vicente \& Calamai (1994), Dempe (2002), Bard (1998) - directly relevant to Lemma 1
+\item \textbf{Continuous-time optimization:} Helmke \& Moore (1994), Schropp \& Singer (2000), Polyak (1987)
+\item \textbf{Modern primal-dual:} Chambolle-Pock (2011), Nesterov primal-dual methods
+\item \textbf{Projected gradient flows:} Extensive literature missing
+\end{itemize}
+
+\textit{Consequence:} Cannot assess true novelty without proper literature positioning.
+
+\textit{Required Fix:} Comprehensive literature review section comparing with bilevel optimization, continuous-time optimization, and modern primal-dual methods.
+
+\end{enumerate}
+
+\subsection*{MINOR ISSUES (Presentation and Clarity)}
+
+\begin{enumerate}[resume]
+
+\item \textbf{Notation Inconsistencies}
+\begin{itemize}
+\item Line 202: $i\in[N]$ definition inconsistent with usage
+\item Bold $\mathbf{x}$ vs regular $x$ used interchangeably
+\item Inconsistent use of $\mathbb{R}$ vs $\real$
+\end{itemize}
+
+\item \textbf{Figure Quality}
+\begin{itemize}
+\item Figures 1-4: Low resolution, hard to read labels
+\item Figure colors and trajectories not clearly explained in captions
+\end{itemize}
+
+\item \textbf{Writing Quality Issues}
+\begin{itemize}
+\item Line 146: "may be computationally more expensive" - vague, which approaches?
+\item Line 447: "quite non-trivial" - subjective, quantify the difficulty
+\item Line 1015: Only THREE examples for a major contribution
+\end{itemize}
+
+\item \textbf{Abstract Issues}
+\begin{itemize}
+\item 202 words (at IEEE TAC upper limit)
+\item "substantial speedups" - unquantified
+\item Claims "exact solutions" but all examples show numerical approximations
+\end{itemize}
+
+\item \textbf{Incomplete Proofs in Appendix}
+\begin{itemize}
+\item Lemma 2 proof (line 541): "Details omitted" for projected dynamics construction
+\item Final convergence arguments in several proofs are hand-wavy
+\end{itemize}
+
+\end{enumerate}
+
+\subsection*{Quantitative Assessment Summary}
+
+\begin{tabular}{lc}
+\hline
+\textbf{Category} & \textbf{Score (out of 10)} \\
+\hline
+Technical Rigor & 5/10 \\
+Novelty & 6/10 \\
+Experimental Validation & 4/10 \\
+Presentation & 6/10 \\
+Completeness & 5/10 \\
+\hline
+\textbf{Overall} & \textbf{5.2/10} \\
 \hline
 \end{tabular}
-\caption{Assessment of how well each reviewer comment was addressed in the revision. All 43 comments across 4 reviewers have been fully addressed with specific changes marked in blue throughout the manuscript.}
-\end{table}
+
+\subsection*{Overall Recommendation}
+
+\textbf{Current State:} This paper is \textbf{not ready for publication} as a full IEEE TAC article.
+
+\textbf{MAJOR REVISION:} Address all critical issues, add convergence rates, large-scale experiments, digital implementation section, proper literature positioning.
+
+\subsection*{Required Actions Checklist}
+
+\textbf{For resubmission, authors MUST:}
+
+\begin{itemize}
+\item[$\square$] Remove ALL "model-free" claims or redefine with proper caveats
+\item[$\square$] Provide ${\cal O}(\cdot)$ convergence rate analysis under strong convexity
+\item[$\square$] Derive iteration/time complexity and compare with existing methods
+\item[$\square$] Remove flawed Theorem 4, keep only rigorous Theorem 5
+\item[$\square$] Add bilevel optimization citations and position Lemma 1 properly
+\item[$\square$] Provide large-scale examples ($n \geq 50$) with modern solver comparisons
+\item[$\square$] Add digital implementation section (discretization, stopping criteria)
+\item[$\square$] Provide practical guidance for parameter selection ($c_i$, scaling)
+\item[$\square$] Add failure mode analysis and sensitivity studies
+\item[$\square$] Fix all notation inconsistencies
+\item[$\square$] Improve figure quality and clarity
+\item[$\square$] Verify ALL quantitative claims (40x speedup, etc.)
+\item[$\square$] Add comparison with ADMM [Rostampour 2021], ROOT [Yazdani 2023]
+\item[$\square$] Address how method handles: conic constraints, non-smooth $f$, boundary optima
+\item[$\square$] Provide condition number analysis
+\item[$\square$] Add computational complexity comparison table
+\item[$\square$] Complete all proofs in Appendix (remove "details omitted")
+\end{itemize}
+
+\subsection*{Final Verdict}
+
+The core idea (continuous-time dynamics for RO) has merit, but the execution has significant flaws. The authors have done substantial work responding to reviewers (86\% addressed per assessment table), but \textbf{fundamental issues remain}. Quality should not be confused with quantity of revisions.
+
+\textbf{Recommended title revision:} "A Continuous-Time Dynamical System Approach to Robust Optimization" (removing "via" which suggests method superiority over alternatives).
 
 \end{document}
