@@ -1,6 +1,9 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Plan Mode
+
+- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
+- At the end of each plan, give me a list of unresolved questions to answer, if any.
 
 ## Repository Overview
 This is a journal paper submission titled "Robust Optimization via Continuous-Time Dynamics" that uses IEEE journal format. The paper proposes a dynamical system-based approach for solving robust optimization problems and is currently under review.

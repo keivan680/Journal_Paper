@@ -81,7 +81,9 @@
       "Bash(then /Library/TeX/texbin/pdflatex)",
       "Bash(else pdflatex)",
       "Bash(fi:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(brew list:*)",
+      "Bash(python3:*)"
     ],
     "deny": []
   },
