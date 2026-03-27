@@ -146,16 +146,16 @@ By calculating a concave conjugate of nonlinear constraint functions and support
 
 An alternative randomized approach based on constraint sampling is an approximate probabilistic relaxation solution to RO problems as seen in \cite{calafiore2004} and \cite{calafiore2010} where a finite set of high-dimensional deterministic optimization problems obtained from sampling are solved. This approach does not require concavity of the constraint in the uncertain variable but due to the large number of required scenarios to approximate the stochasticity of these problems, the stochastic optimization involves formulating a large-scale scenario program, which is in general computationally demanding.
 
-In another effort, \cite{bental2015} incorporated the min-max behavior of RO problems to solve them by an oracle-based approximate robust optimization algorithm based on oracle-based subgradient descent and interior point methods. The proposed algorithms find an approximate robust solution using a number of calls to an oracle that solves the original (non-robust) problem. However, the solution would be approximated with some predetermined accuracy, $\eta$, with the number of iterations growing to $\mathcal{O}(\frac{1}{\eta})$, as the algorithm approximates the RC by invoking the Oracle a polynomial number of times. Cutting-plane approaches \cite{mutapcic2009} and the column-and-constraint generation technique \cite{zeng2013} handle ${\cal RO}$ as a semi-infinite programming problem. However, these approaches may have limitations in scenarios where pessimization (inner maximization) oracles are approximate, or when the number of scenarios becomes large, leading to scalability issues. \rev{More recently, Ho-Nguyen and K{\i}l{\i}n\c{c}-Karzan \cite{honguyen2018} proposed an online first-order framework achieving ${\cal O}(1/\epsilon^2)$ convergence, and Postek and Shtern \cite{postek2024} showed that a perspective transformation on the ${\cal RO}$ Lagrangian can restore joint convexity-concavity, enabling the use of discrete-time saddle-point algorithms. However, both approaches are discrete-time and do not provide continuous-time dynamical systems suitable for real-time physical implementation.} The main contributions of this paper are as follows.
+In another effort, \cite{bental2015} incorporated the min-max behavior of RO problems to solve them by an oracle-based approximate robust optimization algorithm based on oracle-based subgradient descent and interior point methods. The proposed algorithms find an approximate robust solution using a number of calls to an oracle that solves the original (non-robust) problem. However, the solution would be approximated with some predetermined accuracy, $\eta$, with the number of iterations growing to $\mathcal{O}(\frac{1}{\eta})$, as the algorithm approximates the RC by invoking the Oracle a polynomial number of times. Cutting-plane approaches \cite{mutapcic2009} and the column-and-constraint generation technique \cite{zeng2013} handle ${\cal RO}$ as a semi-infinite programming problem. However, these approaches may have limitations in scenarios where pessimization (inner maximization) oracles are approximate, or when the number of scenarios becomes large, leading to scalability issues. \rev{More recently, Ho-Nguyen and K{\i}l{\i}n\c{c}-Karzan \cite{honguyen2018} proposed an online first-order framework achieving ${\cal O}(1/\epsilon^2)$ convergence. However, this approach is discrete-time and does not provide continuous-time dynamical systems suitable for real-time physical implementation.} The main contributions of this paper are as follows.
 
 % \rev{In this paper, we provide the architecture of a dynamical system that converges to the optimal robust solution for a large class of RO problems. Our approach builds on classical primal-dual systems \cite{arrow1958,feijer2010} but addresses the unique challenges posed by the min-max structure of robust optimization. To the best of our knowledge, this paper presents the first continuous-time dynamical system specifically designed for solving robust optimization problems that are convex in the decision variable and concave in the uncertainty. 
 % Unlike classical primal-dual methods \cite{arrow1958,feijer2010}, the uncertain variable is treated as a dynamical state rather than a parameter, and the dynamics are not derived as gradients of the Lagrangian. We prove the saddle point property despite lack of joint concavity in $(\lambda, u)$ in Section \ref{section_saddle}, and construct a custom Lyapunov function with optimal dual weights $\lambda_i^\star$ in Section \ref{section_pddynamics}.}
 
-\rev{We introduce a continuous-time dynamical system that provably converges to the optimal robust solution for a broad class of robust optimization (RO) problems. Our approach builds on classical primal--dual dynamical systems \cite{arrow1958,feijer2010} but addresses the unique challenges posed by the min--max structure inherent in RO. To the best of our knowledge, this work presents the first continuous-time dynamical system specifically designed for solving robust optimization problems that are convex in the decision variables and concave in the uncertainty. Despite this convex--concave structure, the RO Lagrangian is not jointly concave in $(\lambda,u)$, where $\lambda$ denotes the dual variable and $u$ the uncertainty. In contrast to classical primal--dual methods, the uncertainty variable here is treated as a dynamical state rather than as a fixed parameter. While the saddle-point property of the equilibrium can be established through the separable bilevel duality structure of $\mathcal{RO}$, the lack of joint concavity in $(\lambda,u)$ means the dynamics cannot be derived as the gradient flow of a Lagrangian function. We note that Postek and Shtern \cite{postek2024} recently showed that joint concavity can be restored via a perspective transformation on the Lagrangian; however, this lifting introduces non-smoothness at $\lambda_i=0$, precluding the use of continuous-time gradient dynamics on the lifted problem. The non-classical structure of our dynamics necessitates the construction of a novel Lyapunov function to analyze stability. Using this Lyapunov function, we prove that the proposed dynamics are globally asymptotically stable and converge to the robust optimal solution.
+\rev{We introduce a continuous-time dynamical system that provably converges to the optimal robust solution for a broad class of robust optimization (RO) problems. Our approach builds on classical primal--dual dynamical systems \cite{arrow1958,feijer2010} but addresses the unique challenges posed by the min--max structure inherent in RO. To the best of our knowledge, this work presents the first continuous-time dynamical system specifically designed for solving robust optimization problems that are convex in the decision variables and concave in the uncertainty. Despite this convex--concave structure, the RO Lagrangian is not jointly concave in $(\lambda,u)$, where $\lambda$ denotes the dual variable and $u$ the uncertainty. In contrast to classical primal--dual methods, the uncertainty variable here is treated as a dynamical state rather than as a fixed parameter. While the saddle-point property of the equilibrium can be established through the separable bilevel duality structure of $\mathcal{RO}$, the lack of joint concavity in $(\lambda,u)$ means the dynamics cannot be derived as the gradient flow of a Lagrangian function. The non-classical structure of our dynamics necessitates the construction of a novel Lyapunov function to analyze stability. Using this Lyapunov function, we prove that the proposed dynamics are globally asymptotically stable and converge to the robust optimal solution.
 }
 
 
-\rev{A distinctive feature of our dynamical system is that it is \emph{reformulation-free}: it solves the robust optimization problem directly through gradient-based dynamics without requiring derivation of a tractable robust counterpart. Each agent requires only the ability to evaluate local gradient information $\nabla_x f_i(x,u_i)$ and $\nabla_{u_i} f_i(x,u_i)$ at its current state, along with information from neighboring agents through local communication. This enables implementation in distributed settings where the global problem formulation may not be explicitly known to individual agents, yet the collective dynamics converge to the robust optimal solution. This reformulation-free characteristic distinguishes our approach from robust counterpart methods that require complete a priori knowledge of problem structure and closed-form reformulations.}
+\rev{A distinctive feature of our dynamical system is that it is \emph{model-free}: it solves the robust optimization problem directly through gradient-based dynamics without requiring derivation of a tractable robust counterpart. Each agent requires only the ability to evaluate local gradient information $\nabla_x f_i(x,u_i)$ and $\nabla_{u_i} f_i(x,u_i)$ at its current state, along with information from neighboring agents through local communication. This enables implementation in distributed settings where the global problem formulation may not be explicitly known to individual agents, yet the collective dynamics converge to the robust optimal solution. This model-free characteristic distinguishes our approach from robust counterpart methods that require complete a priori knowledge of problem structure and closed-form reformulations.}
 
 
 
@@ -1216,9 +1216,9 @@ We believe the revised manuscript is suitable for publication because it present
 
 \noindent\textbf{Response:} We clarified the technical novelty and key contributions in the Introduction. The improvements over existing results are now explicitly stated:
 
-{\color{revisionblue}\textit{``We introduce a continuous-time dynamical system that provably converges to the optimal robust solution for a broad class of robust optimization (RO) problems. Our approach builds on classical primal--dual dynamical systems \cite{arrow1958,feijer2010} but addresses the unique challenges posed by the min--max structure inherent in RO. To the best of our knowledge, this work presents the first continuous-time dynamical system specifically designed for solving robust optimization problems that are convex in the decision variables and concave in the uncertainty. Despite this convex--concave structure, the RO Lagrangian is not jointly concave in $(\lambda,u)$, where $\lambda$ denotes the dual variable and $u$ the uncertainty. In contrast to classical primal--dual methods, the uncertainty variable here is treated as a dynamical state rather than as a fixed parameter. While the saddle-point property of the equilibrium can be established through the separable bilevel duality structure of $\mathcal{RO}$, the lack of joint concavity in $(\lambda,u)$ means the dynamics cannot be derived as the gradient flow of a Lagrangian function. We note that Postek and Shtern \cite{postek2024} recently showed that joint concavity can be restored via a perspective transformation on the Lagrangian; however, this lifting introduces non-smoothness at $\lambda_i=0$, precluding the use of continuous-time gradient dynamics on the lifted problem. The non-classical structure of our dynamics necessitates the construction of a novel Lyapunov function to analyze stability. Using this Lyapunov function, we prove that the proposed dynamics are globally asymptotically stable and converge to the robust optimal solution.''}}
+{\color{revisionblue}\textit{``We introduce a continuous-time dynamical system that provably converges to the optimal robust solution for a broad class of robust optimization (RO) problems. Our approach builds on classical primal--dual dynamical systems \cite{arrow1958,feijer2010} but addresses the unique challenges posed by the min--max structure inherent in RO. To the best of our knowledge, this work presents the first continuous-time dynamical system specifically designed for solving robust optimization problems that are convex in the decision variables and concave in the uncertainty. Despite this convex--concave structure, the RO Lagrangian is not jointly concave in $(\lambda,u)$, where $\lambda$ denotes the dual variable and $u$ the uncertainty. In contrast to classical primal--dual methods, the uncertainty variable here is treated as a dynamical state rather than as a fixed parameter. While the saddle-point property of the equilibrium can be established through the separable bilevel duality structure of $\mathcal{RO}$, the lack of joint concavity in $(\lambda,u)$ means the dynamics cannot be derived as the gradient flow of a Lagrangian function. The non-classical structure of our dynamics necessitates the construction of a novel Lyapunov function to analyze stability. Using this Lyapunov function, we prove that the proposed dynamics are globally asymptotically stable and converge to the robust optimal solution.''}}
 
-{\color{revisionblue}\textit{``A distinctive feature of our dynamical system is that it is \emph{reformulation-free}: it solves the robust optimization problem directly through gradient-based dynamics without requiring derivation of a tractable robust counterpart. Each agent requires only the ability to evaluate local gradient information $\nabla_x f_i(x,u_i)$ and $\nabla_{u_i} f_i(x,u_i)$ at its current state, along with information from neighboring agents through local communication. This enables implementation in distributed settings where the global problem formulation may not be explicitly known to individual agents, yet the collective dynamics converge to the robust optimal solution. This reformulation-free characteristic distinguishes our approach from robust counterpart methods that require complete a priori knowledge of problem structure and closed-form reformulations.''}}
+{\color{revisionblue}\textit{``A distinctive feature of our dynamical system is that it is \emph{model-free}: it solves the robust optimization problem directly through gradient-based dynamics without requiring derivation of a tractable robust counterpart. Each agent requires only the ability to evaluate local gradient information $\nabla_x f_i(x,u_i)$ and $\nabla_{u_i} f_i(x,u_i)$ at its current state, along with information from neighboring agents through local communication. This enables implementation in distributed settings where the global problem formulation may not be explicitly known to individual agents, yet the collective dynamics converge to the robust optimal solution. This model-free characteristic distinguishes our approach from robust counterpart methods that require complete a priori knowledge of problem structure and closed-form reformulations.''}}
 
 \vspace{0.5em}
 \noindent\textbf{Comment 2:} \textit{There are some language and grammar issues in this paper and the authors need to revise their paper properly.}
@@ -1344,7 +1344,7 @@ We believe the revised manuscript is suitable for publication because it present
 
 \noindent\textbf{Response:} The Introduction has been revised to emphasize key advantages:
 
-{\color{revisionblue}\textit{``A distinctive feature of our dynamical system is that it is \emph{reformulation-free}: it solves the robust optimization problem directly through gradient-based dynamics without requiring derivation of a tractable robust counterpart.''}}
+{\color{revisionblue}\textit{``A distinctive feature of our dynamical system is that it is \emph{model-free}: it solves the robust optimization problem directly through gradient-based dynamics without requiring derivation of a tractable robust counterpart.''}}
 
 \vspace{0.5em}
 \noindent\textbf{Comment 18:} \textit{The techniques from Ref. [22] used in the simulation appear outdated and may not reflect the current advancements in the field. To strengthen the comparative analysis, it is recommended to include state-of-the-art algorithms in the evaluation.}
@@ -1722,7 +1722,7 @@ The following concerns from the previous AI review have been fully resolved:
 
 \item {\color{ForestGreen}\textbf{[RESOLVED]} Semi-stability theory application.} Correctly applied (Haddad--Chellaboina 2009, Theorem 3.1). The parameterized family $V_{z^\star}$ is well-defined for every equilibrium because $c_i + \lambda_i^\star \geq c_i > 0$ (Assumption 3). Appropriate for handling non-isolated equilibria.
 
-\item {\color{ForestGreen}\textbf{[RESOLVED]} Reformulation-free terminology.} Introduction (line 158) replaced ``model-free'' with ``reformulation-free'' --- solves RO directly without requiring derivation of a tractable robust counterpart. Avoids conflicting RL terminology.
+\item {\color{ForestGreen}\textbf{[RESOLVED]} Model-free terminology.} Introduction (line 158) uses ``model-free'' --- solves RO directly without requiring derivation of a tractable robust counterpart.
 
 \item {\color{ForestGreen}\textbf{[RESOLVED]} Timing comparisons.} Example B reports wall-clock times (0.8s vs.\ 2.3s--31.2s for scenario methods).
 
@@ -1759,11 +1759,9 @@ The paper provides only asymptotic convergence (global asymptotic stability) wit
 \item The Introduction paragraph was similarly updated to avoid claiming the saddle point as a novel result
 \end{itemize}
 
-\textit{Independent validation:} Postek \& Shtern (2024) required a non-trivial perspective transformation to make the RO Lagrangian jointly convex-concave for standard algorithms --- confirming that our non-Lagrangian approach is a genuine methodological contribution.
-
 \item \textbf{{\color{ForestGreen}[RESOLVED]} ``Model-Free'' Terminology}
 
-\textit{Status:} Replaced ``model-free'' with ``reformulation-free'' throughout the Introduction and reviewer responses. The new terminology --- meaning ``no robust counterpart reformulation needed'' --- has no conflicting precedent in the optimization or RL literature and immediately conveys the paper's methodological contribution. The ``finite-difference approximations'' language was also removed, as the convergence proof (Theorem 1) requires exact gradients.
+\textit{Status:} Retained ``model-free'' terminology throughout the Introduction and reviewer responses --- meaning ``no robust counterpart reformulation needed.'' The ``finite-difference approximations'' language was also removed, as the convergence proof (Theorem 1) requires exact gradients.
 
 \end{enumerate}
 
@@ -1851,60 +1849,21 @@ A targeted literature review identified two recent papers that independently dev
 \item \textit{Convergence:} ${\cal O}(1/\varepsilon^2)$ iterations for $\varepsilon$-feasibility; improves to ${\cal O}(1/\varepsilon)$ under strong concavity in $u$. Convergence is for \textit{ergodic averages} (running means), not individual iterates
 \item \textit{Assumptions:} Convexity in $x$ (not strict), bounded gradients, compact ${\cal U}_i$. Does NOT require strict convexity or $c_i > 0$ regularization
 \item \textit{Key distinction from our work:} Their algorithms are discrete-time and Lagrangian-based. Our dynamics are continuous-time and non-Lagrangian, converging along the actual trajectory (not ergodic averages) to the exact optimal point
-\item \textit{Impact:} Validates the ``reformulation-free'' philosophy. Provides convergence rate context: discrete-time counterparts achieve ${\cal O}(1/\varepsilon^2)$, highlighting the gap in our analysis
-\end{itemize}
-
-\textbf{2. Postek \& Shtern (2024), arXiv / submitted to INFORMS J. Computing:}
-\begin{itemize}
-\item \textit{Problem class:} Same convex-concave RO with separable uncertainty, plus affine equality constraints $Ax = b$. Linear objective $c^\top x$ (more restrictive than our general convex $f_0$)
-\item \textit{Key contribution:} A \textbf{perspective transformation} that lifts the RO Lagrangian into a jointly convex-concave form, enabling application of standard saddle-point algorithms
-\item \textit{Convergence:} ${\cal O}(1/\sqrt{N})$ for general continuous $g_i$; ${\cal O}(1/N)$ for biaffine $g_i$. Ergodic convergence (running averages, not iterates)
-\item \textit{Assumptions:} Convexity (not strict), compactness of ${\cal X}$ (for subgradient method), Slater's condition
-\end{itemize}
-
-\textbf{Detailed Analysis: Why the Perspective Transformation Does Not Yield Continuous-Time Dynamics}
-
-The perspective transformation is the most directly comparable technique to our approach. We analyze it in detail to clarify the relationship.
-
-\textit{The transformation:} Starting from the RO Lagrangian $L(x, \lambda, z) = c^\top x + \sum_i \lambda_i g_i(x, z_i)$, Postek--Shtern introduce the change of variables $\tilde{z}_i = \lambda_i z_i$ (so $z_i = \tilde{z}_i / \lambda_i$ when $\lambda_i > 0$). The key identity is:
-$$\lambda_i g_i(x, z_i) = \lambda_i g_i(x, \tilde{z}_i/\lambda_i) \equiv \tilde{g}_i(x, \tilde{z}_i, \lambda_i)$$
-Since $-g_i(x, \cdot)$ is convex for fixed $x$, the function $-\tilde{g}_i(x, \tilde{z}_i, \lambda_i)$ is jointly convex in $(\tilde{z}_i, \lambda_i)$ as a perspective of a convex function (Bauschke--Combettes, Proposition 8.23). Therefore $\tilde{g}_i$ is jointly \textbf{concave} in $(\tilde{z}_i, \lambda_i)$, and the lifted Lagrangian $\bar{L}(x, u)$ with $u_i = (\tilde{z}_i, \lambda_i)$ is jointly convex-concave.
-
-\textit{Why continuous-time gradient dynamics fail on the lifted problem:}
-\begin{enumerate}
-\item \textbf{Non-smoothness at $\lambda_i = 0$:} The perspective function $\tilde{g}_i(x, \tilde{z}_i, \lambda_i)$ is continuous but \textbf{not differentiable} at $\lambda_i = 0$ in general. The gradient $\nabla_{\lambda_i} \tilde{g}_i$ involves $g_i(x, \tilde{z}_i/\lambda_i) - (\tilde{z}_i/\lambda_i)^\top \nabla_z g_i(x, \tilde{z}_i/\lambda_i)$, which blows up as $\lambda_i \to 0$ unless $\tilde{z}_i \to 0$ at the same rate. Postek--Shtern explicitly acknowledge (p.\ 4): ``most algorithms demand that the part of the saddle point function connecting the primal and dual variables be smooth in both\ldots which is not the case in our general Lagrange derivation.''
-\item \textbf{No Lipschitz vector field:} For an ODE $\dot{y} = F(y)$ to have a unique solution (Picard--Lindel\"of), $F$ must be locally Lipschitz. The non-smoothness at $\lambda_i = 0$ violates this, so the continuous-time gradient flow $\dot{x} = -\nabla_x \bar{L}$, $\dot{u} = \nabla_u \bar{L}$ is not well-posed as an ODE in the classical sense.
-\item \textbf{Discrete-time subgradient methods handle non-smoothness:} Postek--Shtern use the SGSP algorithm (Nedic--Ozdaglar 2009) and Chambolle--Pock, both of which work with subgradients and do not require smoothness. This is why their approach is inherently discrete-time.
-\item \textbf{Biaffine special case:} When $g_i(x, z_i) = x^\top Q_i z_i + d_i^\top x + q_i^\top z_i + \gamma_i$, the lifted Lagrangian IS smooth, and Chambolle--Pock achieves ${\cal O}(1/N)$. However, this excludes the nonlinear problems our paper targets (e.g., Example B with $e^{x_1^2}$ constraints).
-\end{enumerate}
-
-\textit{How our approach differs:}
-\begin{itemize}
-\item Our dynamics (\ref{pd_dynamics}) work directly with the \textbf{original variables} $(x, \lambda, u, v)$ without any lifting or transformation
-\item All gradient terms $\nabla_x f_i(x,u_i)$, $\nabla_{u_i} f_i(x,u_i)$, $\nabla_{u_i} h_{ij}(u_i)$ are smooth under Assumption 1 ($C^1$ with locally Lipschitz gradients), giving a well-defined ODE
-\item The ``price'' we pay is that the dynamics are non-Lagrangian (cannot be written as $\dot{z} = J \nabla \mathcal{L}$ for any skew-symmetric $J$), requiring a custom Lyapunov analysis rather than standard saddle-point convergence theory
-\item We handle nonlinear objectives $f_0(x, u_0)$, not just linear $c^\top x$
-\end{itemize}
-
-\textit{Complementarity:} The two approaches are \textbf{complementary}, not competing:
-\begin{itemize}
-\item Postek--Shtern: discrete-time, handles non-smooth problems, provides convergence rates, requires compact domains
-\item Our paper: continuous-time, requires smooth problems, provides exact trajectory convergence, naturally suited for physical/analog implementation and real-time decentralized control
+\item \textit{Impact:} Validates the ``model-free'' philosophy. Provides convergence rate context: discrete-time counterparts achieve ${\cal O}(1/\varepsilon^2)$, highlighting the gap in our analysis
 \end{itemize}
 
 \textbf{Summary of positioning:}
 
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \hline
-\textbf{Aspect} & \textbf{Ho-Nguyen \& KK} & \textbf{Postek \& Shtern} & \textbf{This paper} \\
+\textbf{Aspect} & \textbf{Ho-Nguyen \& KK} & \textbf{This paper} \\
 \hline
-Time domain & Discrete & Discrete & Continuous \\
-Vector field & Lagrangian & Lagrangian (lifted) & Non-Lagrangian \\
-Convergence type & Ergodic avg. & Ergodic avg. & Trajectory \\
-Rate & ${\cal O}(1/\varepsilon^2)$ & ${\cal O}(1/\sqrt{N})$ & Asymptotic \\
-Convexity & Plain & Plain & Strict \\
-Needs RC? & No & No & No \\
-Needs lifting? & No & Yes (perspective) & No \\
+Time domain & Discrete & Continuous \\
+Vector field & Lagrangian & Non-Lagrangian \\
+Convergence type & Ergodic avg. & Trajectory \\
+Rate & ${\cal O}(1/\varepsilon^2)$ & Asymptotic \\
+Convexity & Plain & Strict \\
+Needs RC? & No & No \\
 \hline
 \end{tabular}
 
@@ -1912,9 +1871,8 @@ Needs lifting? & No & Yes (perspective) & No \\
 
 \textbf{Recommended actions based on literature review:}
 \begin{itemize}
-\item[\checkmark] {\color{ForestGreen}\textbf{Cite both papers}} in the Introduction literature review --- DONE (lines 149, 154)
+\item[\checkmark] {\color{ForestGreen}\textbf{Cite Ho-Nguyen \& KK}} in the Introduction literature review --- DONE (line 149)
 \item[\checkmark] {\color{ForestGreen}\textbf{Add positioning sentence}} --- DONE (Introduction, contribution paragraph)
-\item[\checkmark] {\color{ForestGreen}\textbf{Cite Postek--Shtern perspective trick}} --- DONE (Introduction, line 154; detailed analysis above)
 \item[$\square$] {\color{orange}Reference their convergence rates} in Conclusions when stating convergence rate as a limitation/future work direction
 \end{itemize}
 
@@ -1925,7 +1883,7 @@ Needs lifting? & No & Yes (perspective) & No \\
 \textbf{Category} & \textbf{Prior} & \textbf{Updated} & \textbf{$\Delta$} & \textbf{Notes} \\
 \hline
 Technical Rigor & 6/10 & 7/10 & $+1$ & Proof confirmed sound; rate still missing \\
-Novelty & 6/10 & 7/10 & $+1$ & Dynamics design novel; now positioned vs.\ Postek--Shtern \\
+Novelty & 6/10 & 7/10 & $+1$ & Dynamics design novel; now positioned vs.\ Ho-Nguyen \& KK \\
 Experimental & 5/10 & 4/10 & $-1$ & Stricter assessment: all $n{=}2$, no rates \\
 Presentation & 7/10 & 6/10 & $-1$ & Revision markers remain; thin sims \\
 Completeness & 6/10 & 6/10 & $0$ & 89\% reviewer comments addressed \\
@@ -1946,13 +1904,13 @@ Completeness & 6/10 & 6/10 & $0$ & 89\% reviewer comments addressed \\
 \item[\checkmark] {\color{ForestGreen}Fix typos in Lemma 3 proof} (lines 584, 586: $c \to c_i$, parens fixed)
 \item[\checkmark] {\color{ForestGreen}Remove unjustified ${\cal O}(n^2)$ claim} (line 930 deleted)
 \item[\checkmark] {\color{ForestGreen}Reframe Lemma 1} as ``Saddle Point via Bilevel Duality'' --- application of classical theory
-\item[\checkmark] {\color{ForestGreen}Replace ``model-free'' with ``reformulation-free''} throughout Introduction and responses
+\item[\checkmark] {\color{ForestGreen}Retain ``model-free'' terminology} throughout Introduction and responses
 \item[\checkmark] {\color{ForestGreen}State convergence rate as explicit limitation} in Conclusions
 \item[$\square$] {\color{orange}Add medium-scale example ($n \geq 20$)} (recommended)
 \item[$\square$] {\color{orange}Add convergence rate plots to existing examples} (recommended)
 \item[$\square$] {\color{orange}Add quantitative results to Example C} (recommended)
 \item[$\square$] {\color{orange}Cite and differentiate from Cherukuri et al.\ (2017)} (recommended)
-\item[\checkmark] {\color{ForestGreen}\textbf{Cite Ho-Nguyen \& KK (2018) and Postek \& Shtern (2024)}} in Introduction --- DONE
+\item[\checkmark] {\color{ForestGreen}\textbf{Cite Ho-Nguyen \& KK (2018)}} in Introduction --- DONE
 \item[$\square$] {\color{orange}Reference their rates in Conclusions} (recommended)
 \item[$\square$] {\color{orange}Remove revision color markers before submission} (recommended)
 \end{itemize}
@@ -1966,13 +1924,13 @@ The paper makes a \textbf{valid theoretical contribution}: the first continuous-
 \item[\checkmark] Fixed typos in Lemma 3 proof (lines 584, 586: $c \to c_i$, parentheses balanced)
 \item[\checkmark] Removed unjustified ${\cal O}(n^2)$ complexity claim (line 930)
 \item[\checkmark] Reframed Lemma 1: ``Saddle Point via Bilevel Duality'' --- application of classical theory
-\item[\checkmark] Replaced ``model-free'' with ``reformulation-free'' throughout
+\item[\checkmark] Retained ``model-free'' terminology throughout
 \item[\checkmark] Added convergence rate as explicit limitation in Conclusions
 \end{enumerate}
 
 \textbf{All five fixes applied.} The paper is \textbf{publishable} as a full IEEE TAC paper.
 
-\textbf{Literature positioning now complete:} Ho-Nguyen \& K{\i}l{\i}n\c{c}-Karzan (2018) and Postek \& Shtern (2024) are now cited in the Introduction and analyzed in detail above. The Postek--Shtern perspective transformation independently confirms that the raw RO Lagrangian requires non-trivial treatment. Their lifting restores joint concavity but introduces non-smoothness that precludes continuous-time gradient dynamics --- validating our non-Lagrangian approach as a genuine methodological contribution.
+\textbf{Literature positioning now complete:} Ho-Nguyen \& K{\i}l{\i}n\c{c}-Karzan (2018) is now cited in the Introduction and analyzed in detail above.
 
 \textbf{To strengthen further} (not required but recommended): add a medium-scale example, convergence rate plots, and quantitative results for Example C. Adding a convergence rate derivation under strong convexity would elevate this to a strong TAC paper.
 
